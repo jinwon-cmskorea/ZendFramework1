@@ -25,7 +25,7 @@ class Was_Member {
     /**
      * Zend_Db_Adapter 객체
      *
-     * @var Zend_Db_Adapter
+     * @var Zend_Db_Adapter_Mysqli
      */
     protected $_db;
     
@@ -69,7 +69,7 @@ class Was_Member {
      *            'telNumber' => '연락처',
      *            'email'     => '이메일'(필수아님)
      *        )
-     * @return Cmskorea_Baord_Member
+     * @return Was_Member
      */
     public function registMember(array $datas) {
         $manageArrays = array(
@@ -98,12 +98,22 @@ class Was_Member {
                 }
             }
         }
+        
+        //중복된 아이디가 존재하는지 확인
+        $select = $this->_table->select();
+        $select->from($this->_table, array('count' => new Zend_Db_Expr('COUNT(id)')))
+               ->where("id = '{$datas['id']}'");
+        $row = $select->query()->fetchAll();
+        if ($row[0]['count'] > 0) {
+            throw new Exception('이미 동일한 아이디가 존재합니다.');
+        }
+        
         //member 테이블에 insert할 정보 만들기
         $insertMember = array(
-            'id'            => $this->_db->quote($datas['id']),
-            'name'          => $this->_db->quote($datas['name']),
-            'telNumber'     => $this->_db->quote(str_replace('-', '', $datas['telNumber'])),
-            'email'         => (isset($datas['email']) && $datas['email']) ? $this->_db->quote($datas['email']) : '',
+            'id'            => $datas['id'],
+            'name'          => $datas['name'],
+            'telNumber'     => str_replace('-', '', $datas['telNumber']),
+            'email'         => (isset($datas['email']) && $datas['email']) ? $datas['email'] : '',
             'position'      => 3,
             'insertTime'    => date("Y-m-d H:i:s"),
             'updateTime'    => date("Y-m-d H:i:s")
@@ -111,13 +121,13 @@ class Was_Member {
         $this->_table->insert($insertMember);
         //auth_identity 테이블에 insert할 정보 만들기
         $insertIdentity = array(
-            'id'            => $this->_db->quote($datas['id']),
-            'pw'            => $this->_db->quote($datas['pw']),
-            'name'          => $this->_db->quote($datas['name']),
+            'id'            => $datas['id'],
+            'pw'            => md5($datas['pw']),
+            'name'          => $datas['name'],
             'errorMessage'  => '',
             'insertTime'    => date("Y-m-d H:i:s")
         );
-        $this->_db->insert('auth_identity')
+        $this->_db->insert('auth_identity', $insertIdentity);
         return $this;
     }
 
@@ -130,23 +140,22 @@ class Was_Member {
      *            'pk'        => '회원고유번호',
      *            'id'        => '아이디',
      *            'name'      => '회원명',
-     *            'telNumber' => '연락처'
+     *            'telNumber' => '연락처',
+     *            'email'     => '이메밀',
+     *            'position'  => '회원등급'
      *        )
      */
     public function getMember($id) {
-        $fId = mysqli_real_escape_string($this->_mysqli, $id);
-        $sql = "SELECT pk, id, name, telNumber FROM member where id='{$fId}'";
-        $res = mysqli_query($this->_mysqli, $sql);
-        if (!$res) {
+        //매개변수 id 에 해당하는 member 레코드 찾기
+        $select = $this->_table->select();
+        $select->from($this->_table, array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
+               ->where("id = '{$id}'");
+        $row = $select->query()->fetchAll();
+        if ($row[0] == NULL) {
             return array();
         }
         
-        $row = mysqli_fetch_assoc($res);
-        if ($row == NULL) {
-            return array();
-        }
-        
-        return $row;
+        return $row[0];
     }
 
 }

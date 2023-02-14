@@ -156,6 +156,9 @@ class Was_AuthTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expext2, $result2[0]);
     }
     
+    /**
+     * Tests Was_Auth->checkAuthable()
+     */
     public function testCheckAuthable() {
         $this->assertEquals('로그인을 5번 이상 실패하셨습니다. 아이디가 잠금 처리됐습니다.', $this->auth->checkAuthable('root'));
         $this->auth->getDb()->update('auth_identity', array('authable' => 1, 'errorCount' => '0', 'errorMessage' => ''));
