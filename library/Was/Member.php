@@ -15,7 +15,7 @@ require_once 'Zend/Db/Select.php';
 /**
  * @see My_Member
  */
-require_once __DIR__ . '/../My/Member.php';
+require_once '/Was/MemberTable.php';
 /**
  * 씨엠에스코리아 게시판 회원 클래스
  *
@@ -50,7 +50,7 @@ class Was_Member {
      */
     public function __construct(array $dbConfig) {
         $this->_db = Zend_Db::factory('Mysqli', $dbConfig);
-        $this->_table = new My_Member(array('db' => $this->_db));
+        $this->_table = new Was_MemberTable(array('db' => $this->_db));
     }
     
 
