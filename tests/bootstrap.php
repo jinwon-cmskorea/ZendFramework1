@@ -21,11 +21,10 @@ set_include_path(implode(PATH_SEPARATOR, array(
 // start PHPUnit framework
 require_once 'PHPUnit/Framework.php';
 
-/**
 define('DBHOST',    'localhost');
 define('DBUSER',    'root');
 define('DBPASSWORD','cmskorea');
-define('DBNAME',    'cmskorea_erp_test');
+define('DBNAME',    'cmskorea_board_test');
 define('DBPORT',    3306);
 define('DB_DEFAULT', 'default');
 
@@ -39,6 +38,9 @@ $dbConfigs = array(
         "charset"   => 'UTF8',
     )
 );
+
+require_once 'Zend/Db.php';
+require_once 'Zend/Registry.php';
 
 foreach($dbConfigs as $index => $dbConfig) {
     try {
@@ -57,7 +59,8 @@ foreach($dbConfigs as $index => $dbConfig) {
     Zend_Registry::set($index, $zdb);
 }
 
+require_once 'Zend/Db/Table/Abstract.php';
 Zend_Db_Table_Abstract::setDefaultAdapter(Zend_Registry::get(DB_DEFAULT));
-*/
+
 require_once 'Zend/Session.php';
 Zend_Session::start();

@@ -1,173 +1,123 @@
 <?php
 /**
- * CMSKOREA BOARD
- *
- * @category Was
- */
-
-/**
  * @see Zend_Auth
+ * @see Was_Auth_Table_Identity
+ * @see Was_Auth_Table_Access
+ * @see Was_Auth_Table_History
+ * @see Was_Auth_Storage
+ * @see Zend_Auth_Result
  */
 require_once 'Zend/Auth.php';
+require_once 'Zend/Auth/Result.php';
+require_once 'Was/Auth/Table/Identity.php';
+require_once 'Was/Auth/Table/Access.php';
+require_once 'Was/Auth/Table/History.php';
+require_once 'Was/Auth/Storage.php';
+
 /**
- * @see Zend_Auth_Adapter_DbTable
- */
-require_once 'Zend/Auth/Adapter/DbTable.php';
-/**
- * @see Zend_Db_Adapter_Mysqli
- */
-require_once 'Zend/Db/Adapter/Mysqli.php';
-/**
- * @see Zend_Db_Selects
- */
-require_once 'Zend/Db/Select.php';
-/**
- * 씨엠에스코리아 사용자 인증 클래스
+ * 인증관리
  *
- * @category Cmskorea
- * @package  Board
+ * @package Was
  */
 class Was_Auth extends Zend_Auth {
-    
     /**
-     * Zend_Auth_Adapter_DbTable 객체
-     * @var Zend_Auth_Adapter_DbTable
+     * 접속중 테이블
+     * @var Was_Auth_Table_Access
      */
-    protected $_adapter = null;
-    
+    protected $_accessTable;
     /**
-     * Zend_Db_Adapter_Mysqli 객체
-     * @var Zend_Db_Adapter_Mysqli
+     * 이력테이블
+     * @var Was_Auth_Table_History
      */
-    protected $_db = null;
+    protected $_historyTable;
+
     /**
-     * 생성자
-     * Zend_Db, Auth_Adapter_DbTable 등을 초기화
-     * @param array DB 연결정보
-     *        array (
-     *            'host'     => '호스트 정보',
-     *            'username' => 'db 계정 id',
-     *            'password' => 'db 계정 pw',
-     *            'dbname'   => 'db 이름'
-     *        )
-     * @return void
+     * Storage 테이블 미설정 오류코드
+     * @var integer
      */
-    public function __construct(array $dbConfig) {
-        $this->_db = Zend_Db::factory('Mysqli', $dbConfig);
-        $this->_adapter = new Zend_Auth_Adapter_DbTable($this->_db, 'auth_identity', 'id', 'pw');
-    }
-    
+    const NOT_SET_STORAGE_TABLE = 99;
+
     /**
-     * 로그인 인증
-     *  - 로그인에 성공한 경우 세션에 로그인에 성공한 회원정보를 보관한다.
-     *
-     * @param string 아이디
-     * @param string 비밀번호
-     * @return array 로그인 성공 시 빈값|로그인 불능 시 불능메시지가 들어있는 배열 반환
+     * 싱글턴
+     * @return Was_Auth
      */
-    public function login($id, $pw, $remoteIp) {
-        //아이디, 비밀번호 확인
-        $this->_adapter->setIdentity($id);
-        $this->_adapter->setCredential(md5($pw));
-        $result = $this->_adapter->authenticate();
-        //로그인 실패시, 실패 카운트 증가 및 에러 메세지 반환
-        if (!$result->isValid()) {
-            //실패 카운트 증가
-            $errorMsg = "아이디 또는 비밀번호가 일치하지 않습니다.";
-            $this->_db->update('auth_identity', array('errorCount' => new Zend_Db_Expr('errorCount + 1')), "id = '{$id}'");
-            
-            //실패 카운트 확인
-            $select = $this->_db->select()->from('auth_identity', array('errorCount'))->where("id = '{$id}'");
-            $result = $select->query()->fetchAll();
-            if (isset($result[0]['errorCount']) && $result[0]['errorCount'] >= 3) {
-                $errorMsg .= "남은 로그인 횟수는 " . (5 - $result[0]['errorCount']) . " 입니다.";
-            }
-            if (isset($result[0]['errorCount']) && $result[0]['errorCount'] == 5) {
-                $errorMsg = "로그인을 5번 이상 실패하셨습니다. 아이디가 잠금 처리됐습니다.";
-                $this->_db->update('auth_identity', array('authable' => 0), "id = '{$id}'");
-            }
-            $this->_db->update('auth_identity', array('errorMessage' => $errorMsg), "id = '{$id}'");
-            return array($errorMsg);
+    public static function getInstance() {
+        if (null === self::$_instance) {
+            self::$_instance = new self();
         }
-        
-        //auth_access 테이블에 레코드 추가
-        $data = array(
-            'identityId'    => $id,
-            'remoteIp'      => $remoteIp,
-            'sessionId'     => Zend_Session::getId(),
-            'authTime'      => date("Y-m-d H:i:s"),
-            'accessTime'    => date("Y-m-d H:i:s")
-        );
-        $this->_db->insert('auth_access', $data);
-        $this->_db->update('auth_identity', array('errorCount' => '0', 'errorMessage' => ''), "id = '{$id}'");
-        
-        return array();
+
+        return self::$_instance;
+    }
+
+    /*
+     * {@inheritDoc}
+     * @see Zend_Auth::authenticate()
+     */
+    public function authenticate(Zend_Auth_Adapter_Interface $adapter) {
+        $result = $adapter->authenticate();
+
+        try {
+            $storage = $this->getStorage();
+        } catch (Was_Auth_Exception $e) {
+            return new Zend_Auth_Result(self::NOT_SET_STORAGE_TABLE, $result->getIdentity(), array('Storage required table is not set.'));
+        }
+
+        if ($this->hasIdentity()) {
+            $this->clearIdentity();
+        }
+
+        $identityTable = $adapter->getIdentityTable();
+
+        // 로그인성공
+        if ($result->isValid()) {
+            $identityData = $identityTable->find($result->getIdentity())->current()->toArray();
+            $identityData['sessionId'] = '';
+            $identityData['remoteIp'] = '';
+            $storage->write($identityData);
+        }
+
+        return $result;
+    }
+
+    /*
+     * {@inheritDoc}
+     * @see Zend_Auth::getStorage()
+     */
+    public function getStorage() {
+        if (null === $this->_storage) {
+            // storage 테이블 미설정 시 예외
+            if (!is_a($this->_accessTable, 'Was_Auth_Table_Access')
+            || !is_a($this->_historyTable, 'Was_Auth_Table_History')) {
+                throw new Was_Auth_Exception('Storage required table is not set.');
+            }
+            $this->setStorage(new Was_Auth_Storage($this->_accessTable, $this->_historyTable));
+        }
+
+        return $this->_storage;
     }
 
     /**
-     * 로그아웃
-     *  - 로그인 시 생성된 세션을 파괴한다.
-     * @param array 세션 정보
-     *        array(
-     *            'identityId' => 아이디,
-     *            'remoteIp'   => 접속IP,
-     *            'sessionId'  => 세션아이디,
-     *            'autoTime'   => 인증시간,
-     *            'accessTime' => 활동시간
-     *        );
-     * @return boolean
+     * 접속중관리 테이블 설정한다.
+     *
+     * @param Was_Auth_Table_Access 접속중관리 테이블
+     * @return Was_Auth
      */
-    public function logout($session) {
-        
-        $temp = $session->info;
-        $this->_db->delete('auth_access', "identityId = '{$temp['id']}'");
-        unset($session->info);
+    public function setAccessTable(Was_Auth_Table_Access $accessTable) {
+        $this->_accessTable = $accessTable;
 
-        return true;
+        return $this;
     }
-    
+
     /**
-     * 로그인 시도
-     *  - 모든 로그인 시도를 auth_history에 쌓인다
+     * 이력테이블을 설정한다.
      *
-     * @param string 아이디
-     * @param string 비밀번호
-     * @param 접속 ip
-     * @return int 마지막으로 추가된 레코드 pk
+     * @param Was_Auth_Table_History 이력테이블
+     * @return Was_Auth
      */
-    public function addAuthHistory($id, $pw, $remoteIp) {
-        $data = array(
-            'identityId'    => $id,
-            'remoteIp'      => $remoteIp,
-            'authTime'      => date("Y-m-d H:i:s")
-        );
-        
-        //아이디, 비밀번호 확인
-        $this->_adapter->setIdentity($id);
-        $this->_adapter->setCredential(md5($pw));
-        $result = $this->_adapter->authenticate();
-        
-        //로그인 성공 유무 메세지를 result 인덱스에 값 저장
-        $result-> isValid() ? $data['result'] = "로그인 성공" : $data['result'] = "로그인 실패";
-        //로그인 결과를 auth_history 테이블에 저장
-        $this->_db->insert('auth_history', $data);
-        //마지막으로 추가된 레코드의 pk를 리턴
-        return $this->_db->lastInsertId();
-    }
-    
-    /**
-     * 로그인 가능 여부
-     *  - auth_identity 의 authable 을 확인하여 로그인 가능 여부 확인
-     *
-     * @param string 아이디
-     * @return 로그인 가능하면 void | 불가능하면 에러메세지 출력
-     */
-    public function checkAuthable($id) {
-        $select = $this->_db->select()->from('auth_identity', array('authable', 'errorMessage'))->where("id = '{$id}'");
-        $result = $select->query()->fetchAll();
-        if ($result[0]['authable'] == 0) {
-            return ($result[0]['errorMessage']);
-        }
+    public function setHistoryTable(Was_Auth_Table_History $historyTable) {
+        $this->_historyTable = $historyTable;
+
+        return $this;
     }
 }
 

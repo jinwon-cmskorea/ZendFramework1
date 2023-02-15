@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
-	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/PHPUnit"/>
-	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/ZendFramework1"/>
 	<buildpathentry kind="src" path=""/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/Zend Framework 1"/>
+	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/PHPUnit"/>
 </buildpath>
