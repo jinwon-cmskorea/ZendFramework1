@@ -36,12 +36,12 @@ class Was_Member_Table_Member extends Zend_Db_Table_Abstract {
      *            'email'       => '이메일',
      *            'position'    => '회원 등급'
      *        )
-     * @return int member pk 회원 기본키
+     * @return number 회원 기본키
      * @exception Was_Member_Table_Exception 이미 존재하는 핸드폰 번호인 경우
      */
     public function regist(array $contents) {
         //전화번호에서 '-' 문자 제거
-        str_replace('-', '', $contents['telNumber']);
+        $contents['telNumber'] = str_replace('-', '', $contents['telNumber']);
         //이미 등록된 휴대전화 번호이면 throw 예외
         $select = $this->select();
         $select->from($this->_getTableName(), array('count' => new Zend_Db_Expr("COUNT('telNumber')")))
@@ -72,13 +72,13 @@ class Was_Member_Table_Member extends Zend_Db_Table_Abstract {
      *            'telNumber'   => '휴대전화번호',
      *            'email'       => '이메일'
      *        )
-     * @param int $pk 수정할 회원정보
+     * @param number 수정할 회원정보
      * @return 업데이트된 rowCount()
      * @exception Was_Member_Table_Exception 이미 존재하는 핸드폰 번호인 경우
      */
     public function modify(array $contents, $pk) {
         //전화번호에서 '-' 문자 제거
-        str_replace('-', '', $contents['telNumber']);
+        $contents['telNumber'] = str_replace('-', '', $contents['telNumber']);
         
         //이미 등록된 휴대전화 번호이면 throw 예외
         $select = $this->select();

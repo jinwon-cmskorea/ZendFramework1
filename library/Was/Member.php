@@ -90,12 +90,12 @@ class Was_Member {
     
     /**
      * 등록된 회원의 id를 찾는다
-     * @param string $name 이름
-     * @param string $telNumber 휴대전호번호
+     * @param string 이름
+     * @param string 휴대전호번호
      * @return 성공시, id 정보 반환 | 실패시 빈 값 반환
      */
     public function searchId($name, $telNumber) {
-        str_replace('-', '', $telNumber);
+        $telNumber = str_replace('-', '', $telNumber);
         //id 찾기
         $select = $this->_memberTable->select();
         $select->where('name = ?', $name)->where('telNumber = ?', $telNumber);
@@ -117,7 +117,7 @@ class Was_Member {
      *            'telNumber'   => '휴대전화번호',
      *            'email'       => '이메일'
      *        )
-     * @param int $pk 수정할 회원정보
+     * @param number 수정할 회원정보
      * @return 예외 발생시, 해당 에러문 반환 | 성공시 수정된 rowCount() 반환
      */
     public function modifyMember(array $contents, $pk) {
@@ -139,13 +139,17 @@ class Was_Member {
     }
     /**
      * 회원 정보를 가져온다
-     * @param string $id 아이디
-     * @return array $memberInfo 회원 정보
+     * @param string 아이디
+     * @return array 회원 정보 | 존재하지 않는 회원의 경우 빈 배열 반환
      */
     public function getMember($id) {
         $select = $this->_memberTable->select();
         $select->where('id = ?', $id);
         $row = $this->_memberTable->fetchRow($select);
+        //존재하지않는 회원인 경우 빈 배열 반환
+        if (is_null($row)) {
+            return array();
+        }
         
         $memberInfo = array(
             'id'        => $row->id,
@@ -212,9 +216,6 @@ class Was_Member {
             if (!$emailValidator->isValid($contents['email'])) {
                 throw new Was_Member_Exception('The Email format is not correct.');
             }
-        } else {
-            //이메일은 필수 항목이 아님
-            return true;
         }
         
         return true;
