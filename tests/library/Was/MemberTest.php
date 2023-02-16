@@ -121,6 +121,34 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($result);
         $this->assertEquals('등록테스트', $memberRow->name);
         $this->assertEquals('0101235678', $memberRow->telNumber);
+        
+        $contents = array(
+            'id'        => 'testThreeNumTwo',
+            'pw'        => '1234@',
+            'name'      => '등록테스트',
+            'telNumber' => '0104325678',
+            'email'     => 'regist2@test.com'
+        );
+        //회원정보 등록
+        $result = $this->member->registMember($contents);
+        $memberRow = $this->memberTable->find(4)->current();
+        $this->assertNotNull($result);
+        $this->assertEquals('등록테스트', $memberRow->name);
+        $this->assertEquals('0104325678', $memberRow->telNumber);
+        
+        $contents = array(
+            'id'        => 'testFourNumTwo',
+            'pw'        => '1234@',
+            'name'      => '등록테스트',
+            'telNumber' => '01043245678',
+            'email'     => 'regist3@test.com'
+        );
+        //회원정보 등록
+        $result = $this->member->registMember($contents);
+        $memberRow = $this->memberTable->find(5)->current();
+        $this->assertNotNull($result);
+        $this->assertEquals('등록테스트', $memberRow->name);
+        $this->assertEquals('01043245678', $memberRow->telNumber);
     }
     
     /**

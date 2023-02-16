@@ -203,7 +203,7 @@ class Was_Member {
         }
         
         if (isset($contents['telNumber']) && $contents['telNumber']) {
-            $phoneValidator = new Zend_Validate_Regex('/^(010|011|016|017|018|019)-[0-9]{3,4}-[0-9]{4}$|^[0-9]{11}&/');
+            $phoneValidator = new Zend_Validate_Regex('/^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/');
             if (!$phoneValidator->isValid($contents['telNumber'])) {
                 throw new Was_Member_Exception('The telNumber format is not correct.');
             }
