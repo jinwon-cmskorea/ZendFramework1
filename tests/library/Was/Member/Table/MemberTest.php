@@ -35,15 +35,13 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        // TODO Auto-generated Was_Member_Table_MemberTest::setUp()
-
         $this->memberTable = new Was_Member_Table_Member();
         $this->memberTable->insert(array(
             'id'          => 'test',
             'name'        => '테스터',
             'telNumber'   => '010-1234-1234',
             'email'       => 'test@example.com',
-            'position'    => Was_Member::MEMBER,
+            'position'    => Was_Member::POWER_MEMBER,
             'insertTime'    => new Zend_Db_Expr('NOW()'),
             'updateTime'    => new Zend_Db_Expr('NOW()')
         ));
@@ -54,7 +52,6 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // TODO Auto-generated Was_Member_Table_MemberTest::tearDown()
         $this->memberTable->delete(1);
         $this->memberTable->getAdapter()->query("ALTER TABLE `member` auto_increment = 1");
         $this->memberTable = null;
@@ -81,7 +78,7 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
             'name'      => '등록테스트',
             'telNumber' => '010-1234-5678',
             'email'     => 'regist@test.com',
-            'position'  => Was_Member::MEMBER
+            'position'  => Was_Member::POWER_MEMBER
         );
         
         $memberPk = $this->memberTable->regist($contents);
@@ -101,7 +98,7 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
             'name'      => '등록테스트',
             'telNumber' => '010-1234-1234',
             'email'     => 'regist@test.com',
-            'position'  => Was_Member::MEMBER
+            'position'  => Was_Member::POWER_MEMBER
         );
         
         try {
@@ -118,13 +115,12 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
     public function testModify()
     {
         $contents = array(
-            'pk'        => 1,
             'id'        => 'testModify',
             'name'      => '수정테스트',
             'telNumber' => '010-1234-4321',
             'email'     => 'regist@test.com'
         );
-        $update = $this->memberTable->modify($contents);
+        $update = $this->memberTable->modify($contents, 1);
         $memberRow = $this->memberTable->find(1)->current();
         $this->assertNotNull($update);
         $this->assertEquals('testModify', $memberRow->id);
@@ -136,7 +132,6 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
      */
     public function testModifyException() {
         $contents = array(
-            'pk'        => 1,
             'id'        => 'testModify',
             'name'      => '수정테스트',
             'telNumber' => '010-1234-1234',
@@ -144,7 +139,7 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
         );
         
         try {
-            $this->memberTable->modify($contents);
+            $this->memberTable->modify($contents, 1);
             $this->assertFalse(true);
         } catch (Was_Member_Table_Exception $e) {
             $this->assertTrue(true);

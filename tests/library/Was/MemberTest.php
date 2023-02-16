@@ -51,7 +51,7 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
             'name'        => '테스터',
             'telNumber'   => '010-1234-1234',
             'email'       => 'test@example.com',
-            'position'    => Was_Member::MEMBER,
+            'position'    => Was_Member::POWER_MEMBER,
             'insertTime'    => new Zend_Db_Expr('NOW()'),
             'updateTime'    => new Zend_Db_Expr('NOW()')
         ));
@@ -193,13 +193,73 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
             $this->assertTrue(true);
         }
     }
+    
+    /**
+     * Tests Was_Member->registMember() NotInput
+     */
+    public function testRegistMemberNotInput()
+    {
+        //빈 아이디 형식
+        $contents = array(
+            'id'        => '',
+            'pw'        => '1234@',
+            'name'      => '검증테스트',
+            'telNumber' => '010-1234-5678',
+            'email'     => 'regist@test.com'
+        );
+        $this->assertFalse($this->member->registMember($contents));
+        
+        //빈 비밀번호 형식
+        $contents = array(
+            'id'        => 'testValidate',
+            'pw'        => '',
+            'name'      => '검증테스트',
+            'telNumber' => '010-1234-5678',
+            'email'     => 'regist@test.com'
+        );
+        
+        $this->assertFalse($this->member->registMember($contents));
+        
+        //빈 이름 형식
+        $contents = array(
+            'id'        => 'testValidate',
+            'pw'        => '1234@',
+            'name'      => '',
+            'telNumber' => '010-1234-5678',
+            'email'     => 'regist@test.com'
+        );
+        
+        $this->assertFalse($this->member->registMember($contents));
+        
+        //빈 핸드폰번호 형식
+        $contents = array(
+            'id'        => 'testValidate',
+            'pw'        => '1234@',
+            'name'      => '검증테스트',
+            'telNumber' => '',
+            'email'     => 'regist@test.com'
+        );
+        
+        $this->assertFalse($this->member->registMember($contents));
+        
+        //빈 이메일 형식
+        $contents = array(
+            'id'        => 'testValidate',
+            'pw'        => '1234@',
+            'name'      => '검증테스트',
+            'telNumber' => '010-1234-5678',
+            'email'     => ''
+        );
+        
+        $this->assertNotNull($this->member->registMember($contents));
+    }
 
     /**
      * Tests Was_Member->searchId()
      */
     public function testSearchId()
     {
-        $this->assertEquals('test', $this->member->searchId(array( 'name' => '테스터', 'telNumber' => '010-1234-1234')));
+        $this->assertEquals('test', $this->member->searchId('테스터', '010-1234-1234'));
     }
 
     /**
@@ -208,14 +268,13 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
     public function testModifyMember()
     {
         $contents = array(
-            'pk'        => 1,
             'id'        => 'testModify',
             'pw'        => '1234@',
             'name'      => '수정테스트',
             'telNumber' => '010-1234-4321',
             'email'     => 'regist@test.com'
         );
-        $result = $this->member->modifyMember($contents);
+        $result = $this->member->modifyMember($contents, 1);
         $memberRow = $this->memberTable->find(1)->current();
         $this->assertNotNull($result);
         $this->assertEquals('testModify', $memberRow->id);
@@ -229,7 +288,6 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
     {
         //잘못된 아이디형식
         $contents = array(
-            'pk'        => 1,
             'id'        => 'test@Validate',
             'pw'        => '1234@',
             'name'      => '검증테스트',
@@ -237,7 +295,7 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
             'email'     => 'regist@test.com'
         );
         try {
-            $this->member->modifyMember($contents);
+            $this->member->modifyMember($contents, 1);
             $this->assertFalse(true);
         } catch (Was_Member_Exception $e) {
             $this->assertTrue(true);
@@ -245,7 +303,6 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         
         //잘못된 비밀번호 형식
         $contents = array(
-            'pk'        => 1,
             'id'        => 'testValidate',
             'pw'        => '1234',
             'name'      => '검증테스트',
@@ -254,7 +311,7 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         );
         
         try {
-            $this->member->modifyMember($contents);
+            $this->member->modifyMember($contents, 1);
             $this->assertFalse(true);
         } catch (Was_Member_Exception $e) {
             $this->assertTrue(true);
@@ -262,7 +319,6 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         
         //잘못된 이름 형식
         $contents = array(
-            'pk'        => 1,
             'id'        => 'testValidate',
             'pw'        => '1234@',
             'name'      => '검증테스트123',
@@ -271,7 +327,7 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         );
         
         try {
-            $this->member->modifyMember($contents);
+            $this->member->modifyMember($contents, 1);
             $this->assertFalse(true);
         } catch (Was_Member_Exception $e) {
             $this->assertTrue(true);
@@ -279,7 +335,6 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         
         //잘못된 핸드폰번호 형식
         $contents = array(
-            'pk'        => 1,
             'id'        => 'testValidate',
             'pw'        => '1234@',
             'name'      => '검증테스트',
@@ -288,7 +343,7 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         );
         
         try {
-            $this->member->modifyMember($contents);
+            $this->member->modifyMember($contents, 1);
             $this->assertFalse(true);
         } catch (Was_Member_Exception $e) {
             $this->assertTrue(true);
@@ -296,7 +351,6 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         
         //잘못된 이메일 형식
         $contents = array(
-            'pk'        => 1,
             'id'        => 'testValidate',
             'pw'        => '1234@',
             'name'      => '검증테스트',
@@ -305,11 +359,86 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         );
         
         try {
-            $this->member->modifyMember($contents);
+            $this->member->modifyMember($contents, 1);
             $this->assertFalse(true);
         } catch (Was_Member_Exception $e) {
             $this->assertTrue(true);
         }
+    }
+    
+    /**
+     * Tests Was_Member->modifyMember() NotInput
+     */
+    public function testModifyMemberNotInput()
+    {
+        //빈 아이디형식
+        $contents = array(
+            'id'        => '',
+            'pw'        => '1234@',
+            'name'      => '검증테스트',
+            'telNumber' => '010-1234-5678',
+            'email'     => 'regist@test.com'
+        );
+        $this->assertFalse($this->member->modifyMember($contents, 1));
+        
+        //빈 비밀번호 형식
+        $contents = array(
+            'id'        => 'testValidate',
+            'pw'        => '',
+            'name'      => '검증테스트',
+            'telNumber' => '010-1234-5678',
+            'email'     => 'regist@test.com'
+        );
+        
+        $this->assertFalse($this->member->modifyMember($contents, 1));
+        
+        //빈 이름 형식
+        $contents = array(
+            'id'        => 'testValidate',
+            'pw'        => '1234@',
+            'name'      => '',
+            'telNumber' => '010-1234-5678',
+            'email'     => 'regist@test.com'
+        );
+        
+        $this->assertFalse($this->member->modifyMember($contents, 1));
+        
+        //빈 핸드폰번호 형식
+        $contents = array(
+            'id'        => 'testValidate',
+            'pw'        => '1234@',
+            'name'      => '검증테스트',
+            'telNumber' => '',
+            'email'     => 'regist@test.com'
+        );
+        
+        $this->assertFalse($this->member->modifyMember($contents, 1));
+        
+        //빈 이메일 형식
+        $contents = array(
+            'id'        => 'testValidate',
+            'pw'        => '1234@',
+            'name'      => '검증테스트',
+            'telNumber' => '010-1234-5678',
+            'email'     => ''
+        );
+        
+        $this->assertNotNull($this->member->modifyMember($contents, 1));
+    }
+    
+    /**
+     * Tests Was_Member->getMember()
+     */
+    public function testGetMember() {
+        $expect = array(
+            'id'          => 'test',
+            'name'        => '테스터',
+            'telNumber'   => '010-1234-1234',
+            'email'       => 'test@example.com'
+        );
+        $memberInfo = $this->member->getMember('test');
+        $this->assertTrue(is_array($memberInfo));
+        $this->assertEquals($expect, $memberInfo);
     }
 }
 
