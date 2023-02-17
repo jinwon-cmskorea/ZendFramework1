@@ -15,6 +15,9 @@ require_once 'Was/Member.php';
  */
 require_once 'Was/Member/Table/Member.php';
 
+/**
+ * Was_MemberTestClass
+ */
 class Was_MemberTestClass extends Was_Member {
     public function getMemberTable() {
         return $this->_memberTable;
