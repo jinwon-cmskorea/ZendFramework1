@@ -14,8 +14,7 @@ require_once 'Was/Board/Table/FileDetails.php';
 /**
  * Was_Board_Table_FileDetailsTest
  */
-class Was_Board_Table_FileDetailsTest extends PHPUnit_Framework_TestCase
-{
+class Was_Board_Table_FileDetailsTest extends PHPUnit_Framework_TestCase {
 
     /**
      *

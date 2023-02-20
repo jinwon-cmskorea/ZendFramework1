@@ -103,11 +103,12 @@ class Was_BoardTest extends PHPUnit_Framework_TestCase
             'content'   => '내용'
         );
         $actual = $this->board->write($contents, 1);
-        $this->assertInstanceOf('Zend_Db_Table_Row', $actual);
-        $this->assertEquals(1, $actual->memberPk);
-        $this->assertEquals('제목', $actual->title);
-        $this->assertEquals('작성자', $actual->writer);
-        $this->assertEquals('내용', $actual->content);
+        $this->assertTrue(is_array($actual));
+        $this->assertEquals(1, $actual['memberPk']);
+        $this->assertEquals('제목', $actual['title']);
+        $this->assertEquals('작성자', $actual['writer']);
+        $this->assertEquals('내용', $actual['content']);
+        $this->assertEquals(0, $actual['view']);
     }
 
     /**
