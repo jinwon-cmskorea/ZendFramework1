@@ -23,7 +23,7 @@ require_once 'Zend/Validate/Regex.php';
 /**
  * @see Zend_Validate_GreaterThan
  */
-require_once 'Zend/Validate/GreaterThan.php';
+require_once 'Zend/Validate/LessThan.php';
 /**
  * 게시글 관리 클래스
  *
@@ -198,7 +198,7 @@ class Was_Board {
      * @throws Was_Board_Exception
      * @return Was_Board_Table_Board
      */
-    public function getFilDetailTable() {
+    public function getFileDetailsTable() {
         if (!$this->_fileDetailsTable) {
             throw new Was_Board_Exception('File Detail Table Is not set.');
         }
@@ -291,14 +291,12 @@ class Was_Board {
      * @exception Was_Board_Exception 게시글이 존재하지않을 시
      */
     public function addFile($boardPk, $fileInfos) {
-        //존재하는 게시글인지 확인
-        $boardTable = $this->getBoardTable();
-        $select = $boardTable->select();
-        $select->from($boardTable->getTableName, array(new Zend_Db_Expr('COUNT(pk) AS count')))
-               ->where('pk = ?', $boardPk);
-        $fetchAll = $boardTable->getAdapter()->fetchAll($select);
-        
-        if ($fetchAll[0]['count'] != 1) throw new Was_Board_Exception('Not Exist Board.');
+        //존재하는 게시글 번호인지 확인
+        try {
+            $this->_checkExistBoard($boardPk);
+        } catch (Was_Board_Exception $e) {
+            throw new Was_Board_Exception($e->getMessage());
+        }
         
         if (!isset($fileInfos['type']) || !$fileInfos['type']) return false;
         
@@ -327,7 +325,7 @@ class Was_Board {
         if ($filePk) {
             $content = base64_encode($fileInfos['content']);
             
-            $detailsTable = $this->getFilDetailTable();
+            $detailsTable = $this->getFileDetailsTable();
             $detailsPk = $detailsTable->insert(array(
                 'filePk'    => $filePk, 
                 'content'   => $content
@@ -362,7 +360,7 @@ class Was_Board {
         $boardFiles = array();
         //file_details 테이블에서 각 파일의 content를 불러옴
         foreach ($datas as $index => $content) {
-            $deTailsTable = $this->getFilDetailTable();
+            $deTailsTable = $this->getFileDetailsTable();
             $select = $deTailsTable->select();
             $select->from($deTailsTable->getTableName(), 'content')
                    ->where('filePk = ?', $content['pk']);
@@ -385,6 +383,15 @@ class Was_Board {
      * @return number
      */
     public function deleteFile($filePk, $boardPk = null) {
+        if ($boardPk) {
+            //존재하는 게시글 번호인지 확인
+            try {
+                $this->_checkExistBoard($boardPk);
+            } catch (Was_Board_Exception $e) {
+                throw new Was_Board_Exception($e->getMessage());
+            }
+        }
+        
         $fileTable = $this->getFileTable();
         if (!$boardPk) {
             $fileTable->getAdapter()->delete($fileTable->getTableName(), "pk = {$filePk}");
@@ -392,7 +399,7 @@ class Was_Board {
             $fileTable->getAdapter()->delete($fileTable->getTableName(), "pk = {$filePk} AND boardPk = {$boardPk}");
         }
         
-        $detailsTable = $this->getFilDetailTable();
+        $detailsTable = $this->getFileDetailsTable();
         $detailsTable->getAdapter()->delete($detailsTable->getTableName(), "filePk = {$filePk}");
         
         return 1;
@@ -405,15 +412,14 @@ class Was_Board {
      * @exception Was_Board_Exception 게시글이 존재하지않을 시
      */
     public function read($pk) {
-        //존재하는 게시글인지 확인
+        //존재하는 게시글 번호인지 확인
+        try {
+            $this->_checkExistBoard($pk);
+        } catch (Was_Board_Exception $e) {
+            throw new Was_Board_Exception($e->getMessage());
+        }
+        
         $boardTable = $this->getBoardTable();
-        $select = $boardTable->select();
-        $select->from($boardTable->getTableName, array(new Zend_Db_Expr('COUNT(pk) AS count')))
-               ->where('pk = ?', $pk);
-        $fetchAll = $boardTable->getAdapter()->fetchAll($select);
-        
-        if ($fetchAll[0]['count'] != 1) throw new Was_Board_Exception('Not Exist Board.');
-        
         //게시글 번호에 해당하는 레코드 찾기
         $select2 = $boardTable->select();
         $select2->where('pk = ?', $pk);
@@ -453,7 +459,7 @@ class Was_Board {
         if (array_key_exists('category', $where) && array_key_exists('search', $where)) {
             foreach ($conditionArr as $condition) {
                 if ($where['category'] == $condition) {
-                    $select->where("{$where['category']} LIKE ?", $where['search']);
+                    $select->where("{$where['category']} LIKE ?", "%".$where['search']."%");
                     break;
                 }
             }
@@ -492,17 +498,12 @@ class Was_Board {
      * @exception Was_Board_Exception 게시글이 존재하지않을 시
      */
     public function delete($pk) {
-        //존재하는 게시글인지 확인
-        $boardTable = $this->getBoardTable();
-        $select = $boardTable->select();
-        $select->from($boardTable->getTableName, array(new Zend_Db_Expr('COUNT(pk) AS count')))
-               ->where('pk = ?', $pk);
-        $fetchAll = $boardTable->getAdapter()->fetchAll($select);
-        
-        if ($fetchAll[0]['count'] != 1) throw new Was_Board_Exception('Not Exist Board.');
-        
-        $num = $boardTable->getAdapter()->delete($boardTable->getTableName(), "pk = {$pk}");
-        if ($num != 1) return false;
+        //존재하는 게시글 번호인지 확인
+        try {
+            $this->_checkExistBoard($pk);
+        } catch (Was_Board_Exception $e) {
+            throw new Was_Board_Exception($e->getMessage());
+        }
         
         //파일 삭제를 위해서 $pk 가 가진 파일들 불러오기
         $fileTable = $this->getFileTable();
@@ -510,11 +511,11 @@ class Was_Board {
         $select->where('boardPk = ?', $pk);
         $fileFetch = $fileTable->getAdapter()->fetchAll($select);
         
-        //삭제할 파일이 없으면 끝이므로 리턴
-        if (!$fileFetch) return 1;
-        
-        foreach ($fileFetch as $index => $values) {
-            $this->deleteFile($values['pk'], $pk);
+        //삭제할 파일이 있으면 파일 삭제
+        if ($fileFetch) {
+            foreach ($fileFetch as $index => $values) {
+                $this->deleteFile($values['pk'], $pk);
+            }
         }
         
         //댓글 삭제를 위해 $pk 가 가진 댓글들 불러오기
@@ -523,11 +524,17 @@ class Was_Board {
         $select->where('boardPk = ?', $pk);
         $replyFetch = $replyTable->getAdapter()->fetchAll($select);
         
-        if (!$replyFetch) return 1;
-        
-        foreach ($replyFetch as $index => $values) {
-            $this->deleteReply($values['pk'], $pk);
+        //삭제할 댓글이 있으면 댓글들 삭제
+        if ($replyFetch) {
+            foreach ($replyFetch as $index => $values) {
+                $this->deleteReply($values['pk'], $pk);
+            }
         }
+        
+        $boardTable = $this->getBoardTable();
+        //파일, 댓글 삭제 후 게시글 삭제
+        $num = $boardTable->getAdapter()->delete($boardTable->getTableName(), "pk = {$pk}");
+        if ($num != 1) return false;
         
         return 1;
     }
@@ -539,15 +546,14 @@ class Was_Board {
      * @exception Was_Board_Exception 게시글이 존재하지않을 시
      */
     public function getReply($boardPk) {
-        //존재하는 게시글인지 확인
-        $boardTable = $this->getBoardTable();
-        $select = $boardTable->select();
-        $select->from($boardTable->getTableName, array(new Zend_Db_Expr('COUNT(pk) AS count')))
-               ->where('pk = ?', $boardPk);
-        $fetchAll = $boardTable->getAdapter()->fetchAll($select);
+        //존재하는 게시글 번호인지 확인
+        try {
+            $this->_checkExistBoard($boardPk);
+        } catch (Was_Board_Exception $e) {
+            throw new Was_Board_Exception($e->getMessage());
+        }
         
-        if ($fetchAll[0]['count'] != 1) throw new Was_Board_Exception('Not Exist Board.');
-        
+        //해당 게시글에 있는 댓글 전체 가져오기
         $boardReplyTable = $this->getBoardReplyTable();
         $select = $boardReplyTable->select();
         $select->where('boardPk = ?', $boardPk);
@@ -565,26 +571,24 @@ class Was_Board {
      * @return boolean false 필수 항목 미입력, 100자 초과 댓글내용 | number
      * @exception Was_Board_Exception 게시글이 존재하지않을 시
      */
-    public function writeReply($boardPk, $writer, $content) {
-        //존재하는 게시글인지 확인
-        $boardTable = $this->getBoardTable();
-        $select = $boardTable->select();
-        $select->from($boardTable->getTableName, array(new Zend_Db_Expr('COUNT(pk) AS count')))
-               ->where('pk = ?', $boardPk);
-        $fetchAll = $boardTable->getAdapter()->fetchAll($select);
+    public function writeReply($boardPk, $writerPk, $content) {
+        //존재하는 게시글 번호인지 확인
+        try {
+            $this->_checkExistBoard($boardPk);
+        } catch (Was_Board_Exception $e) {
+            throw new Was_Board_Exception($e->getMessage());
+        }
         
-        if ($fetchAll[0]['count'] != 1) throw new Was_Board_Exception('Not Exist Board.');
-        
-        if (!$writer || !$content) return false;
+        if (!$writerPk || !$content) return false;
         
         //댓글 글자길이 100 자 초과시 false 반환
-        $contentValidator = new Zend_Validate_GreaterThan(101);
+        $contentValidator = new Zend_Validate_LessThan(101);
         if (!$contentValidator->isValid(strlen($content))) return false;
         
         $boardReplyTable = $this->getBoardReplyTable();
         $replyPk = $boardReplyTable->insert(array(
             'boardPk'       => $boardPk,
-            'memberPk'      => $writer,
+            'memberPk'      => $writerPk,
             'content'       => $content,
             'insertTime'    => new Zend_Db_Expr('NOW()')
         ));
@@ -606,14 +610,14 @@ class Was_Board {
      * @exception Was_Board_Exception 게시글이 존재하지않을 시
      */
     public function deleteReply($replyPk, $boardPk = null) {
-        //존재하는 게시글인지 확인
-        $boardTable = $this->getBoardTable();
-        $select = $boardTable->select();
-        $select->from($boardTable->getTableName, array(new Zend_Db_Expr('COUNT(pk) AS count')))
-               ->where('pk = ?', $boardPk);
-        $fetchAll = $boardTable->getAdapter()->fetchAll($select);
-        
-        if ($fetchAll[0]['count'] != 1) throw new Was_Board_Exception('Not Exist Board.');
+        if ($boardPk) { 
+            //존재하는 게시글 번호인지 확인
+            try {
+                $this->_checkExistBoard($boardPk);
+            } catch (Was_Board_Exception $e) {
+                throw new Was_Board_Exception($e->getMessage());
+            }
+        }
         
         $boardReplyTable = $this->getBoardReplyTable();
         if (!$boardPk) {
@@ -652,6 +656,22 @@ class Was_Board {
         }
         
         return true;
+    }
+    
+    /**
+     * 존재하는 게시글인지 확인하는 메소드
+     * @param number 
+     * @throws Was_Board_Exception 존재하지 않는 게시글인 경우
+     */
+    protected function _checkExistBoard($boardPk) {
+        //존재하는 게시글인지 확인
+        $boardTable = $this->getBoardTable();
+        $select = $boardTable->select();
+        $select->from($boardTable->getTableName(), array(new Zend_Db_Expr('COUNT(pk) AS count')))
+        ->where('pk = ?', $boardPk);
+        $fetchAll = $boardTable->getAdapter()->fetchAll($select);
+        
+        if ($fetchAll[0]['count'] != 1) throw new Was_Board_Exception('Not Exist Board.');
     }
 }
 
