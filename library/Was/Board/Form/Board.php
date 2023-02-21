@@ -29,6 +29,7 @@ class Was_Board_Form_Board extends Zend_Form {
             "ViewHelper",
             "Errors",
             "Description",
+            "Label",
             array("HtmlTag", array("tag" => "div"))
         ));
         
