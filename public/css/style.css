@@ -1,0 +1,519 @@
+/* login.html css 요소 */
+.sep-line {
+	margin: 30px 40px 5px;
+	padding-bottom: 9px;
+	border-bottom: 1px solid rgb(208, 206, 206);
+	font-size: large;
+	color: rgb(89, 89, 89);
+}
+
+.center {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.control-label-left {
+    padding-top: 5px;
+    padding-left: 20px;
+    margin-top: 10px;
+    color: rgb(89, 89, 89);
+    font-size: 15px;
+}
+
+.des-padding {
+	padding: 5px 0 15px;
+}
+
+.myForm-control {
+    display: block;
+    width: 100%;
+    height: 38px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 2px solid #ccc;
+}
+
+.login-btn {
+	padding: 8px 0;
+	background-color: rgb(68, 114, 196);
+	color: #fff;
+	border: none;
+	font-size: 18px;
+}
+
+.signup-btn {
+	background-color: rgb(91, 155, 213);
+	color: #fff;
+	margin-top: 15px;
+	margin-bottom: 10px;
+	border: 3px solid rgb(65, 113, 156);
+	padding: 8px 0;
+}
+
+/* signup.php css 요소 */
+.fence {
+	border: 1px solid black;
+	/*
+	padding-top: 10%;
+	padding-bottom: 10%;
+	*/
+	padding-left: 3%;
+}
+
+.signup-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.signup-title {
+	font-size: medium;
+	margin-top: 10%;
+	margin-bottom: 45%;
+	margin-left: -6%;
+}
+
+.signup-title .subtitle {
+	color: rgb(132, 151, 176);
+	padding: 10px;
+}
+
+.category-design {
+	background-color: rgb(191, 191, 191);
+	color: black;
+	text-align: center;
+	padding: 7px;
+	font-size: 11px;
+}
+
+.signup-button {
+	float: right;
+	margin: 50px 0 20px;
+}
+
+.signup-button .submit-btn {
+	margin-right: 10px;
+	color: white;
+	padding-left: 45px;
+	padding-right: 45px;
+	border: none;
+}
+.signup-button .cancle-btn {
+	background-color: rgb(255, 255, 255);
+    margin-left: 10px;
+	padding-left: 45px;
+    padding-right: 45px;
+    border: 1px solid rgb(166, 166, 166);
+}
+
+.myForm-control3 {
+    display: block;
+    width: 100%;
+    height: 32px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid black;
+}
+
+/* boardList.php css 요소 */
+
+.menubar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(89, 89, 89);
+    width: 100%;
+    min-height: 50px;
+}
+
+.menutitle {
+    font-size: 30px;
+    color: white;
+    padding: 10px;
+}
+
+.info-group {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.user-info {
+    color: white;
+    margin-top: 5px;
+    padding: 15px;
+    font-size: large;
+}
+
+.logout-btn {
+    color: black;
+    background-color: white;
+    border: none;
+    padding: 5px 15px;
+}
+
+/* boardList.php - 페이지 상단 요소 */
+.list-title {
+	font-size: x-large;
+	padding-top: 10px;
+	padding-bottom: 15px;
+}
+
+.list-descript {
+	font-size: medium;
+	border: 1px solid rgb(191, 191, 191);
+	border-radius: 8px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.small-ele {
+	color: rgb(132, 151, 176);
+}
+
+/* boardList.php - 게시글 상단 요소 */
+.board-upper {
+    float: left;
+}
+
+.search-form {
+    /*margin: 1em 0;*/
+}
+
+.selectbox {
+    width: 100px;
+    height: 32px;
+    background-color: rgb(191, 191, 191);
+    border: 1px solid rgb(191, 191, 191);
+    color: white;
+    padding: 4px 0 4px;
+    text-align: center;
+}
+
+.searchCnt {
+    float: left;
+    margin: 0.4em 0 0 1em;
+}
+
+.write-btn-div {
+    float: right;
+}
+
+.write-btn-div::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.s-input {
+    border: 1px solid rgb(191, 191, 191);
+    height: 32px;
+}
+
+.s-button {
+    margin-bottom: 2px;
+    height: 32px;
+    background-color: rgb(143, 170, 220);
+    border-radius: 4px;
+    padding: 4px 30px 4px 30px;
+    color: white;
+}
+
+.write-btn {
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.view-btn {
+	background-color: rgb(255, 192, 0);
+	color: white;
+	padding-right: 20px;
+	padding-left: 20px;
+}
+
+.del-btn {
+	background-color: rgb(255, 0, 0);
+    color: white;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+/* boardList.php - 게시글 리스트 요소 */
+th, td {
+    text-align: center;
+    vertical-align: middle;
+}
+th {
+    padding: 15px 0;
+}
+
+td {
+    padding: 10px 0;
+}
+
+.myTable {
+    width: 100%;
+}
+
+.add-top-line {
+    border-top: 1px solid rgb(191, 191, 191);
+    border-bottom: 1px solid rgb(191, 191, 191);
+}
+
+.list-body {
+	margin-top: 50px;
+}
+
+.add-bottom-line {
+    border-bottom: 1px solid rgb(191, 191, 191);
+}
+
+/* boardList.php - 게시글 하단 페이징 요소 */
+.pagination > li > a {
+	float: none;
+}
+
+/* logoutOk.html css 요소 */
+.logout-text {
+    font-size: large;
+    margin: 30px 20px 20px;
+}
+
+.containerFooter {
+    display: flex;
+    justify-content: space-between;
+}
+
+.threeMsg {
+    height: 60px;
+    line-height: 90px;
+    margin-left: 20px;
+    color: rgb(127, 127, 127);
+}
+
+.logoutOk-btn {
+    margin-top : 20px;
+    margin-bottom : 20px;
+    padding: 10px 25px;
+    font-size: medium;
+    background-color: rgb(68, 114, 196);
+    border: none;
+    color: white;
+}
+
+/* writeBoard.php 요소 */
+.list-descript2 {
+    font-size: medium;
+    border: 1px solid rgb(191, 191, 191);
+    border-radius: 8px;
+    padding: 15px 10px;
+}
+
+.control-label-center {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    text-align: center;
+    background-color: rgb(191, 191, 191);
+    color: white;
+}
+
+.myForm-control2 {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+}
+
+.myForm-control2-textarea {
+    display: block;
+    width: 100%;
+    height: 30%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+}
+
+.write-button {
+    float: right;
+    margin-right: -15px;
+    font-size: medium;
+}
+
+.write-button .submit-btn {
+	background-color: rgb(112, 173, 71);
+    margin-right: 10px;
+    color: white;
+    padding-left: 40px;
+    padding-right: 40px;
+    border: none;
+}
+.write-button .cancle-btn {
+    background-color: rgb(255, 255, 255);
+    margin-left: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border: 1px solid rgb(166, 166, 166);
+}
+
+.space-form {
+    margin-left: 15px;
+}
+
+.input-writer {
+    color: rgb(191, 191, 191);
+    text-align: center;
+}
+
+.input-file {
+    height: 34px;
+    font-size: 15px;
+}
+
+/* viewBoard.php 요소 */
+.view-box {
+	margin: 150px 30px 0 30px;
+}
+
+.page-header-custom {
+    font-size: x-large;
+    margin: 50px 20px 0;
+    padding: 10px 20px 10px;
+    border-bottom: 3px dashed #eee;
+    color: rgb(118, 113, 113);
+}
+
+.info {
+    font-size: large;
+    float: right;
+    margin-top: 10px;
+    color: rgb(127, 127, 127);
+}
+
+.writer-info {
+    font-weight: bold;
+}
+
+.space {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.text-box {
+    height: 300px;
+    padding: 20px;
+    margin: 0 20px;
+    border-bottom: 3px dashed #eee;
+    font-size: 20px;
+    line-height: 150%;
+    color: rgb(118, 113, 113);
+}
+
+.file-info {
+	margin: 0 20px;
+    padding: 20px;
+    border-bottom: 3px dashed #eee;
+}
+
+.file-link {
+    text-decoration: none;
+    color: rgb(127, 127, 127);
+}
+
+.time-info {
+	margin: 0 20px;
+    padding: 20px;
+    font-size: medium;
+}
+
+.time-info .line {
+    display: flex;
+    margin: 5px 0;
+}
+
+.time-title {
+    font-weight: bold;
+    color: rgb(127, 127, 127);
+}
+
+.view-page-button {
+    float: right;
+    font-size: medium;
+}
+
+.view-page-button .submit-btn {
+    background-color: rgb(112, 173, 71);
+    margin-right: 10px;
+    color: white;
+    padding-left: 40px;
+    padding-right: 40px;
+    border: none;
+}
+.view-page-button .cancle-btn {
+    background-color: rgb(255, 255, 255);
+    margin-left: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border: 1px solid rgb(166, 166, 166);
+}
+
+.list-btn {
+	background-color: white;
+	color: black;
+	border: 1px solid rgb(127, 127, 127);
+}
+
+/* editBoard.php 요소 */
+.del-file-btn {
+    color: white;
+    background-color: rgb(237, 125, 49);
+    border: 2px solid rgb(174, 90, 33);
+}
+
+.time-info2 {
+    font-size: medium;
+    margin-left: -15px;
+}
+
+.edit-time-float {
+    float: left;
+}
+
+.edit-time-diplay {
+    float: left;
+}
+
+.edit-time-diplay::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.file-name {
+    margin: 0 10px 15px;
+}
+
+.update-time {
+    margin-right: 49%;
+}
