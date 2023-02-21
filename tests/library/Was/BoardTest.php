@@ -310,9 +310,9 @@ class Was_BoardTest extends PHPUnit_Framework_TestCase {
         $fileInfos2['content'] = file_get_contents($infos['testFilePath']);
         $this->assertTrue($this->board->addFile($infos['boardPk'], $fileInfos2));
         
-        $res = $this->board->getFiles($infos['boardPk']);
-        $this->assertEquals(1, $this->board->deleteFile($res[0]['pk'], $infos['boardPk']));
-        $this->assertEquals(1, $this->board->deleteFile($res[1]['pk'], $infos['boardPk']));
+        $this->assertEquals(2, count($this->board->getFiles($infos['boardPk'])));
+        $this->assertEquals(1, $this->board->deleteFile(null, $infos['boardPk']));
+        $this->assertEquals(0, count($this->board->getFiles($infos['boardPk'])));
         
         //테스트 파일 삭제
         unlink(__DIR__ . DIRECTORY_SEPARATOR . 'Board' . DIRECTORY_SEPARATOR . 'tempFile' . DIRECTORY_SEPARATOR . 'test.png');
@@ -528,6 +528,8 @@ class Was_BoardTest extends PHPUnit_Framework_TestCase {
         $select->where('boardPk = ?', 1);
         $result = $replyTable->getAdapter()->fetchAll($select);
         $this->assertEquals(array(), $result);
+        
+        unlink(__DIR__ . DIRECTORY_SEPARATOR . 'Board' . DIRECTORY_SEPARATOR . 'tempFile' . DIRECTORY_SEPARATOR . 'test.png');
     }
 
     /**
@@ -589,13 +591,12 @@ class Was_BoardTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $actual);
         $this->assertEquals(array(), $this->board->getReply($boardRow['pk']));
         
-        //2개의 댓글 작성 후 삭제
-        $replyRow2 = $this->board->writeReply($boardRow['pk'], 20, '현재 작성자 기본키 20');
-        $replyRow3 = $this->board->writeReply($boardRow['pk'], 30, '현재 작성자 기본키 30');
+        //2개의 댓글 작성 후 전체 삭제
+        $this->board->writeReply($boardRow['pk'], 20, '현재 작성자 기본키 20');
+        $this->board->writeReply($boardRow['pk'], 30, '현재 작성자 기본키 30');
         
-        $this->board->deleteReply($replyRow2['pk'], $boardRow['pk']);
-        $this->assertEquals(1, count($this->board->getReply($boardRow['pk'])));
-        $this->board->deleteReply($replyRow3['pk'], $boardRow['pk']);
+        $this->assertEquals(2, count($this->board->getReply($boardRow['pk'])));
+        $this->board->deleteReply(null, $boardRow['pk']);
         $this->assertEquals(0, count($this->board->getReply($boardRow['pk'])));
     }
     
