@@ -25,17 +25,15 @@ class Was_Auth_Form_Login extends Zend_Form {
             "ViewHelper",
             "Errors",
             "Description",
-            array("HtmlTag", array("tag" => "div", "class" => ""))
+            array("HtmlTag", array("tag" => "div"))
         ));
 
         $this->addElement('text', 'id', array(
-            'class'       => '',
             'placeholder' => '아이디',
             'required'    => true,
             'label'  => '아이디',
         ));
         $this->addElement('password', 'pw', array(
-            'class'         => '',
             'placeholder'   => '비밀번호',
         ));
         $pw = $this->getElement('pw');
