@@ -124,7 +124,17 @@ class Was_Auth_Storage implements Zend_Auth_Storage_Interface {
         if (!isset($contents->remoteIp)) {
             throw new Was_Auth_Storage_Exception("not exist remoteIp property");
         }
-
+        
+        // 원격 아이피 없는경우
+        if (is_null($contents->remoteIp) || !$contents->remoteIp) {
+            $contents->remoteIp = $_SERVER['REMOTE_ADDR'];
+        }
+        
+        // 세션아이디 없는경우
+        if (is_null($contents->sessionId) || !$contents->sessionId) {
+            $contents->sessionId = session_id();
+        }
+        
         // 세션에 기록
         $this->_session->write($contents);
 
