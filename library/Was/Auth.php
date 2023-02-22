@@ -6,6 +6,7 @@
  * @see Was_Auth_Table_History
  * @see Was_Auth_Storage
  * @see Zend_Auth_Result
+ * @see Zend_Auth_Exception
  */
 require_once 'Zend/Auth.php';
 require_once 'Zend/Auth/Result.php';
@@ -13,6 +14,7 @@ require_once 'Was/Auth/Table/Identity.php';
 require_once 'Was/Auth/Table/Access.php';
 require_once 'Was/Auth/Table/History.php';
 require_once 'Was/Auth/Storage.php';
+require_once 'Was/Auth/Exception.php';
 
 /**
  * 인증관리

@@ -1,7 +1,6 @@
 <?php
 /**
- * 테스트용 form 컨트롤러
- *
+ * 계정 컨트롤러
  */
 /**
  * @see Was_Auth
@@ -20,28 +19,29 @@ require_once 'Was/Auth/AdapterFactory.php';
  */
 require_once 'Zend/Db.php';
 /**
+ * @see Zend_Session
+ */
+require_once 'Zend/Session.php';
+/**
  * @see Bootstrap
  */
 require_once __DIR__ . '/../Bootstrap.php';
 
 class TestFormController extends Zend_Controller_Action {
-    
     /*
      * {@inheritDoc}
      * @see Zend_Controller_Action::init()
      */
     public function init() {
-        
+        //기본 레이아웃 설정
+        $this->_helper->layout->setLayout('default1');
     }
     
     /**
      * login page Action
      */
     public function signinAction() {
-        //기본 레이아웃 설정
-        $this->_helper->layout->setLayout('default1');
         $request = $this->getRequest();
-        
         require_once 'Was/Auth/Form/Login.php';
         $loginForm = new Was_Auth_Form_Login();
         
@@ -49,24 +49,28 @@ class TestFormController extends Zend_Controller_Action {
             if ($loginForm->isValid($request->getPost())) {
                 //auth 인스턴스 생성
                 $auth = Was_Auth::getInstance();
-                //mysqli adapter 생성
-                $db = Bootstrap::setDbFactory();
                 //테이블 객체 생성
-                $identityTable = new Was_Auth_Table_Identity($db);
-                $accessTable = new Was_Auth_Table_Access($db);
-                $historyTable = new Was_Auth_Table_History($db);
+                $identityTable = new Was_Auth_Table_Identity();
+                $accessTable = new Was_Auth_Table_Access();
+                $historyTable = new Was_Auth_Table_History();
                 //auth 객체 내부에 테이블 세팅
                 $auth->setAccessTable($accessTable);
                 $auth->setHistoryTable($historyTable);
                 //adapter 생성
                 $adapter = Was_Auth_AdapterFactory::getAdapter($identityTable);
-                //post로 받아온 값을을 세팅
-                $param = $request->getPost();
+                //getAllParams로 값들을 가져옴
+                $param = $this->getAllParams();
                 $adapter->setIdentity($param['id']);
                 $adapter->setCredential($param['pw']);
                 
                 $authRes = $auth->authenticate($adapter);
-                var_dump($authRes->isValid());
+                if ($authRes->isValid()) {
+                    $this->redirect('/board/boardlist');
+                } else if (!$authRes->isValid()) {
+                    echo "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.')</script>";
+                    echo "<script>history.back(-1);</script>";
+                }
+            } else {
             }
         }
         
@@ -117,5 +121,16 @@ class TestFormController extends Zend_Controller_Action {
         
         $this->view->form = $form;
     }
+    
+    public function searchidAction() {
+        $request = $this->getRequest();
+        
+        if ($this->getRequest()->isPost()) {
+            if ($form->isValid($request->getPost())) {
+                echo "test";
+            }
+        }
+    }
+    
 }
 

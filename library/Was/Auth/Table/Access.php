@@ -35,7 +35,6 @@ class Was_Auth_Table_Access extends Zend_Db_Table_Abstract {
         if (is_null($sessionId)) {
             $sessionId = session_id();
         }
-
         return $this->insert(array(
             'identityId' => $identityId,
             'remoteIp'      => $remoteIp,

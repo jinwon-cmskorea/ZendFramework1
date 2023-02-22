@@ -1,7 +1,79 @@
 <?php
 $this->headTitle("로그인");
 
+//
+if (isset($_SESSION['Was_Auth'])) {
+    echo "<script type=\"text/javascript\">alert('이미 로그인하셨습니다.');</script>";
+    echo "<script type=\"text/javascript\">location.href='/board/boardlist';</script>";
+}
 ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        //저장된 쿠키값을 가져와서 id 입력칸에 삽입. 없으면 공백 삽입
+        var key = getCookie("key");
+        $("#id").val(key);
+        
+        //id 를 저장하고 페이지 로딩 시, 입력칸에 저장된 id가 표시된 상태라면 체크박스 체크 유지
+        if ($("#id").val() != "") {
+            $("#isSaveId").attr("checked", true);
+        }
+        
+        //체크 박스 변화 확인
+        $("#isSaveId").change(function(){
+            //체크되었을 때
+            if ($("#isSaveId").is(":checked")) {
+                //7일동안 쿠키 보관
+                setCookie("key", $("#id").val(), 7);
+            } else {
+                //체크 해제시 쿠키 삭제
+                deleteCookie("key");
+            }
+        });
+        
+        $("#id").keyup(function(){
+            if ($("#isSaveId").is(":checked")) {
+                setCookie("key", $("#id").val(), 7);
+            }
+        });
+    });
+    //쿠키 저장하기
+    function setCookie(cookieName, value, expireDays) {
+        //현재시각 저장
+        var expireDate = new Date();
+        //현재 몇 일인지 확인후, 설정한 만료 일자를 더해서 지정 (현재 월 시작일 + 지정날짜)
+        expireDate.setDate(expireDate.getDate() + expireDays);
+        //GMT 포멧으로 설정
+        var cookieValue = escape(value) + ((expireDays == null) ? "" : "; expires=" + expireDate.toGMTString());
+        document.cookie = cookieName + "=" + cookieValue;
+    }
+    
+    //쿠키 삭제
+    function deleteCookie(cookieName) {
+        var expireDate = new Date();
+        expireDate.setDate(expireDate.getDate() - 1);
+        document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
+    }
+    
+    //쿠키 가져오기
+    function getCookie(cookieName) {
+        cookieName = cookieName + '=';
+        
+        var cookieData = document.cookie;
+        var start = cookieData.indexOf(cookieName);
+        var cookieValue = '';
+        
+        if (start != -1) {
+            start += cookieName.length;
+            var end = cookieData.indexOf(';', start);
+            if (end == -1) {
+                end = cookieData.length;
+            }
+            cookieValue = cookieData.substring(start, end);
+        }
+        
+        return unescape(cookieValue);
+    }
+</script>
 <div class="container center">
     <div class="col-sm-6" style="background-color: rgb(231, 230, 230);">
         <div class="text-center">
@@ -20,14 +92,12 @@ $this->headTitle("로그인");
                 <label for="isSaveId" class="chkText"><span>아이디 저장</span></label>
                 <div class="links">
                 <?php 
-                    echo $this->FormButton('signUp', '회원가입', array('class' => 'signup-btn', 'onclick' => ''));
-                    echo $this->FormButton('searchId', '아이디찾기', array('class' => 'searchId-btn', 'onclick' => ''));
+                    echo $this->FormButton('signUp', '회원가입', array('class' => 'signup-btn', 'onclick' => 'location.href="testmember"'));
+                    echo $this->FormButton('searchId', '아이디찾기', array('class' => 'searchId-btn', 'onclick' => 'location.href="searchid"'));
                 ?>
                 </div>
             </div>
-            
-        </div>
-        
-    </div>
+        </div><!-- login-bottom end -->
+    </div><!-- login window end -->
 </div>
 

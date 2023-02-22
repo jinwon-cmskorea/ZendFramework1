@@ -4,24 +4,24 @@
  */
 require_once 'Zend/Config/Ini.php';
 /**
+ * @see Zend_Session
+ */
+require_once 'Zend/Session.php';
+/**
  * Bootstrap3
  */
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
     /**
-     * DB Adapter 를 만들어서 반환해준다.
-     * 
-     * @return Zend_Db_Adapter_Abstract
+     * 전역적으로 db adapter 설정
      */
-    public static function setDbFactory() {
-        
-        $configIni = new Zend_Config_Ini(__DIR__ . '/configs/application.ini', 'testing');
-        
-        $zdb = Zend_Db::factory("Mysqli", array(
-            'host'      => $configIni->resources->db->params->host,
-            'username'  => $configIni->resources->db->params->username,
-            'password'  => $configIni->resources->db->params->password,
-            'dbname'    => $configIni->resources->db->params->dbname
-        ));
-        return $zdb;
+    public function _initDb() {
+        $dbConfig = $this->getOption('resources');
+        $db = Zend_Db::factory('Mysqli', $dbConfig['db']['params']);
+        Zend_Db_Table_Abstract::setDefaultAdapter($db);
     }
+    
+    public function _initSession() {
+        Zend_Session::start();
+    }
+    
 }

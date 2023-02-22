@@ -1,0 +1,8 @@
+<?php
+var_dump($_SESSION['Was_Auth']);
+echo "게시글 리스트 페이지";
+
+//임시 로그아웃. identity 테이블의 레코드가 삭제 안되므로 
+session_unset();
+session_destroy();
+echo "<script type=\"text/javascript\">location.href='/testform/signin';</script>";

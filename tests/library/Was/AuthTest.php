@@ -108,6 +108,7 @@ class Was_AuthTest extends PHPUnit_Framework_TestCase {
             'pw'    => md5('test1234'),
             'name'  => '관리자',
         ));
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
     }
 
     /**
