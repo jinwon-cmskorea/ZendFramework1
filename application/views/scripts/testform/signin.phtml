@@ -1,0 +1,33 @@
+<?php
+$this->headTitle("로그인");
+
+?>
+<div class="container center">
+    <div class="col-sm-6" style="background-color: rgb(231, 230, 230);">
+        <div class="text-center">
+            <div class="sep-line">
+               <strong>CMSKOREA Board</strong>
+            </div>
+            <div class="des-padding">아이디 / 비밀번호를 입력해 주세요.</div>
+        </div>
+        <?php
+            //form rendering
+            echo $this->form->render(); 
+        ?>
+        <div class="login-bottom">
+            <div class="checks">
+                <?php echo $this->FormCheckbox('isSaveId', 'no', array('class' => 'hello')); ?>
+                <label for="isSaveId" class="chkText"><span>아이디 저장</span></label>
+                <div class="links">
+                <?php 
+                    echo $this->FormButton('signUp', '회원가입', array('class' => 'signup-btn', 'onclick' => ''));
+                    echo $this->FormButton('searchId', '아이디찾기', array('class' => 'searchId-btn', 'onclick' => ''));
+                ?>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+

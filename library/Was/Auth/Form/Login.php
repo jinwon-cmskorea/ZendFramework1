@@ -16,37 +16,38 @@ class Was_Auth_Form_Login extends Zend_Form {
      */
     public function init() {
         $decorators = array(
-            "Description", "FormElements", "Fieldset", "Form"
+            "Description",
+            "FormElements",
+            array('Form', array('class' => 'form-horizontal'))
         );
         $this->setDecorators($decorators);
 
         // 엘리먼트 데코레이터 설정
         $this->setElementDecorators(array(
             "ViewHelper",
-            "Errors",
             "Description",
-            array("Label"),
-            array("HtmlTag", array("tag" => "div", 'class' => 'form-horizontal'))
+            array("Label", array('class' => 'col-sm-2 control-label-left')),
+            array("HtmlTag", array("tag" => "div", 'class' => 'form-group'))
         ));
 
         $this->addElement('text', 'id', array(
-            'class'       => 'myForm-control',
-            'placeholder' => '아이디',
-            'required'    => true,
-            'label'  => '아이디',
+            'class'          => 'myForm-control',
+            'required'      => true,
+            'label'         => '아이디',
         ));
         $this->addElement('password', 'pw', array(
-            'class'       => 'myForm-control',
-            'placeholder'   => '비밀번호',
-            'label'  => '비밀번호'
+            'class'         => 'myForm-control',
+            'required'      => true,
+            'label'         => '비밀번호',
         ));
-        $pw = $this->getElement('pw');
-        $pw->setRequired();
 
         $this->addElement('submit', 'login', array(
             'class' => 'btn-block login-btn',
-            'value' => '로그인'
+            'label' => '로그인'
         ));
+        $login = $this->getElement('login');
+        $login->removeDecorator('HtmlTag');
+        $login->removeDecorator('Label');
     }
 }
 

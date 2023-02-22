@@ -37,7 +37,7 @@ class TestFormController extends Zend_Controller_Action {
     /**
      * login page Action
      */
-    public function testsignAction() {
+    public function signinAction() {
         //기본 레이아웃 설정
         $this->_helper->layout->setLayout('default1');
         $request = $this->getRequest();

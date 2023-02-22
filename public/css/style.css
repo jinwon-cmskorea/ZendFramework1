@@ -28,7 +28,7 @@
 
 .myForm-control {
     display: block;
-    width: 100%;
+    width: 80.5%;
     height: 38px;
     padding: 6px 12px;
     font-size: 14px;
@@ -47,13 +47,69 @@
 	font-size: 18px;
 }
 
+.login-bottom {
+    margin-top: 20px;
+}
+
+.login-bottom .links {
+    float: right;
+}
+
+.checks {
+    position: relative;
+}
+
+/* 기존 체크박스 display none */
+.checks input[id="isSaveId"] {
+    display: none;
+}
+
+/* 체크박스 디자인 - 일반 상태 */
+.checks input[id="isSaveId"] + label {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+/* 체크박스 디자인 */
+.checks input[id="isSaveId"] + label::before {
+    content: ' ';
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center; 
+    vertical-align: middle;
+    border: 2px solid rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    margin: 5px 0 5px 0;
+}
+
+/* 체크박스 디자인 - 체크 되었을 경우 */
+.checks input[id="isSaveId"]:checked + label::before {
+    content: '✔';
+    font-size: 20px;
+    background-color: rgb(255, 255, 255);
+}
+
+.chkText span {
+    padding-left: 15px;
+}
+
 .signup-btn {
-	background-color: rgb(91, 155, 213);
+	background-color: rgb(255, 192, 0);
 	color: #fff;
-	margin-top: 15px;
-	margin-bottom: 10px;
-	border: 3px solid rgb(65, 113, 156);
-	padding: 8px 0;
+	margin: 0 5px 10px;
+	border: 2px solid rgb(127, 96, 0);
+	padding: 5px 15px;
+}
+
+.searchId-btn {
+    background-color: rgb(112, 173, 71);
+    color: #fff;
+    margin: 0 0 10px 5px;
+    border: 2px solid rgb(84, 130, 53);
+    padding: 5px 15px;
 }
 
 /* signup.php css 요소 */
