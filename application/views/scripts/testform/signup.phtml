@@ -1,0 +1,16 @@
+<?php
+$this->headTitle('회원가입');
+?>
+<div class="container signup-center">
+    <div class="col-sm-4 fence">
+        <div class="signup-title">
+            <strong>씨엠에스코리아 게시판</strong><small class="subtitle">- 회원가입 -</small>
+        </div>
+        <?php
+            $submit = $this->form->getElement('submit');
+            $submit->setLabel('가 입');
+        
+            echo $this->form->render(); 
+        ?>
+    </div>
+</div>

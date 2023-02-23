@@ -110,7 +110,7 @@ class TestFormController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
     
-    public function testmemberAction() {
+    public function signupAction() {
         $request = $this->getRequest();
         
         require_once 'Was/Member/Form/Member.php';

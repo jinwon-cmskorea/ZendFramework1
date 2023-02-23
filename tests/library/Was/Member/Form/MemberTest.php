@@ -60,6 +60,7 @@ class Was_Member_Form_MemberTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('id', $element->getName());
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('아이디', $element->getLabel());
+        $this->assertEquals('myForm-control3 col-sm-9', $element->getAttrib('class'));
         $this->assertInstanceOf('Zend_Validate_Alnum', $element->getValidator('alnum'));
 
         $element = $this->form->getElement('pw');
@@ -68,6 +69,7 @@ class Was_Member_Form_MemberTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('pw', $element->getName());
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('비밀번호', $element->getLabel());
+        $this->assertEquals('myForm-control3 col-sm-9', $element->getAttrib('class'));
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
         
         $element = $this->form->getElement('name');
@@ -76,6 +78,7 @@ class Was_Member_Form_MemberTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('name', $element->getName());
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('이름', $element->getLabel());
+        $this->assertEquals('myForm-control3 col-sm-9', $element->getAttrib('class'));
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
         
         $element = $this->form->getElement('phone');
@@ -84,6 +87,7 @@ class Was_Member_Form_MemberTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('phone', $element->getName());
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('휴대전화', $element->getLabel());
+        $this->assertEquals('myForm-control3 col-sm-9', $element->getAttrib('class'));
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
         
         $element = $this->form->getElement('email');
@@ -91,19 +95,22 @@ class Was_Member_Form_MemberTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('email', $element->getId());
         $this->assertEquals('email', $element->getName());
         $this->assertEquals('이메일', $element->getLabel());
+        $this->assertEquals('myForm-control3 col-sm-9', $element->getAttrib('class'));
         $this->assertInstanceOf('Zend_Validate_EmailAddress', $element->getValidator('emailaddress'));
         
         $element = $this->form->getElement('submit');
         $this->assertInstanceOf('Zend_Form_Element_Submit', $element);
         $this->assertEquals('submit', $element->getId());
         $this->assertEquals('submit', $element->getName());
-        $this->assertEquals('제출', $element->getLabel());
+        $this->assertEquals('submit-btn', $element->getAttrib('class'));
+        $this->assertEquals(true, $element->getAttrib('disabled'));
         
         $element = $this->form->getElement('cancle');
         $this->assertInstanceOf('Zend_Form_Element_Button', $element);
         $this->assertEquals('cancle', $element->getId());
         $this->assertEquals('cancle', $element->getName());
         $this->assertEquals('취소', $element->getLabel());
+        $this->assertEquals('cancle-btn', $element->getAttrib('class'));
     }
 }
 

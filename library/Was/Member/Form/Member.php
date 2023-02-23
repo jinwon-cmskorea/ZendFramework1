@@ -24,7 +24,9 @@ class Was_Member_Form_Member extends Zend_Form {
      */
     public function init() {
         $decorators = array(
-            "Description", "FormElements", "Fieldset", "Form"
+            "Description",
+            "FormElements",
+            array("Form", array('class' => 'form-horizontal'))
         );
         
         $this->setDecorators($decorators);
@@ -33,10 +35,12 @@ class Was_Member_Form_Member extends Zend_Form {
             "ViewHelper",
             "Errors",
             "Description",
-            array("HtmlTag", array("tag" => "div"))
+            array("Label", array('class' => 'col-sm-2 category-design')),
+            array("HtmlTag", array("tag" => "div", 'class' => 'form-group'))
         ));
         
         $this->addElement('text', 'id', array(
+            'class'     => 'myForm-control3 col-sm-9',
             'required'  => true,
             'label'     => '아이디'
         ));
@@ -44,6 +48,7 @@ class Was_Member_Form_Member extends Zend_Form {
         $id->addValidator(new Zend_Validate_Alnum());
         
         $this->addElement('password', 'pw', array(
+            'class'     => 'myForm-control3 col-sm-9',
             'required'  => true,
             'label'     => '비밀번호'
         ));
@@ -51,6 +56,7 @@ class Was_Member_Form_Member extends Zend_Form {
         $pw->addValidator(new Zend_Validate_Regex('/(?=.*[~`!@#$%\^&*()-+=])[A-Za-z0-9~`!@#$%\^&*()-+=]+$/'));
         
         $this->addElement('text', 'name', array(
+            'class'     => 'myForm-control3 col-sm-9',
             'required'  => true,
             'label'     => '이름'
         ));
@@ -58,6 +64,7 @@ class Was_Member_Form_Member extends Zend_Form {
         $name->addValidator(new Zend_Validate_Regex('/[가-힣A-Za-z]+$/'));
         
         $this->addElement('text', 'phone', array(
+            'class'     => 'myForm-control3 col-sm-9',
             'required'  => true,
             'label'     => '휴대전화'
         ));
@@ -65,14 +72,36 @@ class Was_Member_Form_Member extends Zend_Form {
         $phone->addValidator(new Zend_Validate_Regex('/^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/'));
         
         $this->addElement('text', 'email', array(
+            'class'     => 'myForm-control3 col-sm-9',
             'label'     => '이메일'
         ));
         $email = $this->getElement('email');
         $email->addValidator(new Zend_Validate_EmailAddress());
         
-        $this->addElement('submit', 'submit', array('label' => '제출'));
+        $this->addElement('submit', 'submit', array(
+            'class' => 'submit-btn',
+            'disabled' => true
+        ));
+        $submit = $this->getElement('submit');
+        $submit->removeDecorator('Label');
+        $submit->removeDecorator('HtmlTag');
         
-        $this->addElement('button', 'cancle', array('label' => '취소'));
+        $this->addElement('button', 'cancle', array(
+            'label' => '취 소',
+            'class' => 'cancle-btn'
+        ));
+        $cancle = $this->getElement('cancle');
+        $cancle->removeDecorator('Label');
+        $cancle->removeDecorator('HtmlTag');
+        
+        //가입, 취소 버튼을 묶어주기 위해 DisplayGroup 사용
+        $this->addDisplayGroup(array('submit', 'cancle'), 'btns');
+        $group = $this->getDisplayGroup('btns');
+        $group->clearDecorators();
+        $group->addDecorators(array(
+            'FormElements',
+            array('HtmlTag', array('tag' => 'div', 'class' => 'signup-button'))
+        ));
     }
 }
 
