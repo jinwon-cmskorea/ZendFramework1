@@ -26,14 +26,13 @@ class Was_Member_Form_Member extends Zend_Form {
         $decorators = array(
             "Description",
             "FormElements",
-            array("Form", array('class' => 'form-horizontal'))
+            array("Form", array('class' => 'form-horizontal signup-form'))
         );
         
         $this->setDecorators($decorators);
         
         $this->setElementDecorators(array(
             "ViewHelper",
-            "Errors",
             "Description",
             array("Label", array('class' => 'col-sm-2 category-design')),
             array("HtmlTag", array("tag" => "div", 'class' => 'form-group'))

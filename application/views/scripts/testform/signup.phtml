@@ -1,12 +1,111 @@
 <?php
 $this->headTitle('회원가입');
 ?>
+<script type="text/javascript">
+    
+    $(document).ready(function() {
+        //제출 버튼 초기 배경색 설정
+        $(".submit-btn").css("background-color", "rgb(200, 200, 200)");
+        //id 중복 체크 변수
+        var idDupOk = false;
+        //아이디를 입력받는 #id 에서 keyup 이벤트 발생시 처리
+        $("#id").on("keyup", function() {
+            var self = $(this);
+            var userId = self.val();
+            console.log(userId);
+            /*
+            //ajax를 통해 action 에 입력된 id 전송
+            $.ajax({
+                url: "/testform/signup",
+                method: "POST",
+                data: {"userId" : userId},
+                dataType: "json",
+                success: function(receive) {
+                    if (receive.status == 1) {
+                        alert("중복된 아이디입니다.");
+                        self.focus();
+                        idDupOk = false;
+                    } else {
+                        idDupOk = true;
+                    }
+                }
+            });
+            */
+        });
+        
+        
+        //입력값이 모두 입력됐는지 체크하는 변수
+        var isEmpty = true;
+        //각 input이 변경되었을 때 실행
+        $(".signup-form").find("input[type=text], input[type=password]").change(function() {
+            var Elements = $(".signup-form input[type=text], .signup-form input[type=password]");
+            for (var i = 0; i < Elements.length; i++) {
+                //비어있지 않으면 false 입력, 비어있으면 true 입력
+                if ($(Elements[i]).val() != "" && $(Elements[i]).val() != null) {
+                    isEmpty = false;
+                } else {
+                    isEmpty = true;
+                    break;
+                }
+            }
+            
+            //입력값이 모두 들어있고, 아이디 중복체크를 통과했으면 제출 비활성화 해제 
+            // ajax 결과값을 받는 부분이 비어있으므로 추가 필요
+            if (!isEmpty) {
+                $(".submit-btn").attr("disabled", false);
+                $(".submit-btn").css("background-color", "rgb(112, 173, 71)");
+            } else {
+                $(".submit-btn").attr("disabled", true);
+                $(".submit-btn").css("background-color", "rgb(200, 200, 200)");
+            }
+        });
+        
+        //form 입력값 체크
+        $(".signup-form").on("submit", function() {
+            var id = $("#id").val();
+            var pw = $("#pw").val();
+            var name = $("#name").val();
+            var phone = $("#phone").val();
+            var email = $("#email").val();
+            //validate 정규식
+            var idReg = /^[a-zA-Z0-9]*$/;
+            var pwReg = /(?=.*[~`!@#$%\^&*()-+=])[A-Za-z0-9~`!@#$%\^&*()-+=]+$/;
+            var nameReg = /^[가-힣A-Za-z]+$/;
+            var phoneReg = /^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/;
+            var emailReg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+            
+            if (!idReg.test(id)) {
+                alert("아이디 형식이 잘못됐습니다.");
+                return false;
+            }
+            if (!pwReg.test(pw)) {
+                alert("비밀번호 형식이 잘못됐습니다.");
+                return false;
+            }
+            if (!nameReg.test(name)) {
+                alert("이름 형식이 잘못됐습니다.");
+                return false;
+            }
+            if (!phoneReg.test(phone)) {
+                alert("휴대전화 번호 형식이 잘못됐습니다.");
+                return false;
+            }
+            if (!emailReg.test(email)) {
+                alert("이메일 형식이 잘못됐습니다.");
+                return false;
+            }
+        });
+    });
+    
+</script>
+
 <div class="container signup-center">
     <div class="col-sm-4 fence">
         <div class="signup-title">
             <strong>씨엠에스코리아 게시판</strong><small class="subtitle">- 회원가입 -</small>
         </div>
         <?php
+            //버튼 value를 '가 입' 으로 설정
             $submit = $this->form->getElement('submit');
             $submit->setLabel('가 입');
         

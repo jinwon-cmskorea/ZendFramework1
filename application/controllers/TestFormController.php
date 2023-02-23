@@ -2,6 +2,8 @@
 /**
  * 계정 컨트롤러
  */
+require_once 'Zend/Controller/Action/Helper/AjaxContext.php';
+require_once 'Zend/Controller/Request/Http.php';
 /**
  * @see Was_Auth
  * @see Was_Auth_Table_Access
@@ -118,7 +120,9 @@ class TestFormController extends Zend_Controller_Action {
         
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($request->getPost())) {
-                echo "test";
+                var_dump($this->getAllParams());
+            } else {
+                echo "맞지 않는 형식 존재";
             }
         }
         
