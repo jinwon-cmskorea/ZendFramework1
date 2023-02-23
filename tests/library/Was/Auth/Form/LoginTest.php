@@ -52,15 +52,24 @@ class Was_Auth_Form_LoginTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Zend_Form_Element_Text', $element);
         $this->assertEquals('id', $element->getId());
         $this->assertEquals('id', $element->getName());
+        $this->assertEquals('myForm-control', $element->getAttrib('class'));
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('아이디', $element->getLabel());
+        $this->assertInstanceOf('Zend_Validate_Alnum', $element->getValidator('alnum'));
 
         $element = $this->form->getElement('pw');
         $this->assertInstanceOf('Zend_Form_Element_Password', $element);
         $this->assertEquals('pw', $element->getId());
+        $this->assertEquals('pw', $element->getName());
+        $this->assertEquals('myForm-control', $element->getAttrib('class'));
+        $this->assertEquals(true, $element->isRequired());
+        $this->assertEquals('비밀번호', $element->getLabel());
+        $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
 
         $element = $this->form->getElement('login');
         $this->assertInstanceOf('Zend_Form_Element_Submit', $element);
         $this->assertEquals('login', $element->getId());
+        $this->assertEquals('login', $element->getName());
+        $this->assertEquals('btn-block login-btn', $element->getAttrib('class'));
     }
 }

@@ -4,6 +4,12 @@
  */
 require_once 'Zend/Form.php';
 /**
+ * @see Zend_Validate_Alnum
+ * @see Zend_Validate_Regex
+ */
+require_once 'Zend/Validate/Alnum.php';
+require_once 'Zend/Validate/Regex.php';
+/**
  * Was_Auth_Form_Login
  *
  * @package    Was
