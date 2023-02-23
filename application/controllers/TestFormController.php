@@ -38,7 +38,7 @@ class TestFormController extends Zend_Controller_Action {
     }
     
     /**
-     * login page Action
+     * 로그인 페이지 Action
      */
     public function signinAction() {
         $request = $this->getRequest();
@@ -77,6 +77,22 @@ class TestFormController extends Zend_Controller_Action {
         }
         
         $this->view->form = $loginForm;
+    }
+    
+    /**
+     * 로그아웃 페이지 Action
+     */
+    public function logoutAction() {
+        //auth 인스턴스 생성
+        $auth = Was_Auth::getInstance();
+        //테이블 객체 생성
+        $accessTable = new Was_Auth_Table_Access();
+        $historyTable = new Was_Auth_Table_History();
+        //auth 객체 내부에 테이블 세팅
+        $auth->setAccessTable($accessTable);
+        $auth->setHistoryTable($historyTable);
+        //clear 메소드를 사용하기 위해 스토리지 가져오기, 세션 unset 및 access table 레코드 삭제
+        $auth->getStorage()->clear();
     }
     
     public function testpasswordAction() {

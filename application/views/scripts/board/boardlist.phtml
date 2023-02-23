@@ -1,8 +1,8 @@
 <?php
 var_dump(Zend_Session::namespaceGet('Was_Auth'));
-echo "게시글 리스트 페이지";
+echo "<br>";
+echo "게시글 리스트 페이지<br>";
 
-//임시 로그아웃. identity 테이블의 레코드가 삭제 안되므로 
-Zend_Session::destroy();
-var_dump(Zend_Session::namespaceGet('Was_Auth'));
-echo "<script type=\"text/javascript\">location.href='/testform/signin';</script>";
+$url = $this->url(array('controller' => 'testform', 'action' => 'logout'));
+echo $this->FormButton('logout', '로그아웃', array('class' => 'logout-btn', 'onclick' => "location.href='{$url}'"));
+?>

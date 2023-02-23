@@ -1,0 +1,21 @@
+<?php
+Zend_Session::start();
+$this->headTitle("로그아웃");
+$this->headMeta()->appendHttpEquiv('refresh', '3; url=signin');
+?>
+<div class="container center">
+    <div class="col-sm-6" style="background-color: rgb(231, 230, 230);">
+        <div class="text-center">
+        <div class="sep-line">
+            <strong>CMSKOREA Board</strong>
+        </div>
+        </div>
+        <div class="text-center logout-text">
+            로그아웃 되었습니다.
+        </div>
+        <div class="containerFooter">
+            <div class="threeMsg">3초 후 처음 화면으로 이동합니다...</div>
+            <?php echo $this->FormButton('moveSignin', '확인', array('class' => 'logoutOk-btn', 'onclick' => "location.href='signin'"))?>
+        </div>
+    </div>
+</div>
