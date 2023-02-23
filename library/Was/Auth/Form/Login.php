@@ -18,7 +18,10 @@ class Was_Auth_Form_Login extends Zend_Form {
         $decorators = array(
             "Description",
             "FormElements",
-            array('Form', array('class' => 'form-horizontal'))
+            array('Form', array(
+                    'class'     => 'form-horizontal loginForm',
+                    'name'      => 'login-form'
+                ))
         );
         $this->setDecorators($decorators);
 
@@ -35,11 +38,16 @@ class Was_Auth_Form_Login extends Zend_Form {
             'required'      => true,
             'label'         => '아이디',
         ));
+        $id = $this->getElement('id');
+        $id->addValidator(new Zend_Validate_Alnum());
+        
         $this->addElement('password', 'pw', array(
             'class'         => 'myForm-control',
             'required'      => true,
             'label'         => '비밀번호',
         ));
+        $pw = $this->getElement('pw');
+        $pw->addValidator(new Zend_Validate_Regex('/(?=.*[~`!@#$%\^&*()-+=])[A-Za-z0-9~`!@#$%\^&*()-+=]+$/'));
 
         $this->addElement('submit', 'login', array(
             'class' => 'btn-block login-btn',

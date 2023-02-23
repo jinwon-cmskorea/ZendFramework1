@@ -71,6 +71,8 @@ class TestFormController extends Zend_Controller_Action {
                     echo "<script>history.back(-1);</script>";
                 }
             } else {
+                echo "<script>alert('아이디 또는 비밀번호를 입력해주세요')</script>";
+                echo "<script>history.back(-1);</script>";
             }
         }
         

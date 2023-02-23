@@ -1,8 +1,7 @@
 <?php
 $this->headTitle("로그인");
-
-//
-if (isset($_SESSION['Was_Auth'])) {
+//이미 로그인한 경우, 게시글 리스트로 리다이렉트
+if (Zend_Session::namespaceGet('Was_Auth')) {
     echo "<script type=\"text/javascript\">alert('이미 로그인하셨습니다.');</script>";
     echo "<script type=\"text/javascript\">location.href='/board/boardlist';</script>";
 }
@@ -35,7 +34,24 @@ if (isset($_SESSION['Was_Auth'])) {
                 setCookie("key", $("#id").val(), 7);
             }
         });
+        //로그인 유효성 체크
+        $(".loginForm").on("submit", function() {
+        	var id = $("#id").val();
+            var pw = $("#pw").val();
+            var idReg = /^[a-zA-Z0-9]*$/;
+            var pwReg = /(?=.*[~`!@#$%\^&*()-+=])[A-Za-z0-9~`!@#$%\^&*()-+=]+$/;
+            
+            if (id == '' || pw == '') {
+                alert("아이디 또는 비밀번호를 입력해주세요.");
+                return false;
+            }
+            if (!idReg.test(id) || !pwReg.test(pw)) {
+                alert("아이디 또는 비밀번호의 형식이 맞지않습니다.");
+                return false;
+            }
+        });
     });
+    
     //쿠키 저장하기
     function setCookie(cookieName, value, expireDays) {
         //현재시각 저장
