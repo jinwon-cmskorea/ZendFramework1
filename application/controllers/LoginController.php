@@ -3,38 +3,6 @@
  * 계정 컨트롤러
  */
 /**
- * @see Was_Auth
- * @see Was_Auth_Table_Access
- * @see Was_Auth_Table_History
- * @see Was_Auth_Table_Identity
- * @see Was_Auth_AdapterFactory
- */
-require_once 'Was/Auth.php';
-require_once 'Was/Auth/Table/Access.php';
-require_once 'Was/Auth/Table/History.php';
-require_once 'Was/Auth/Table/Identity.php';
-require_once 'Was/Auth/AdapterFactory.php';
-/**
- * @see Was_Member
- * @see Was_Member_Table_Member
- * @see Was_Member_Exception
- * @see Was_Member_Table_Exception
- */
-require_once 'Was/Member.php';
-require_once 'Was/Member/Table/Member.php';
-require_once 'Was/Member/Exception.php';
-require_once 'Was/Member/Table/Exception.php';
-/**
- * @see Zend_Db
- * @see Zend_Db_Expr
- */
-require_once 'Zend/Db.php';
-require_once 'Zend/Db/Expr.php';
-/**
- * @see Zend_Session
- */
-require_once 'Zend/Session.php';
-/**
  * @see Bootstrap
  */
 require_once __DIR__ . '/../Bootstrap.php';
