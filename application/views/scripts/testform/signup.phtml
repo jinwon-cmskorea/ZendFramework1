@@ -4,6 +4,18 @@ $this->headTitle('회원가입');
 <script type="text/javascript">
     
     $(document).ready(function() {
+    	<?php if (isset($this->processResult)) : ?>
+        //컨트롤러로 부터 결과를 받은 뒤, 이에 따라 적절히 처리
+        var processResult = <?php echo $this->processResult ? 'true' : 'false'; ?>;
+        var processMessage = '<?php echo $this->processMessage; ?>';
+        
+        if (!processResult && processMessage != '') {
+            alert(processMessage);
+        } else if (processResult) {
+            alert(processMessage);
+            location.href = '/testform/signin';
+        }
+        <?php endif;?>
         //제출 버튼 초기 배경색 설정
         $(".submit-btn").css("background-color", "rgb(200, 200, 200)");
         //id 중복 체크 변수
@@ -108,6 +120,8 @@ $this->headTitle('회원가입');
             //버튼 value를 '가 입' 으로 설정
             $submit = $this->form->getElement('submit');
             $submit->setLabel('가 입');
+            $cancle = $this->form->getElement('cancle');
+            $cancle->setAttrib('onclick', "location.href='/testform/signin'");
         
             echo $this->form->render(); 
         ?>

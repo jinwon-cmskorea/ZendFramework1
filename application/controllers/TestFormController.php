@@ -130,12 +130,21 @@ class TestFormController extends Zend_Controller_Action {
         require_once 'Was/Member/Form/Member.php';
         $form = new Was_Member_Form_Member();
         if ($this->getRequest()->isPost()) {
+            //view 페이지에서 호출할 수 있는 변수 선언
+            $this->view->processResult = false;
+            $this->view->processMessage = '';
+            
             if ($form->isValid($request->getPost())) {
                 //사용자 입력값 및 모든 파라미터 가져옴
                 $params = $this->getAllParams();
                 //member 테이블에 먼저 등록
-                $member = new Was_Member(new Was_Member_Table_Member());
+                $memberTable = new Was_Member_Table_Member();
+                $db = Zend_Db::factory('mysqli', $memberTable->getAdapter()->getConfig());
+                //트랜잭션 시작
+                $db->beginTransaction();
+                $member = new Was_Member($memberTable);
                 try {
+                    
                     $memberPk = $member->registMember(array(
                         'id'        => $params['id'],
                         'pw'        => $params['pw'],
@@ -143,18 +152,7 @@ class TestFormController extends Zend_Controller_Action {
                         'telNumber' => $params['telNumber'],
                         'email'     => $params['email']
                     ));
-                    if (!$memberPk) {
-                        echo "<script>alert('비어있는 항목이 존재합니다')</script>";
-                        echo "<script>history.back(-1);</script>";
-                    }
-                } catch (Was_Member_Exception $e) {
-                    echo "<script>alert('{$e->getMessage()}')</script>";
-                    echo "<script>history.back(-1);</script>";
-                } catch (Was_Member_Table_Exception $e) {
-                    echo "<script>alert('{$e->getMessage()}')</script>";
-                    echo "<script>history.back(-1);</script>";
-                }
-                if ($memberPk) {
+                    
                     $identityTable = new Was_Auth_Table_Identity();
                     $identityPk = $identityTable->insert(array(
                         'id'            => $params['id'],
@@ -162,15 +160,26 @@ class TestFormController extends Zend_Controller_Action {
                         'name'          => $params['name'],
                         'insertTime'    => new Zend_Db_Expr('NOW()')
                     ));
+                } catch (Was_Member_Exception $e) {
+                    $db->rollBack();
+                    $this->view->processMessage = $e->getMessage();
+                } catch (Was_Member_Table_Exception $e) {
+                    $db->rollBack();
+                    $this->view->processMessage = $e->getMessage();
+                } catch (Zend_Db_Exception $e) {
+                    $db->rollBack();
+                    $this->view->processMessage = $e->getMessage();
                 }
+                
+                //이상 없이 동작을 수행했으면 트랜잭션 commit
+                $db->commit();
                 
                 if ($memberPk && $identityPk) {
-                    echo "<script>alert('회원가입이 완료됐습니다.')</script>";
-                    echo "<script>location.href='/testform/signin';</script>";
+                    $this->view->processResult = true;
+                    $this->view->processMessage = '회원가입에 성공했습니다.';
                 }
-                
             } else {
-                echo "맞지 않는 형식 존재";
+                $this->view->processMessage = '회원가입이 실패하였습니다.';
             }
         }
         
