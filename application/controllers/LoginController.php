@@ -2,8 +2,6 @@
 /**
  * 계정 컨트롤러
  */
-require_once 'Zend/Controller/Action/Helper/AjaxContext.php';
-require_once 'Zend/Controller/Request/Http.php';
 /**
  * @see Was_Auth
  * @see Was_Auth_Table_Access
@@ -41,14 +39,14 @@ require_once 'Zend/Session.php';
  */
 require_once __DIR__ . '/../Bootstrap.php';
 
-class TestFormController extends Zend_Controller_Action {
+class LoginController extends Zend_Controller_Action {
     /*
      * {@inheritDoc}
      * @see Zend_Controller_Action::init()
      */
     public function init() {
         //기본 레이아웃 설정
-        $this->_helper->layout->setLayout('default1');
+        $this->_helper->layout->setLayout('layout');
     }
     
     /**
@@ -60,6 +58,9 @@ class TestFormController extends Zend_Controller_Action {
         $loginForm = new Was_Auth_Form_Login();
         
         if ($this->getRequest()->isPost()) {
+            $this->view->processResult = false;
+            $this->view->processMessage = '';
+            
             if ($loginForm->isValid($request->getPost())) {
                 //auth 인스턴스 생성
                 $auth = Was_Auth::getInstance();
@@ -81,12 +82,12 @@ class TestFormController extends Zend_Controller_Action {
                 if ($authRes->isValid()) {
                     $this->redirect('/board/boardlist');
                 } else if (!$authRes->isValid()) {
-                    echo "<script>alert('아이디 또는 비밀번호가 일치하지 않습니다.')</script>";
-                    echo "<script>history.back(-1);</script>";
+                    $this->view->processResult = false;
+                    $this->view->processMessage = '아이디 또는 비밀번호가 일치하지 않습니다.';
                 }
             } else {
-                echo "<script>alert('아이디 또는 비밀번호를 입력해주세요')</script>";
-                echo "<script>history.back(-1);</script>";
+                $this->view->processResult = false;
+                $this->view->processMessage = '아이디 또는 비밀번호를 입력해 주세요.';
             }
         }
         
@@ -109,26 +110,12 @@ class TestFormController extends Zend_Controller_Action {
         $auth->getStorage()->clear();
     }
     
-    public function testpasswordAction() {
-        $request = $this->getRequest();
-        
-        require_once 'Was/Auth/Form/Password.php';
-        $form = new Was_Auth_Form_Password();
-        
-        if ($this->getRequest()->isPost()) {
-            if ($form->isValid($request->getPost())) {
-                echo "test";
-            }
-        }
-        
-        $this->view->form = $form;
-    }
-    
     public function signupAction() {
         $request = $this->getRequest();
         
         require_once 'Was/Member/Form/Member.php';
         $form = new Was_Member_Form_Member();
+        
         if ($this->getRequest()->isPost()) {
             //view 페이지에서 호출할 수 있는 변수 선언
             $this->view->processResult = false;
@@ -144,7 +131,7 @@ class TestFormController extends Zend_Controller_Action {
                 $db->beginTransaction();
                 $member = new Was_Member($memberTable);
                 try {
-                    
+                    $memberPk = false;
                     $memberPk = $member->registMember(array(
                         'id'        => $params['id'],
                         'pw'        => $params['pw'],
@@ -185,30 +172,36 @@ class TestFormController extends Zend_Controller_Action {
         
         $this->view->form = $form;
     }
-    
-    public function testboardAction() {
-        $request = $this->getRequest();
+
+    //아이디 중복 체크를 처리하기 위한 별도의 action
+    public function duplicateIdAction() {
+        $this->_helper->layout->disableLayout();
         
-        require_once 'Was/Board/Form/Board.php';
-        $form = new Was_Board_Form_Board();
-        
-        if ($this->getRequest()->isPost()) {
-            if ($form->isValid($request->getPost())) {
-                echo "test";
+        $result = array(
+            'result'    => false,
+            'message'   => '',
+        );
+        //XmlHttpRequest 인지 확인(ajax)
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            //member 테이블에서 중복된 아이디가 존재하는 지 확인
+            $member = new Was_Member_Table_Member();
+            $select = $member->select();
+            $select->from($member->getTableName(), array('count' => new Zend_Db_Expr('COUNT(id)')))
+                   ->where('id = ?', $params['userId']);
+            $row = $member->getAdapter()->fetchRow($select);
+            //'count' 값이 1 이상이라면 중복된 아이디가 존재한다는 뜻이므로 처리
+            if ($row['count'] > 0) {
+                $result['result'] = true;
+                $result['message'] = 'duplicate';
             }
+        } else {
+            //에외
+            $result['result'] = false;
+            $result['message'] = '';
         }
         
-        $this->view->form = $form;
-    }
-    
-    public function searchidAction() {
-        $request = $this->getRequest();
-        
-        if ($this->getRequest()->isPost()) {
-            if ($form->isValid($request->getPost())) {
-                echo "test";
-            }
-        }
+        $this->_helper->json->sendJson($result);
     }
     
 }

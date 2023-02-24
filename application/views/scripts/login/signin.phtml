@@ -8,6 +8,15 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
+        <?php if (isset($this->processResult)) : ?>
+        var processResult = <?php echo $this->processResult ? 'true' : 'false'; ?>;
+        var processMessage = '<?php echo $this->processMessage; ?>';
+        
+        if (!processResult && processMessage != '') {
+            alert(processMessage);
+        }
+        <?php endif;?>
+        
         //저장된 쿠키값을 가져와서 id 입력칸에 삽입. 없으면 공백 삽입
         var key = getCookie("key");
         $("#id").val(key);

@@ -11,17 +11,10 @@ class BoardController extends Zend_Controller_Action {
      */
     public function init() {
         //기본 레이아웃 설정
-        $this->_helper->layout->setLayout('default1');
+        $this->_helper->layout->setLayout('layout');
     }
     
     public function boardlistAction() {
-        $request = $this->getRequest();
-        
-        if ($this->getRequest()->isPost()) {
-            if ($form->isValid($request->getPost())) {
-                echo "test";
-            }
-        }
     }
 }
 

@@ -44,7 +44,7 @@ class Was_Member_Table_Member extends Zend_Db_Table_Abstract {
         $contents['telNumber'] = str_replace('-', '', $contents['telNumber']);
         //이미 등록된 휴대전화 번호이면 throw 예외
         $select = $this->select();
-        $select->from($this->_getTableName(), array('count' => new Zend_Db_Expr("COUNT('telNumber')")))
+        $select->from($this->getTableName(), array('count' => new Zend_Db_Expr("COUNT('telNumber')")))
                ->where('telNumber = ?', $contents['telNumber']);
         $rowset = $this->fetchAll($select)->toArray();
         if ($rowset[0]['count'] > 0) {
@@ -82,7 +82,7 @@ class Was_Member_Table_Member extends Zend_Db_Table_Abstract {
         
         //이미 등록된 휴대전화 번호이면 throw 예외
         $select = $this->select();
-        $select->from($this->_getTableName(), array('count' => new Zend_Db_Expr("COUNT('telNumber')")))
+        $select->from($this->getTableName(), array('count' => new Zend_Db_Expr("COUNT('telNumber')")))
                ->where('telNumber = ?', $contents['telNumber']);
         $rowset = $this->fetchAll($select)->toArray();
         if ($rowset[0]['count'] > 0) {
@@ -99,7 +99,7 @@ class Was_Member_Table_Member extends Zend_Db_Table_Abstract {
             ), "pk = {$pk}");
     }
     
-    protected function _getTableName() {
+    public function getTableName() {
         return $this->_name;
     }
 }

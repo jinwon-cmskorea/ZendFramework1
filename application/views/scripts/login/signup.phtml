@@ -13,7 +13,7 @@ $this->headTitle('회원가입');
             alert(processMessage);
         } else if (processResult) {
             alert(processMessage);
-            location.href = '/testform/signin';
+            location.href = '/login/signin';
         }
         <?php endif;?>
         //제출 버튼 초기 배경색 설정
@@ -24,16 +24,15 @@ $this->headTitle('회원가입');
         $("#id").on("keyup", function() {
             var self = $(this);
             var userId = self.val();
-            console.log(userId);
-            /*
+            
             //ajax를 통해 action 에 입력된 id 전송
             $.ajax({
-                url: "/testform/signup",
+                url: "/login/duplicate-id",
                 method: "POST",
                 data: {"userId" : userId},
                 dataType: "json",
                 success: function(receive) {
-                    if (receive.status == 1) {
+                    if (receive.message == 'duplicate') {
                         alert("중복된 아이디입니다.");
                         self.focus();
                         idDupOk = false;
@@ -42,7 +41,7 @@ $this->headTitle('회원가입');
                     }
                 }
             });
-            */
+            
         });
         
         
@@ -63,7 +62,7 @@ $this->headTitle('회원가입');
             
             //입력값이 모두 들어있고, 아이디 중복체크를 통과했으면 제출 비활성화 해제 
             // ajax 결과값을 받는 부분이 비어있으므로 추가 필요
-            if (!isEmpty) {
+            if (!isEmpty && idDupOk) {
                 $(".submit-btn").attr("disabled", false);
                 $(".submit-btn").css("background-color", "rgb(112, 173, 71)");
             } else {
@@ -121,7 +120,7 @@ $this->headTitle('회원가입');
             $submit = $this->form->getElement('submit');
             $submit->setLabel('가 입');
             $cancle = $this->form->getElement('cancle');
-            $cancle->setAttrib('onclick', "location.href='/testform/signin'");
+            $cancle->setAttrib('onclick', "location.href='/login/signin'");
         
             echo $this->form->render(); 
         ?>
