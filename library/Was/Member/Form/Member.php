@@ -62,12 +62,12 @@ class Was_Member_Form_Member extends Zend_Form {
         $name = $this->getElement('name');
         $name->addValidator(new Zend_Validate_Regex('/[가-힣A-Za-z]+$/'));
         
-        $this->addElement('text', 'phone', array(
+        $this->addElement('text', 'telNumber', array(
             'class'     => 'myForm-control3 col-sm-9',
             'required'  => true,
             'label'     => '휴대전화'
         ));
-        $phone = $this->getElement('phone');
+        $phone = $this->getElement('telNumber');
         $phone->addValidator(new Zend_Validate_Regex('/^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/'));
         
         $this->addElement('text', 'email', array(

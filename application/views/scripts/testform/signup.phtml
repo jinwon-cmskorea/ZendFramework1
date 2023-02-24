@@ -39,7 +39,7 @@ $this->headTitle('회원가입');
         //각 input이 변경되었을 때 실행
         $(".signup-form").find("input[type=text], input[type=password]").change(function() {
             var Elements = $(".signup-form input[type=text], .signup-form input[type=password]");
-            for (var i = 0; i < Elements.length; i++) {
+            for (var i = 0; i < Elements.length - 1; i++) {
                 //비어있지 않으면 false 입력, 비어있으면 true 입력
                 if ($(Elements[i]).val() != "" && $(Elements[i]).val() != null) {
                     isEmpty = false;
@@ -65,13 +65,13 @@ $this->headTitle('회원가입');
             var id = $("#id").val();
             var pw = $("#pw").val();
             var name = $("#name").val();
-            var phone = $("#phone").val();
+            var telNumber = $("#telNumber").val();
             var email = $("#email").val();
             //validate 정규식
             var idReg = /^[a-zA-Z0-9]*$/;
             var pwReg = /(?=.*[~`!@#$%\^&*()-+=])[A-Za-z0-9~`!@#$%\^&*()-+=]+$/;
             var nameReg = /^[가-힣A-Za-z]+$/;
-            var phoneReg = /^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/;
+            var telNumberReg = /^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/;
             var emailReg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
             
             if (!idReg.test(id)) {
@@ -86,11 +86,11 @@ $this->headTitle('회원가입');
                 alert("이름 형식이 잘못됐습니다.");
                 return false;
             }
-            if (!phoneReg.test(phone)) {
+            if (!telNumberReg.test(telNumber)) {
                 alert("휴대전화 번호 형식이 잘못됐습니다.");
                 return false;
             }
-            if (!emailReg.test(email)) {
+            if (email != '' && !emailReg.test(email)) {
                 alert("이메일 형식이 잘못됐습니다.");
                 return false;
             }

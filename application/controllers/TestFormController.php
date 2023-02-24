@@ -17,9 +17,21 @@ require_once 'Was/Auth/Table/History.php';
 require_once 'Was/Auth/Table/Identity.php';
 require_once 'Was/Auth/AdapterFactory.php';
 /**
+ * @see Was_Member
+ * @see Was_Member_Table_Member
+ * @see Was_Member_Exception
+ * @see Was_Member_Table_Exception
+ */
+require_once 'Was/Member.php';
+require_once 'Was/Member/Table/Member.php';
+require_once 'Was/Member/Exception.php';
+require_once 'Was/Member/Table/Exception.php';
+/**
  * @see Zend_Db
+ * @see Zend_Db_Expr
  */
 require_once 'Zend/Db.php';
+require_once 'Zend/Db/Expr.php';
 /**
  * @see Zend_Session
  */
@@ -117,10 +129,46 @@ class TestFormController extends Zend_Controller_Action {
         
         require_once 'Was/Member/Form/Member.php';
         $form = new Was_Member_Form_Member();
-        
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($request->getPost())) {
-                var_dump($this->getAllParams());
+                //사용자 입력값 및 모든 파라미터 가져옴
+                $params = $this->getAllParams();
+                //member 테이블에 먼저 등록
+                $member = new Was_Member(new Was_Member_Table_Member());
+                try {
+                    $memberPk = $member->registMember(array(
+                        'id'        => $params['id'],
+                        'pw'        => $params['pw'],
+                        'name'      => $params['name'],
+                        'telNumber' => $params['telNumber'],
+                        'email'     => $params['email']
+                    ));
+                    if (!$memberPk) {
+                        echo "<script>alert('비어있는 항목이 존재합니다')</script>";
+                        echo "<script>history.back(-1);</script>";
+                    }
+                } catch (Was_Member_Exception $e) {
+                    echo "<script>alert('{$e->getMessage()}')</script>";
+                    echo "<script>history.back(-1);</script>";
+                } catch (Was_Member_Table_Exception $e) {
+                    echo "<script>alert('{$e->getMessage()}')</script>";
+                    echo "<script>history.back(-1);</script>";
+                }
+                if ($memberPk) {
+                    $identityTable = new Was_Auth_Table_Identity();
+                    $identityPk = $identityTable->insert(array(
+                        'id'            => $params['id'],
+                        'pw'            => md5($params['pw']),
+                        'name'          => $params['name'],
+                        'insertTime'    => new Zend_Db_Expr('NOW()')
+                    ));
+                }
+                
+                if ($memberPk && $identityPk) {
+                    echo "<script>alert('회원가입이 완료됐습니다.')</script>";
+                    echo "<script>location.href='/testform/signin';</script>";
+                }
+                
             } else {
                 echo "맞지 않는 형식 존재";
             }
