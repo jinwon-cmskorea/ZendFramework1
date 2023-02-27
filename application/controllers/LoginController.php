@@ -168,6 +168,17 @@ class LoginController extends Zend_Controller_Action {
         
         $this->view->form = $form;
     }
+    
+    /**
+     * 아이디 찾기 페이지 Action
+     */
+    public function searchidAction() {
+        $request = $this->getRequest();
+        
+        $form = new Was_Member_Form_SearchId();
+        
+        $this->view->form = $form;
+    }
 
     /**
      * 아이디 중복 체크를 처리하기 위한 별도의 action

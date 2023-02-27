@@ -1,2 +1,22 @@
 <?php
-echo "아이디 찾기 페이지";
+$this->headTitle('아이디 찾기');
+?>
+<div class="container center">
+    <div class="col-sm-6" style="background-color: rgb(231, 230, 230);">
+        <div class="text-center">
+            <div class="sep-line">
+               <strong>CMSKOREA Board</strong>
+            </div>
+            <div class="des-padding">이름 / 휴대전화번호를 입력하여 주세요.</div>
+        </div>
+        <?php
+            //form rendering
+            echo $this->form->render(); 
+        ?>
+        <div>
+        <?php 
+            echo $this->FormButton('back', '돌아가기', array('class' => 'back-btn', 'onclick' => "location.href='signin'"));
+        ?>
+        </div>
+    </div>
+</div>

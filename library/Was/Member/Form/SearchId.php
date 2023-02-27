@@ -33,12 +33,12 @@ class Was_Member_Form_SearchId extends Zend_Form {
         $this->setElementDecorators(array(
             "ViewHelper",
             "Description",
-            array("Label", array('class' => 'col-sm-2 control-label-left')),
+            array("Label", array('class' => 'col-sm-3 control-label-left')),
             array("HtmlTag", array("tag" => "div", 'class' => 'form-group'))
         ));
         
         $this->addElement('text', 'name', array(
-            'class'     => 'myForm-control',
+            'class'     => 'searchid-input',
             'required'  => true,
             'label'     => '이름'
         ));
@@ -46,7 +46,7 @@ class Was_Member_Form_SearchId extends Zend_Form {
         $name->addValidator(new Zend_Validate_Regex('/[가-힣A-Za-z]+$/'));
         
         $this->addElement('text', 'telNumber', array(
-            'class'     => 'myForm-control',
+            'class'     => 'searchid-input',
             'required'  => true,
             'label'     => '휴대전화번호'
         ));
@@ -54,7 +54,7 @@ class Was_Member_Form_SearchId extends Zend_Form {
         $phone->addValidator(new Zend_Validate_Regex('/^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/'));
         
         $this->addElement('submit', 'search', array(
-            'class' => 'btn-block login-btn',
+            'class' => 'btn-block searchid-btn',
             'label' => '아이디 찾기'
         ));
         $login = $this->getElement('search');

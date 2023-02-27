@@ -132,7 +132,7 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
                 <div class="links">
                 <?php 
                     echo $this->FormButton('signUp', '회원가입', array('class' => 'signup-btn', 'onclick' => "popUp();"));
-                    echo $this->FormButton('searchId', '아이디찾기', array('class' => 'searchId-btn', 'onclick' => "alert('점검중')"));
+                    echo $this->FormButton('searchId', '아이디찾기', array('class' => 'searchId-btn', 'onclick' => "location.href='searchid'"));
                 ?>
                 </div>
             </div>
