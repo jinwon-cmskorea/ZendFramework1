@@ -22,13 +22,12 @@ class LoginController extends Zend_Controller_Action {
      */
     public function signinAction() {
         $request = $this->getRequest();
-        require_once 'Was/Auth/Form/Login.php';
         $loginForm = new Was_Auth_Form_Login();
         
         if ($this->getRequest()->isPost()) {
             $this->view->processResult = false;
             $this->view->processMessage = '';
-            
+            //form validate를 통과한 경우
             if ($loginForm->isValid($request->getPost())) {
                 //auth 인스턴스 생성
                 $auth = Was_Auth::getInstance();
@@ -47,11 +46,39 @@ class LoginController extends Zend_Controller_Action {
                 $adapter->setCredential($param['pw']);
                 
                 $authRes = $auth->authenticate($adapter);
+                //errorCount 및 error 메세지를 초기화 후, 게시글 리스트로 리다이렉트
                 if ($authRes->isValid()) {
+                    $identityTable->update(array('errorCount' => 0, 'errorMessage' => ''), "id = '{$param['id']}'");
                     $this->redirect('/board/boardlist');
                 } else if (!$authRes->isValid()) {
+                    //로그인 에러문 설정
+                    $errorString = '아이디 또는 비밀번호가 일치하지 않습니다.';
+                    
+                    //존재하는 회원인지 검색
+                    $select = $identityTable->select();
+                    $select->from($identityTable->getTableName(), array('count' => new Zend_Db_Expr('COUNT(id)'), 'errorCount'))
+                           ->where('id = ?', $param['id']);
+                    $row = $identityTable->getAdapter()->fetchRow($select);
+                    //존재하는 회원인 경우 errorCount 및 errorMessage 갱신
+                    if ($row['count'] > 0) {
+                        //업데이트 할 컬럼 설정
+                        $set = array(
+                            'errorCount'   => new Zend_Db_Expr('errorCount + 1'),
+                            'errorMessage' => $errorString
+                        );
+                        //errorCount에 따른 처리
+                        if ($row['errorCount'] >= 2 && $row['errorCount'] < 4) {
+                            $errorString .= " 남은 로그인 횟수는 ". (5 - ($row['errorCount'] + 1)) . "번 입니다.";
+                        } else if ($row['errorCount'] >= 4) {
+                            $errorString .= " 계정이 잠금 처리 되었습니다.";
+                            $set['authable'] = 0;
+                        }
+                        
+                        $identityTable->update($set, "id = '{$param['id']}'");
+                    }
+                    //설정된 에러문으로 view 에 전달
                     $this->view->processResult = false;
-                    $this->view->processMessage = '아이디 또는 비밀번호가 일치하지 않습니다.';
+                    $this->view->processMessage = $errorString;
                 }
             } else {
                 $this->view->processResult = false;
@@ -77,11 +104,12 @@ class LoginController extends Zend_Controller_Action {
         //clear 메소드를 사용하기 위해 스토리지 가져오기, 세션 unset 및 access table 레코드 삭제
         $auth->getStorage()->clear();
     }
-    
+    /**
+     * 회원가입 페이지 Action
+     */
     public function signupAction() {
         $request = $this->getRequest();
         
-        require_once 'Was/Member/Form/Member.php';
         $form = new Was_Member_Form_Member();
         
         if ($this->getRequest()->isPost()) {
@@ -141,7 +169,9 @@ class LoginController extends Zend_Controller_Action {
         $this->view->form = $form;
     }
 
-    //아이디 중복 체크를 처리하기 위한 별도의 action
+    /**
+     * 아이디 중복 체크를 처리하기 위한 별도의 action
+     */
     public function duplicateIdAction() {
         $this->_helper->layout->disableLayout();
         
