@@ -60,7 +60,7 @@ class LoginController extends Zend_Controller_Action {
                            ->where('id = ?', $param['id']);
                     $row = $identityTable->getAdapter()->fetchRow($select);
                     //존재하는 회원인 경우 errorCount 및 errorMessage 갱신
-                    if ($row != NULL) {
+                    if ($row) {
                         //업데이트 할 컬럼 설정
                         $set = array(
                             'errorCount'   => new Zend_Db_Expr('errorCount + 1'),
