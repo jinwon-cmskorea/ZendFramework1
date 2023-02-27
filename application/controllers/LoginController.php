@@ -56,11 +56,11 @@ class LoginController extends Zend_Controller_Action {
                     
                     //존재하는 회원인지 검색
                     $select = $identityTable->select();
-                    $select->from($identityTable->getTableName(), array('count' => new Zend_Db_Expr('COUNT(id)'), 'errorCount'))
+                    $select->from($identityTable->getTableName(), array('errorCount'))
                            ->where('id = ?', $param['id']);
                     $row = $identityTable->getAdapter()->fetchRow($select);
                     //존재하는 회원인 경우 errorCount 및 errorMessage 갱신
-                    if ($row['count'] > 0) {
+                    if ($row != NULL) {
                         //업데이트 할 컬럼 설정
                         $set = array(
                             'errorCount'   => new Zend_Db_Expr('errorCount + 1'),
@@ -139,7 +139,7 @@ class LoginController extends Zend_Controller_Action {
                     $identityTable = new Was_Auth_Table_Identity();
                     $identityPk = $identityTable->insert(array(
                         'id'            => $params['id'],
-                        'pw'            => md5($params['pw']),
+                        'pw'            => new Zend_Db_Expr("MD5('{$params['pw']}')"),
                         'name'          => $params['name'],
                         'insertTime'    => new Zend_Db_Expr('NOW()')
                     ));
@@ -191,7 +191,7 @@ class LoginController extends Zend_Controller_Action {
             //'count' 값이 1 이상이라면 중복된 아이디가 존재한다는 뜻이므로 처리
             if ($row['count'] > 0) {
                 $result['result'] = true;
-                $result['message'] = 'duplicate';
+                $result['message'] = '중복된 아이디입니다.';
             }
         } else {
             //에외

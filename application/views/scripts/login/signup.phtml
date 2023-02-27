@@ -32,8 +32,8 @@ $this->headTitle('회원가입');
                 data: {"userId" : userId},
                 dataType: "json",
                 success: function(receive) {
-                    if (receive.message == 'duplicate') {
-                        alert("중복된 아이디입니다.");
+                    if (receive.result == true) {
+                        alert(receive.message);
                         self.focus();
                         idDupOk = false;
                     } else {
