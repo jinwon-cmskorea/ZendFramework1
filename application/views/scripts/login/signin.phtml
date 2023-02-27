@@ -105,7 +105,9 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
         var popUpWidth = 1250;
         var popUpHeight = 600;
         //팝업창 위치 조절
-        var popUpX = (window.screen.width / 2) - (popUpWidth / 2);
+        var popUpX = (document.body.offsetWidth / 2) - (popUpWidth / 2);
+        //듀얼 모니터인 경우 넣어줘야함.
+        popUpX += window.screenLeft;
         var popUpY = (window.screen.height / 2) - (popUpHeight / 2);
         
         window.open('signup', '회원가입', 'height=' + popUpHeight  + ',width=' + popUpWidth  + ',left='+ popUpX + ',top='+ popUpY);
