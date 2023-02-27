@@ -13,7 +13,7 @@ $this->headTitle('회원가입');
             alert(processMessage);
         } else if (processResult) {
             alert(processMessage);
-            location.href = '/login/signin';
+            window.close();
         }
         <?php endif;?>
         //제출 버튼 초기 배경색 설정
@@ -120,7 +120,7 @@ $this->headTitle('회원가입');
             $submit = $this->form->getElement('submit');
             $submit->setLabel('가 입');
             $cancle = $this->form->getElement('cancle');
-            $cancle->setAttrib('onclick', "location.href='/login/signin'");
+            $cancle->setAttrib('onclick', "window.close();");
         
             echo $this->form->render(); 
         ?>

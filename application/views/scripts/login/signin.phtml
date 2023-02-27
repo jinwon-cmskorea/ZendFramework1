@@ -98,6 +98,18 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
         
         return unescape(cookieValue);
     }
+    
+    //팝업창 전시
+    function popUp() {
+        //팝업창 크기
+        var popUpWidth = 1250;
+        var popUpHeight = 600;
+        //팝업창 위치 조절
+        var popUpX = (window.screen.width / 2) - (popUpWidth / 2);
+        var popUpY = (window.screen.height / 2) - (popUpHeight / 2);
+        
+        window.open('signup', '회원가입', 'height=' + popUpHeight  + ',width=' + popUpWidth  + ',left='+ popUpX + ',top='+ popUpY);
+    }
 </script>
 <div class="container center">
     <div class="col-sm-6" style="background-color: rgb(231, 230, 230);">
@@ -117,7 +129,7 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
                 <label for="isSaveId" class="chkText"><span>아이디 저장</span></label>
                 <div class="links">
                 <?php 
-                    echo $this->FormButton('signUp', '회원가입', array('class' => 'signup-btn', 'onclick' => 'location.href="signup"'));
+                    echo $this->FormButton('signUp', '회원가입', array('class' => 'signup-btn', 'onclick' => "popUp();"));
                     echo $this->FormButton('searchId', '아이디찾기', array('class' => 'searchId-btn', 'onclick' => "alert('점검중')"));
                 ?>
                 </div>
