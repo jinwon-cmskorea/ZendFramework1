@@ -17,7 +17,7 @@ $this->headTitle('회원가입');
         }
         <?php endif;?>
         //제출 버튼 초기 배경색 설정
-        $(".submit-btn").css("background-color", "rgb(200, 200, 200)");
+        $(".submit-btn").addClass("submit-gray-color");
         //id 중복 체크 변수
         var idDupOk = false;
         //아이디를 입력받는 #id 에서 keyup 이벤트 발생시 처리
@@ -64,10 +64,12 @@ $this->headTitle('회원가입');
             // ajax 결과값을 받는 부분이 비어있으므로 추가 필요
             if (!isEmpty && idDupOk) {
                 $(".submit-btn").attr("disabled", false);
-                $(".submit-btn").css("background-color", "rgb(112, 173, 71)");
+                $(".submit-btn").removeClass("submit-gray-color");
+                $(".submit-btn").addClass("submit-green-color");
             } else {
                 $(".submit-btn").attr("disabled", true);
-                $(".submit-btn").css("background-color", "rgb(200, 200, 200)");
+                $(".submit-btn").removeClass("submit-green-color");
+                $(".submit-btn").addClass("submit-gray-color");
             }
         });
         

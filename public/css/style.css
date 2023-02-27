@@ -155,13 +155,21 @@
 }
 
 .submit-btn {
-    background-color: rgb(112, 173, 71);
     margin-right: 10px;
     color: white;
     padding-left: 45px;
     padding-right: 45px;
     border: none;
 }
+
+.submit-gray-color {
+    background-color: rgb(200, 200, 200);
+}
+
+.submit-green-color {
+    background-color: rgb(112, 173, 71);
+}
+
 .cancle-btn {
     background-color: rgb(255, 255, 255);
     margin-left: 10px;
