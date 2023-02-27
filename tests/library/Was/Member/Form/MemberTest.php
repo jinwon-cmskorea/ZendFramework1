@@ -81,10 +81,10 @@ class Was_Member_Form_MemberTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('myForm-control3 col-sm-9', $element->getAttrib('class'));
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
         
-        $element = $this->form->getElement('phone');
+        $element = $this->form->getElement('telNumber');
         $this->assertInstanceOf('Zend_Form_Element_Text', $element);
-        $this->assertEquals('phone', $element->getId());
-        $this->assertEquals('phone', $element->getName());
+        $this->assertEquals('telNumber', $element->getId());
+        $this->assertEquals('telNumber', $element->getName());
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('휴대전화', $element->getLabel());
         $this->assertEquals('myForm-control3 col-sm-9', $element->getAttrib('class'));
@@ -109,8 +109,13 @@ class Was_Member_Form_MemberTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Zend_Form_Element_Button', $element);
         $this->assertEquals('cancle', $element->getId());
         $this->assertEquals('cancle', $element->getName());
-        $this->assertEquals('취소', $element->getLabel());
+        $this->assertEquals('취 소', $element->getLabel());
         $this->assertEquals('cancle-btn', $element->getAttrib('class'));
+        
+        $displayGroup = $this->form->getDisplayGroup('btns');
+        $this->assertEquals('btns', $displayGroup->getName());
+        $this->assertInstanceOf('Zend_Form_Element_Submit', $displayGroup->getElement('submit'));
+        $this->assertInstanceOf('Zend_Form_Element_Button', $displayGroup->getElement('cancle'));
     }
 }
 
