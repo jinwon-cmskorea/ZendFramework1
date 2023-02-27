@@ -102,15 +102,15 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
     //팝업창 전시
     function popUp() {
         //팝업창 크기
-        var popUpWidth = 1250;
-        var popUpHeight = 600;
+        var popUpWidth = 500
+        var popUpHeight = 555;
         //팝업창 위치 조절
         var popUpX = (document.body.offsetWidth / 2) - (popUpWidth / 2);
         //듀얼 모니터인 경우 넣어줘야함.
         popUpX += window.screenLeft;
         var popUpY = (window.screen.height / 2) - (popUpHeight / 2);
         
-        window.open('signup', '회원가입', 'height=' + popUpHeight  + ',width=' + popUpWidth  + ',left='+ popUpX + ',top='+ popUpY);
+        window.open('signup', '회원가입', 'scrollbars=no, width=' + popUpWidth + ', height=' + popUpHeight + ', left='+ popUpX + ',top='+ popUpY);
     }
 </script>
 <div class="container center">

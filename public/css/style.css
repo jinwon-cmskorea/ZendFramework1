@@ -114,12 +114,9 @@
 
 /* signup.php css 요소 */
 .fence {
-	border: 2px solid black;
-	/*
-	padding-top: 10%;
-	padding-bottom: 10%;
-	*/
-	padding-left: 3%;
+    border: 2px solid black;
+    padding-left: 3%;
+    width: 500px;
 }
 
 .signup-center {
@@ -130,10 +127,9 @@
 }
 
 .signup-title {
-	font-size: medium;
-	margin-top: 10%;
-	margin-bottom: 30%;
-	margin-left: -6%;
+    font-size: medium;
+    margin-top: 10%;
+    margin-bottom: 25%;
 }
 
 .signup-title .subtitle {
@@ -142,11 +138,13 @@
 }
 
 .category-design {
-	background-color: rgb(191, 191, 191);
-	color: black;
-	text-align: center;
-	padding: 7px;
-	font-size: 11px;
+    background-color: rgb(191, 191, 191);
+    color: black;
+    text-align: center;
+    padding: 7px;
+    font-size: 13px;
+    width: 80px;
+    margin-left: 24px;
 }
 
 .signup-button {
@@ -179,7 +177,7 @@
 }
 
 .myForm-control3 {
-    display: block;
+    width: 70%;
     height: 32px;
     margin: 0 12px 0 12px;
     padding: 6px 12px 6px 12px;
