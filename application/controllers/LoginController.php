@@ -187,7 +187,8 @@ class LoginController extends Zend_Controller_Action {
         $searchForm = new Was_Member_Form_SearchId();
         
         if ($this->getRequest()->isPost()) {
-            $this->view->processId = '검색 결과 : ';
+            $this->view->processResult = false;
+            $this->view->processId = '';
             //form validate를 통과한 경우
             if ($searchForm->isValid($request->getPost())) {
                 $memberTable = new Was_Member_Table_Member();
@@ -197,6 +198,7 @@ class LoginController extends Zend_Controller_Action {
                 $result = $member->searchId($params['name'], $params['telNumber']);
                 //아이디가 존재하는 경우 아이디를 붙여줌
                 if ($result) {
+                    $this->view->processResult = true;
                     $this->view->processId .= $result;
                 } else {
                     //존재하지 않는 경우, id 대신 경고문구 출력

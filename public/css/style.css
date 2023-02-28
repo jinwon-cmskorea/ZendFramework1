@@ -127,7 +127,7 @@
 
 .searchid-btn {
     padding: 6px 0 4px 0;
-    background-color: rgb(68, 114, 196);
+    background-color: #4472C4;
     color: #fff;
     border: none;
     font-size: 18px;
@@ -135,11 +135,29 @@
 
 .back-btn {
     float: right;
-    background-color: rgb(112, 173, 71);
+    background-color: #70AD47;
     color: #fff;
     margin: 15px 0 10px 5px;
     padding: 5px 20px;
     border: none;
+}
+
+.search-result {
+    text-align: center;
+    font-size: x-large;
+    padding: 30px 0 30px 0;
+}
+
+.searched-id {
+    text-align: center;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    font-size: x-large;
+}
+
+.search-description {
+    text-align: center;
+    margin-top: 10px;
 }
 
 /* signup.php css 요소 */

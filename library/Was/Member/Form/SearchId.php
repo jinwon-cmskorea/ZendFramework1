@@ -25,7 +25,8 @@ class Was_Member_Form_SearchId extends Zend_Form {
             array("Form", array(
                 'class'     => 'form-horizontal loginForm search-form',
                 'name'      => 'search-id-form'
-            ))
+            )),
+            array("HtmlTag", array('tag' => 'div', 'class' => 'field'))
         );
         //form 데코레이터 설정
         $this->setDecorators($decorators);

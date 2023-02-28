@@ -3,10 +3,23 @@ $this->headTitle('아이디 찾기');
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
-    <?php if (isset($this->processId)) : ?>
+    <?php if (isset($this->processResult)) : ?>
+        var processResult = '<?php echo $this->processResult ? 'true' : 'false'; ?>';
         var processId = '<?php echo $this->processId; ?>';
         
-        alert(processId);
+        //존재하지 않는 회원일 시, 경고창만 출력
+        if (processResult == 'false') {
+            alert(processId);
+        } else if (processResult == 'true') {
+            //존재하는 회원일 시
+            //form 및 텍스트 삭제
+            $('div.des-padding').remove();
+            $('form.search-form').remove();
+            //아이디 찾기 결과를 보여주기 위해 새 요소 삽입 및 전시
+            $(".field").append("<div class='search-result'>검색 결과</div>");
+            $(".field").append("<div class='searched-id'>" + processId + "</div>");
+            $(".field").append("<div class='search-description'>위의 아이디를 복사하실 수 있습니다.</div>");
+        }
     <?php endif; ?>
     
     //아이디 찾기 버튼 클릭했을 때, 먼저 입력값 형식 확인
@@ -28,8 +41,13 @@ $(document).ready(function() {
     });
 });
 </script>
+<style type="text/css">
+.search-background {
+    background-color: #E7E6E6;
+}
+</style>
 <div class="container center">
-    <div class="col-sm-6" style="background-color: rgb(231, 230, 230);">
+    <div class="col-sm-6 search-background">
         <div class="text-center">
             <div class="sep-line">
                <strong>CMSKOREA Board</strong>
