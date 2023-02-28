@@ -2,9 +2,9 @@
 .sep-line {
 	margin: 30px 40px 5px;
 	padding-bottom: 9px;
-	border-bottom: 1px solid rgb(208, 206, 206);
+	border-bottom: 1px solid #D0CECE;
 	font-size: large;
-	color: rgb(89, 89, 89);
+	color: #595959;
 }
 
 .center {
@@ -18,7 +18,7 @@
     padding-top: 5px;
     padding-left: 20px;
     margin-top: 10px;
-    color: rgb(89, 89, 89);
+    color: #595959;
     font-size: 15px;
 }
 
@@ -41,7 +41,7 @@
 
 .login-btn {
 	padding: 8px 0;
-	background-color: rgb(68, 114, 196);
+	background-color: #4472C4;
 	color: #fff;
 	border: none;
 	font-size: 18px;
@@ -81,7 +81,7 @@
     text-align: center; 
     vertical-align: middle;
     border: 2px solid rgb(0, 0, 0);
-    background-color: rgb(255, 255, 255);
+    background-color: #FFFFFF;
     margin: 5px 0 5px 0;
 }
 
@@ -89,7 +89,7 @@
 .checks input[id="isSaveId"]:checked + label::before {
     content: '✔';
     font-size: 20px;
-    background-color: rgb(255, 255, 255);
+    background-color: #FFFFFF;
 }
 
 .chkText span {
@@ -97,18 +97,18 @@
 }
 
 .signup-btn {
-	background-color: rgb(255, 192, 0);
+	background-color: #FFC000;
 	color: #fff;
 	margin: 0 5px 10px;
-	border: 2px solid rgb(127, 96, 0);
+	border: 2px solid #7F6000;
 	padding: 5px 15px;
 }
 
 .searchId-btn {
-    background-color: rgb(112, 173, 71);
+    background-color: #70AD47;
     color: #fff;
     margin: 0 0 10px 5px;
-    border: 2px solid rgb(84, 130, 53);
+    border: 2px solid #548235;
     padding: 5px 15px;
 }
 /* searchid.phtml css 요소 */
