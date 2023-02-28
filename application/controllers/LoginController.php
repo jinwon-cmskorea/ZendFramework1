@@ -49,6 +49,15 @@ class LoginController extends Zend_Controller_Action {
                 //errorCount 및 error 메세지를 초기화 후, 게시글 리스트로 리다이렉트
                 if ($authRes->isValid()) {
                     $identityTable->update(array('errorCount' => 0, 'errorMessage' => ''), "id = '{$param['id']}'");
+                    //세션에 member.position 정보를 넣기 위해서 조회
+                    $memberTable = new Was_Member_Table_Member();
+                    $select = $memberTable->select();
+                    $select->where('id = ?', $param['id']);
+                    $row = $memberTable->getAdapter()->fetchRow($select);
+                    //session 정보를 불러온 뒤, position 정보를 session 에 삽입
+                    $info = Zend_Session::namespaceGet('Was_Auth');
+                    $info['storage']->position = $row['position'];
+                    
                     $this->redirect('/board/boardlist');
                 } else if (!$authRes->isValid()) {
                     //로그인 에러문 설정

@@ -1,5 +1,12 @@
 <?php
 echo "게시글 리스트 페이지<br>";
+$info = Zend_Session::namespaceGet('Was_Auth');
+
+
+echo "로그인 유저 id: {$info['storage']->id} </br>";
+echo "로그인 유저 name: {$info['storage']->name} </br>";
+
+echo "로그인 유저 position: {$info['storage']->position} </br>";
 
 $url = $this->url(array('controller' => 'login', 'action' => 'logout'));
 echo $this->FormButton('logout', '로그아웃', array('class' => 'logout-btn', 'onclick' => "location.href='{$url}'"));
