@@ -4,7 +4,7 @@
  */
 require_once __DIR__ . '/../Bootstrap.php';
 
-class BoardController extends Zend_Controller_Action {
+class ManageController extends Zend_Controller_Action {
     /*
      * {@inheritDoc}
      * @see Zend_Controller_Action::init()
@@ -17,10 +17,12 @@ class BoardController extends Zend_Controller_Action {
         $this->view->name = $info['storage']->name;
         $this->view->position = $info['storage']->position;
     }
+    
     /**
-     * 게시글 리스트 Action
+     * 회원 관리 Action
      */
-    public function listAction() {
+    public function manageAction() {
+        
     }
 }
 

@@ -3,7 +3,7 @@ $this->headTitle("로그인");
 //이미 로그인한 경우, 게시글 리스트로 리다이렉트
 if (Zend_Session::namespaceGet('Was_Auth')) {
     echo "<script type=\"text/javascript\">alert('이미 로그인하셨습니다.');</script>";
-    echo "<script type=\"text/javascript\">location.href='/board/boardlist';</script>";
+    echo "<script type=\"text/javascript\">location.href='/board/list';</script>";
 }
 ?>
 <script type="text/javascript">

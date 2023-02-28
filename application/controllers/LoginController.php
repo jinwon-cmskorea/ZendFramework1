@@ -14,7 +14,7 @@ class LoginController extends Zend_Controller_Action {
      */
     public function init() {
         //기본 레이아웃 설정
-        $this->_helper->layout->setLayout('layout');
+        $this->_helper->layout->setLayout('default');
     }
     
     /**
@@ -58,7 +58,7 @@ class LoginController extends Zend_Controller_Action {
                     $info = Zend_Session::namespaceGet('Was_Auth');
                     $info['storage']->position = $row['position'];
                     
-                    $this->redirect('/board/boardlist');
+                    $this->redirect('/board/list');
                 } else if (!$authRes->isValid()) {
                     //로그인 에러문 설정
                     $errorString = '아이디 또는 비밀번호가 일치하지 않습니다.';
