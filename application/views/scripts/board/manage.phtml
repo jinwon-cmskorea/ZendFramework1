@@ -1,0 +1,15 @@
+<?php
+$this->headTitle('회원관리');
+
+$info = Zend_Session::namespaceGet('Was_Auth');
+
+//페이지 상단바를 patial로 불러옴
+$this->addScriptPath(__DIR__ . '/../../../layouts/partials');
+echo $this->partial('top.phtml', array(
+    'name'          => $info['storage']->name,
+    'position'      => $info['storage']->position,
+    'subTitle'      => "씨엠에스코리아 관리자",
+    'subSmall'      => "회원관리",
+    'description'   => "등록된 회원을 관리하는 페이지 입니다."
+));
+?>
