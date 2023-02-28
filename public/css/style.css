@@ -243,7 +243,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(89, 89, 89);
+    background-color: #595959;
     width: 100%;
     min-height: 50px;
 }
@@ -254,6 +254,11 @@
     padding: 10px;
 }
 
+.menutitle a {
+    text-decoration: none;
+    color: white;
+}
+
 .info-group {
     display: flex;
     align-items: center;
@@ -262,15 +267,15 @@
 }
 
 .user-info {
-    color: white;
+    color: #FFFFFF;
     margin-top: 5px;
     padding: 15px;
     font-size: large;
 }
 
 .logout-btn {
-    color: black;
-    background-color: white;
+    color: #000000;
+    background-color: #FFFFFF;
     border: none;
     margin-left: 10px;
     padding: 5px 15px;

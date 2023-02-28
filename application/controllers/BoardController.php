@@ -11,7 +11,11 @@ class BoardController extends Zend_Controller_Action {
      */
     public function init() {
         //기본 레이아웃 설정
-        $this->_helper->layout->setLayout('layout');
+        $this->_helper->layout->setLayout('boardlayout');
+        
+        $info = Zend_Session::namespaceGet('Was_Auth');
+        $this->view->name = $info['storage']->name;
+        $this->view->position = $info['storage']->position;
     }
     /**
      * 게시글 리스트 Action

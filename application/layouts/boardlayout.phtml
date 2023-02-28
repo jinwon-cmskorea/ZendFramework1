@@ -1,0 +1,30 @@
+<?php
+echo $this->doctype() . "\n";
+?>
+<html lang="ko">
+<head>
+<?php 
+echo $this->headTitle() . "\n";
+echo $this->headMeta() . "\n";
+
+echo $this->headLink()
+    ->appendStylesheet($this->baseUrl('/css/bootstrap/css/bootstrap.css'))
+    ->appendStylesheet($this->baseUrl('/css/style.css')) . "\n";
+
+echo $this->headScript()
+    ->appendFile($this->baseUrl('/js/jquery-3.6.3.min.js'))
+    ->appendFile($this->baseUrl('/css/bootstrap/js/bootstrap.js')) . "\n";
+?>
+</head>
+<body>
+<?php
+//partial 페이지 경로 설정
+$this->addScriptPath(__DIR__ . '/partials');
+echo $this->partial('top.phtml', array(
+    'name'          => $this->name,
+    'position'      => $this->position
+));
+echo $this->layout()->content;
+?>
+</body>
+</html>
