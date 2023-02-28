@@ -181,12 +181,12 @@
 }
 
 .signup-title .subtitle {
-	color: rgb(132, 151, 176);
+	color: #8497B0;
 	padding: 10px;
 }
 
 .category-design {
-    background-color: rgb(191, 191, 191);
+    background-color: #BFBFBF;
     color: black;
     text-align: center;
     padding: 7px;
@@ -209,19 +209,19 @@
 }
 
 .submit-gray-color {
-    background-color: rgb(200, 200, 200);
+    background-color: #C8C8C8;
 }
 
 .submit-green-color {
-    background-color: rgb(112, 173, 71);
+    background-color: #70AD47;
 }
 
 .cancle-btn {
-    background-color: rgb(255, 255, 255);
+    background-color: #FFFFFF;
     margin-left: 10px;
     padding-left: 45px;
     padding-right: 45px;
-    border: 1px solid rgb(166, 166, 166);
+    border: 1px solid #A6A6A6;
 }
 
 .myForm-control3 {

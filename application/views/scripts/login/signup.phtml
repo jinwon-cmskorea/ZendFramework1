@@ -118,12 +118,6 @@ $this->headTitle('회원가입');
             <strong>씨엠에스코리아 게시판</strong><small class="subtitle">- 회원가입 -</small>
         </div>
         <?php
-            //버튼 value를 '가 입' 으로 설정
-            $submit = $this->form->getElement('submit');
-            $submit->setLabel('가 입');
-            $cancle = $this->form->getElement('cancle');
-            $cancle->setAttrib('onclick', "window.close();");
-        
             echo $this->form->render(); 
         ?>
     </div>

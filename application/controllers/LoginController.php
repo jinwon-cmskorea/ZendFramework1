@@ -120,6 +120,11 @@ class LoginController extends Zend_Controller_Action {
         $request = $this->getRequest();
         
         $form = new Was_Member_Form_Member();
+        //form element 요소 수정
+        $submit = $form->getElement('submit');
+        $submit->setLabel('가 입');
+        $cancle = $form->getElement('cancle');
+        $cancle->setAttrib('onclick', "window.close();");
         
         if ($this->getRequest()->isPost()) {
             //view 페이지에서 호출할 수 있는 변수 선언
