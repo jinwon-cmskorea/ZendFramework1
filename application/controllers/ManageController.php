@@ -22,7 +22,17 @@ class ManageController extends Zend_Controller_Action {
      * 회원 관리 Action
      */
     public function manageAction() {
+        $request = $this->getRequest();
         
+        $form = new Was_Member_Form_Manage();
+        //select 요소의 option 설정
+        $category = $form->getElement('category');
+        $category->setMultiOptions(array(
+            'id'    => '아이디',
+            'name'  => '이름'
+        ));
+        
+        $this->view->form = $form;
     }
 }
 
