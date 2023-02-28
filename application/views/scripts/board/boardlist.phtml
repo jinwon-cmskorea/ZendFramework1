@@ -1,13 +1,19 @@
 <?php
-echo "게시글 리스트 페이지<br>";
+$this->headTitle('게시글 리스트');
 $info = Zend_Session::namespaceGet('Was_Auth');
 
+//페이지 상단바를 patial로 불러옴
+$this->addScriptPath(__DIR__ . '/../../../layouts/partials');
+echo $this->partial('top.phtml', array(
+    'name'          => $info['storage']->name,
+    'position'      => $info['storage']->position,
+    'subTitle'      => "씨엠에스코리아 게시판",
+    'subSmall'      => "리스트",
+    'description'   => "등록 된 게시글을 조회하는 페이지 입니다.<br> 등록 된 글은 조회, 수정 및 삭제 할 수 있습니다."
+));
 
 echo "로그인 유저 id: {$info['storage']->id} </br>";
 echo "로그인 유저 name: {$info['storage']->name} </br>";
 
 echo "로그인 유저 position: {$info['storage']->position} </br>";
-
-$url = $this->url(array('controller' => 'login', 'action' => 'logout'));
-echo $this->FormButton('logout', '로그아웃', array('class' => 'logout-btn', 'onclick' => "location.href='{$url}'"));
 ?>

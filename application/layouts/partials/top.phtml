@@ -1,0 +1,23 @@
+<div class="menubar">
+    <div class="menutitle"><a href="/board/boardlist" style="text-decoration: none; color: white;">CMSKOREA Board</a></div>
+    <div class="info-group">
+        <div class="user-info"><?php echo $this->name; ?></div>
+        <?php
+        if ($this->position != 3) {
+            $managetUrl = $this->url(array('controller' => 'board', 'action' => 'manage'));
+            echo $this->FormButton('logout', '회원관리', array('class' => 'logout-btn', 'onclick' => "location.href='{$managetUrl}'"));
+        }
+            $logoutUrl = $this->url(array('controller' => 'login', 'action' => 'logout'));
+            echo $this->FormButton('logout', '로그아웃', array('class' => 'logout-btn', 'onclick' => "location.href='{$logoutUrl}'"));
+        ?>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="list-title">
+        <strong style="color: rgb(89, 89, 89);"><?php echo $this->subTitle; ?></strong>
+        <small style="color: rgb(132, 151, 176);">- <?php echo $this->subSmall; ?> -</small>
+    </div>
+    <div class="col-sm-12 list-descript">
+        <?php echo $this->description; ?>
+    </div>
+</div>
