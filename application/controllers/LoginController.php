@@ -175,9 +175,31 @@ class LoginController extends Zend_Controller_Action {
     public function searchidAction() {
         $request = $this->getRequest();
         
-        $form = new Was_Member_Form_SearchId();
+        $searchForm = new Was_Member_Form_SearchId();
         
-        $this->view->form = $form;
+        if ($this->getRequest()->isPost()) {
+            $this->view->processId = '검색 결과 : ';
+            //form validate를 통과한 경우
+            if ($searchForm->isValid($request->getPost())) {
+                $memberTable = new Was_Member_Table_Member();
+                $member = new Was_Member($memberTable);
+                $params = $this->getAllParams();
+                //아이디를 검색한 결과를 받고 체크
+                $result = $member->searchId($params['name'], $params['telNumber']);
+                //아이디가 존재하는 경우 아이디를 붙여줌
+                if ($result) {
+                    $this->view->processId .= $result;
+                } else {
+                    //존재하지 않는 경우, id 대신 경고문구 출력
+                    $this->view->processId .= '존재하지 않는 회원입니다.';
+                }
+            } else {
+                //form validate를 통과하지 못한 경우
+                $this->view->processId = '이름 또는 휴대전화번호가 잘못된 형식입니다.';
+            }
+        }
+        
+        $this->view->form = $searchForm;
     }
 
     /**

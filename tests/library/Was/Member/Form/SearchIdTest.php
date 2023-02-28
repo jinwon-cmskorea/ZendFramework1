@@ -59,7 +59,7 @@ class Was_Member_Form_SearchIdTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('name', $element->getName());
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('이름', $element->getLabel());
-        $this->assertEquals('myForm-control', $element->getAttrib('class'));
+        $this->assertEquals('searchid-input', $element->getAttrib('class'));
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
         
         $element = $this->form->getElement('telNumber');
@@ -68,14 +68,14 @@ class Was_Member_Form_SearchIdTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('telNumber', $element->getName());
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('휴대전화번호', $element->getLabel());
-        $this->assertEquals('myForm-control', $element->getAttrib('class'));
+        $this->assertEquals('searchid-input', $element->getAttrib('class'));
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
         
         $element = $this->form->getElement('search');
         $this->assertInstanceOf('Zend_Form_Element_Submit', $element);
         $this->assertEquals('search', $element->getId());
         $this->assertEquals('search', $element->getName());
-        $this->assertEquals('btn-block login-btn', $element->getAttrib('class'));
+        $this->assertEquals('btn-block searchid-btn', $element->getAttrib('class'));
     }
 }
 

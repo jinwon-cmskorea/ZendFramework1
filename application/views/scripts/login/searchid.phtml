@@ -1,6 +1,33 @@
 <?php
 $this->headTitle('아이디 찾기');
 ?>
+<script type="text/javascript">
+$(document).ready(function() {
+    <?php if (isset($this->processId)) : ?>
+        var processId = '<?php echo $this->processId; ?>';
+        
+        alert(processId);
+    <?php endif; ?>
+    
+    //아이디 찾기 버튼 클릭했을 때, 먼저 입력값 형식 확인
+    $(".search-form").on("submit", function() {
+        var name = $("#name").val();
+        var tel = $("#telNumber").val();
+        var nameReg = /[가-힣A-Za-z]+$/;
+        var telReg = /^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/;
+        //제출 누를 시, 올바른 형식으로 입력했는 지 확인
+        if (name == '' || tel == '') {
+            alert('이름, 휴대전화번호를 모두 입력해주세요.');
+            return false;
+        }
+        
+        if (!nameReg.test(name) || !telReg.test(tel)) {
+            alert('이름 또는 휴대전화번호가 잘못된 형식입니다.');
+            return false;
+        }
+    });
+});
+</script>
 <div class="container center">
     <div class="col-sm-6" style="background-color: rgb(231, 230, 230);">
         <div class="text-center">

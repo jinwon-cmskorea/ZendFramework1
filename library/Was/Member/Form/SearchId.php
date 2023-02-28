@@ -23,7 +23,7 @@ class Was_Member_Form_SearchId extends Zend_Form {
             "Description",
             "FormElements",
             array("Form", array(
-                'class'     => 'form-horizontal loginForm',
+                'class'     => 'form-horizontal loginForm search-form',
                 'name'      => 'search-id-form'
             ))
         );
