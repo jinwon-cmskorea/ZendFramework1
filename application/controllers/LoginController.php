@@ -65,22 +65,34 @@ class LoginController extends Zend_Controller_Action {
                     
                     //존재하는 회원인지 검색
                     $select = $identityTable->select();
-                    $select->from($identityTable->getTableName(), array('errorCount'))
+                    $select->from($identityTable->getTableName(), array('authable', 'errorCount'))
                            ->where('id = ?', $param['id']);
                     $row = $identityTable->getAdapter()->fetchRow($select);
                     //존재하는 회원인 경우 errorCount 및 errorMessage 갱신
                     if ($row) {
                         //업데이트 할 컬럼 설정
                         $set = array(
-                            'errorCount'   => new Zend_Db_Expr('errorCount + 1'),
                             'errorMessage' => $errorString
                         );
-                        //errorCount에 따른 처리
-                        if ($row['errorCount'] >= 2 && $row['errorCount'] < 4) {
-                            $errorString .= " 남은 로그인 횟수는 ". (5 - ($row['errorCount'] + 1)) . "번 입니다.";
-                        } else if ($row['errorCount'] >= 4) {
-                            $errorString .= " 계정이 잠금 처리 되었습니다.";
-                            $set['authable'] = 0;
+                        
+                        if ($row['authable'] == 0) {
+                            $errorString = "계정이 잠금처리된 상태입니다.";
+                            $set['errorMessage'] = $errorString;
+                        } else {
+                            $errorCount = $row['errorCount'];
+                            $errorCount++;
+                            
+                            if ($errorCount >= 3 && $errorCount < 5) {
+                                $errorString .= " 남은 로그인 횟수는 ". (5 - $errorCount) . "번 입니다.";
+                            }
+                            
+                            if ($errorCount >= 5) {
+                                $set['authable'] = 0;
+                                $errorString .= " 계정이 잠금 처리 되었습니다.";
+                                $errorCount = 5;
+                            }
+                            
+                            $set['errorCount'] = $errorCount;
                         }
                         
                         $identityTable->update($set, "id = '{$param['id']}'");
