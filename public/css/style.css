@@ -379,6 +379,39 @@
     padding-left: 20px;
 }
 
+.pagination-class {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.front-and-back {
+    border: 1px solid #C8C8C8;
+    padding: 5px 20px;
+    text-decoration: none;
+    margin: 0 2px;
+}
+
+.disable-btn {
+    color: #ffffff;
+    background-color: #C8C8C8;
+}
+
+.page-btn {
+    border: 1px solid #C8C8C8;
+    padding: 5px 10px;
+    margin: 0 2px;
+}
+
+.active-color {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+.current-page {
+    color: #ffffff;
+    background-color: #2F5597;
+}
+
 /* boardList.php - 게시글 리스트 요소 */
 th, td {
     text-align: center;

@@ -1,38 +1,38 @@
-<div class="pagination" style="width:100%; text-align: center;">
-    <div style="">
-        <!-- First page link -->
-        <?php if (isset($this->previous)): ?>
-              <a href="<?= $this->url(array('page' => $this->first)); ?>">Start</a> |
-        <?php else: ?>
-                <span class="disabled">Start</span> |
-        <?php endif; ?>
+<div class="pagination-class">
+    <!-- First page link -->
+    <?php if (isset($this->previous)): ?>
+        <a class="front-and-back" href="<?php echo $this->url(array('page' => $this->first)); ?>">First</a>
+    <?php else: ?>
+        <span class="disabled front-and-back disable-btn">First</span>
+    <?php endif; ?>
+ 
+    <!-- Previous page link -->
+    <?php if (isset($this->previous)): ?>
+        <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $this->previous)); ?>">&lt; </a>
+    <?php else: ?>
+        <span class="disabled page-btn">&lt;</span>
+    <?php endif; ?>
     
-        <!-- Previous page link -->
+    <!-- Numbered page links -->
+    <?php foreach ($this->pagesInRange as $page): ?>
+        <?php if ($page != $this->current): ?>
+            <a class="page-btn" href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page; ?></a>
+        <?php else: ?>
+            <span class="page-btn current-page"><?php echo $page; ?></span>
+        <?php endif; ?>
+     <?php endforeach; ?>
+     
+    <!-- Next page link -->
+    <?php if (isset($this->next)): ?>
+        <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $this->next)); ?>">&gt;</a>
+    <?php else: ?>
+        <span class="disabled page-btn">&gt;</span>
+    <?php endif; ?>
     
-        <?php if (isset($this->previous)): ?>
-              <a href="<?= $this->url(array('page' => $this->previous)); ?>">&lt; Previous</a> |
-        <?php else: ?>
-            <span class="disabled">&lt; Previous</span> |
-        <?php endif; ?>
-        <!-- Numbered page links -->
-        <?php foreach ($this->pagesInRange as $page): ?>
-            <?php if ($page != $this->current): ?>
-                <a href="<?= $this->url(array('page' => $page)); ?>"><?= $page; ?></a>
-            <?php else: ?>
-                <?= $page; ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        <!-- Next page link -->
-        <?php if (isset($this->next)): ?>
-              | <a href="<?= $this->url(array('page' => $this->next)); ?>">Next &gt;</a> |
-        <?php else: ?>
-            | <span class="disabled">Next &gt;</span> |
-        <?php endif; ?>
-        <!-- Last page link -->
-        <?php if (isset($this->next)): ?>
-              <a href="<?= $this->url(array('page' => $this->last)); ?>">End</a>
-        <?php else: ?>
-            <span class="disabled">End</span>
-        <?php endif; ?>
-    </div>
- </div>
+    <!-- Last page link -->
+    <?php if (isset($this->next)): ?>
+        <a class="front-and-back active-color" href="<?php echo $this->url(array('page' => $this->last)); ?>">Last</a>
+    <?php else: ?>
+        <span class="disabled front-and-back disable-btn">Last</span>
+    <?php endif; ?>
+</div>
