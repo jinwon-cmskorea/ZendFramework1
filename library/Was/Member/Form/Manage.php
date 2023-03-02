@@ -18,7 +18,7 @@ class Was_Member_Form_Manage extends Zend_Form {
         $decorators = array(
             "Description",
             "FormElements",
-            array("Form", array('class' => 'search-form')),
+            array("Form", array('class' => 'search-member-form')),
             array("HtmlTag", array('tag' => 'div', 'class' => 'board-upper'))
         );
         

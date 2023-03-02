@@ -21,6 +21,7 @@ $this->headTitle('회원관리');
 </div>
 <div class="col-sm-12 list-body">
     <?php echo $this->form->render();?>
+    <div class="searchCnt"><?php echo number_format($this->recordCount) . " / " . number_format($this->totalCount) . " 건";?></div>
     <table class="myTable">
         <thead class="add-top-line">
             <tr>
@@ -33,15 +34,20 @@ $this->headTitle('회원관리');
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($this->paginator as $items) { ?>
+        <?php foreach ($this->paginator as $items) { 
+            $telNumber = preg_replace("/([0-9]{3})([0-9]{3,4})([0-9]{4})$/","\\1-\\2-\\3" ,$items['telNumber']);
+        ?>
             <tr class="add-bottom-line">
                 <td><?php echo $items['pk']; ?></td>
                 <td class="text-align-left"><?php echo $items['id']; ?></td>
                 <td class="text-align-left"><?php echo $items['name']; ?></td>
-                <td class="text-align-left"><?php echo $items['telNumber']; ?></td>
+                <td class="text-align-left"><?php echo $telNumber; ?></td>
                 <td><?php echo $items['authable']; ?></td>
             </tr>
         <?php } ?>
         </tbody>
     </table>
+    <?php 
+    echo $this->paginator->render();
+    ?>
 </div>

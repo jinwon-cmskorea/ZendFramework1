@@ -24,4 +24,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
         Zend_Session::start();
     }
     
+    public function _initPaginatrolController() {
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial('partials/controls.phtml');
+    }
 }
