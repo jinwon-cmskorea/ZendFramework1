@@ -76,6 +76,9 @@ class Was_Auth extends Zend_Auth {
             $identityData['sessionId'] = '';
             $identityData['remoteIp'] = '';
             $storage->write($identityData);
+        } else {
+            $remoteIp = $_SERVER['REMOTE_ADDR'];
+            $this->_historyTable->addHistory($result->getIdentity(), $remoteIp, Was_Auth_Table_History::FAIL_MESSAGE);
         }
 
         return $result;
