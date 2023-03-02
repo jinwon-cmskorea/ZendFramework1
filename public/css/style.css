@@ -407,6 +407,12 @@
     background-color: #ffffff;
 }
 
+.active-color:hover {
+    text-decoration: none;
+    color: #000000;
+    background-color: #C8C8C8;
+}
+
 .current-page {
     color: #ffffff;
     background-color: #2F5597;
