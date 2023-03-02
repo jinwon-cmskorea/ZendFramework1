@@ -21,4 +21,27 @@ $this->headTitle('회원관리');
 </div>
 <div class="col-sm-12 list-body">
     <?php echo $this->form->render();?>
+    <table class="myTable">
+        <thead class="add-top-line">
+            <tr>
+                <th class="col-sm-2">회원번호</th>
+                <th class="col-sm-2">아이디</th>
+                <th class="col-sm-2">회원명</th>
+                <th class="col-sm-2">휴대전화번호</th>
+                <th class="col-sm-1">로그인제한</th>
+                <th class="col-sm-3">작업</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($this->paginator as $items) { ?>
+            <tr class="add-bottom-line">
+                <td><?php echo $items['pk']; ?></td>
+                <td class="text-align-left"><?php echo $items['id']; ?></td>
+                <td class="text-align-left"><?php echo $items['name']; ?></td>
+                <td class="text-align-left"><?php echo $items['telNumber']; ?></td>
+                <td><?php echo $items['authable']; ?></td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
 </div>

@@ -24,6 +24,23 @@ class ManageController extends Zend_Controller_Action {
     public function manageAction() {
         $request = $this->getRequest();
         
+        $identityTable = new Was_Auth_Table_Identity();
+        $memberTable = new Was_Member_Table_Member();
+        //table join 작업
+        $select = $memberTable->select();
+        $select->from(array('a' => $memberTable->getTableName()), array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
+               ->join(array('b' => $identityTable->getTableName()), "a.id = b.id")
+               ->order("a.pk DESC");
+        //Zend_Db_Table_Select 객체로 join을 사용할 때, 아래와 같이 설정해줘야함
+        $select->setIntegrityCheck(false);
+        //join 결과를 array로 가져옴
+        $result = $memberTable->getAdapter()->fetchAll($select);
+        //paginator 객체 생성
+        $paginator = Zend_Paginator::factory($result);
+        
+        $this->view->paginator = $paginator;
+        
+        
         $form = new Was_Member_Form_Manage();
         //select 요소의 option 설정
         $category = $form->getElement('category');

@@ -301,12 +301,16 @@
 }
 
 /* boardList.php - 게시글 상단 요소 */
-.board-upper {
-    float: left;
-}
 
 .search-form {
     /*margin: 1em 0;*/
+    float: left;
+}
+
+.board-upper::after {
+    content:'';
+    display:block;
+    clear:both;
 }
 
 .selectbox {
@@ -381,12 +385,13 @@ td {
 }
 
 .myTable {
+    margin-top: 15px;
     width: 100%;
 }
 
 .add-top-line {
-    border-top: 1px solid rgb(191, 191, 191);
-    border-bottom: 1px solid rgb(191, 191, 191);
+    border-top: 1px solid #BFBFBF;
+    border-bottom: 1px solid #BFBFBF;
 }
 
 .list-body {
@@ -394,7 +399,12 @@ td {
 }
 
 .add-bottom-line {
-    border-bottom: 1px solid rgb(191, 191, 191);
+    color: #7F7F7F;
+    border-bottom: 1px solid #BFBFBF;
+}
+
+.text-align-left {
+    text-align: left;
 }
 
 /* boardList.php - 게시글 하단 페이징 요소 */
