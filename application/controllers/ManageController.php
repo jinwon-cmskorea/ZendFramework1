@@ -57,5 +57,44 @@ class ManageController extends Zend_Controller_Action {
         
         $this->view->form = $form;
     }
+    
+    /**
+     * 로그인 제한 관리 Action
+     */
+    public function authableManageAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $result = array(
+            'result'    => false,
+            'message'   => ''
+        );
+        
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            $set = array();
+            $status = "로그인 불가";
+            if ($params['checked'] == "true") {
+                $set['authable'] = 0;
+                $status = "로그인 차단";
+            } else if ($params['checked'] == "false") {
+                $set['authable'] = 1;
+                $set['errorCount'] = 0;
+                $status = "로그인 허용";
+            }
+            
+            $identityTable = new Was_Auth_Table_Identity();
+            $row = $identityTable->update($set, "id = '{$params['userId']}'");
+            if ($row) {
+                $result['result'] = true;
+                $result['message'] = "로그인 제한 상태가 [" . $status . "] 상태로 변경됐습니다.";
+            }
+        } else {
+            //에외
+            $result['result'] = false;
+            $result['message'] = '';
+        }
+        
+        $this->_helper->json->sendJson($result);
+    }
 }
 
