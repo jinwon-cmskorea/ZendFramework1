@@ -84,13 +84,13 @@ if ($session['storage']->position > 2) {
                 </td>
                 <td>
                     <?php if ($items['position'] == 3) {
-                        echo $this->FormButton('manager', '관리자', array('class' => 'manager-btn gray-color', 'data-user-id' => $items['id']));
-                        echo $this->FormButton('normal', '일 반', array('class' => 'normal-btn green-color', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
+                        echo $this->FormButton('manager', '관리자', array('class' => 'common-btn gray-color manager', 'data-user-id' => $items['id']));
+                        echo $this->FormButton('normal', '일 반', array('class' => 'common-btn green-color normal', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
                     } else {
-                        echo $this->FormButton('manager', '관리자', array('class' => 'manager-btn brown-color', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
-                        echo $this->FormButton('normal', '일 반', array('class' => 'normal-btn gray-color', 'data-user-id' => $items['id']));
+                        echo $this->FormButton('manager', '관리자', array('class' => 'common-btn brown-color manager', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
+                        echo $this->FormButton('normal', '일 반', array('class' => 'common-btn gray-color normal', 'data-user-id' => $items['id']));
                     }
-                    echo $this->FormButton('member-delete', '삭 제', array('class' => 'delete-btn', 'data-user-id' => $items['id']));
+                    echo $this->FormButton('member-delete', '삭 제', array('class' => 'common-btn red-color del', 'data-user-id' => $items['id']));
                     ?>
                     
                 </td>

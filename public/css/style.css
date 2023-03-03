@@ -404,7 +404,7 @@
 
 .active-color {
     color: #000000;
-    background-color: #ffffff;
+    background-color: #FFFFFF;
 }
 
 .active-color:hover {
@@ -414,8 +414,32 @@
 }
 
 .current-page {
-    color: #ffffff;
+    color: #FFFFFF;
     background-color: #2F5597;
+}
+/* manage/manage - 회원관리 페이지 요소 */
+.common-btn {
+    padding: 3px 20px;
+    margin: 0 5px;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+}
+
+.brown-color {
+    background-color: #843C0C;
+}
+
+.gray-color {
+    background-color: #7F7F7F;
+}
+
+.green-color {
+    background-color: #00B050;
+}
+
+.red-color {
+    background-color: #FF0000;
 }
 
 /* boardList.php - 게시글 리스트 요소 */
