@@ -3,10 +3,11 @@ $this->headTitle('회원관리');
 ?>
 <script type="text/javascript">
     $(document).on("click", ".authable-btn", function() {
+        //누른 체크박스의 data-user-pk를 가져옴
+        var userId = $(this).data('userId');
+        var checked = $(this).is(":checked");
+        
         if (confirm("로그인 제한 설정을 변경하시겠습니까?")) {
-            //누른 체크박스의 data-user-pk를 가져옴
-            var userId = $(this).data('userId');
-            var checked = $(this).is(":checked");
             //action에 ajax 전송
             $.ajax({
                 url: "/manage/authable-manage",
@@ -21,6 +22,11 @@ $this->headTitle('회원관리');
             });
         } else {
             alert("변경을 취소하셨습니다.");
+            if (checked == true) {
+                $(this).prop("checked", false);
+            } else {
+                $(this).prop("checked", true);
+            }
         }
     });
 </script>
