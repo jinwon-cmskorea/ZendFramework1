@@ -8,32 +8,121 @@ if ($session['storage']->position > 2) {
 }
 ?>
 <script type="text/javascript">
-    $(document).on("click", ".authable-btn", function() {
-        //누른 체크박스의 data-user-pk를 가져옴
-        var userId = $(this).data('userId');
-        var checked = $(this).is(":checked");
-        if (confirm("로그인 제한 설정을 변경하시겠습니까?")) {
-            //action에 ajax 전송
-            $.ajax({
-                url: "/manage/authable-manage",
-                method: "POST",
-                data: {"userId": userId, "checked": checked},
-                dataType: "json",
-                success: function(receive) {
-                    if (receive.result == true) {
-                        alert(receive.message);
+    $(document).ready(function() {
+        //로그인 제한 체크 박스를 클릭했을 경우의 이벤트
+        $(document).on("click", ".authable-btn", function() {
+            //누른 체크박스의 data-user-pk를 가져옴
+            var userId = $(this).data('userId');
+            var checked = $(this).is(":checked");
+            if (confirm("로그인 제한 설정을 변경하시겠습니까?")) {
+                //action에 ajax 전송
+                $.ajax({
+                    url: "/manage/authable-manage",
+                    method: "POST",
+                    data: {"userId": userId, "checked": checked},
+                    dataType: "json",
+                    success: function(receive) {
+                        if (receive.result == true) {
+                            alert(receive.message);
+                        }
                     }
-                }
-            });
-        } else {
-            alert("변경을 취소하셨습니다.");
-            if (checked == true) {
-                $(this).prop("checked", false);
+                });
             } else {
-                $(this).prop("checked", true);
+                alert("변경을 취소하셨습니다.");
+                if (checked == true) {
+                    $(this).prop("checked", false);
+                } else {
+                    $(this).prop("checked", true);
+                }
             }
-        }
+        });
+        
+        //관리자 버튼을 누를 경우 동작 처리
+        $(document).on("click", ".manager", function() {
+            var userId = $(this).data('userId');
+            
+            if(confirm("등급을 관리자로 변경하시겠습니까?")) {
+                $.ajax({
+                    url: "/manage/change-manager",
+                    method: "POST",
+                    data: {"userId": userId},
+                    dataType: "json",
+                    success: function(receive) {
+                        if (receive.result == true) {
+                            alert(receive.message);
+                            //관리자 버튼을 비활성화하고, 갈색으로 색상 변경
+                            $("button[name=manager-" + userId + "]").attr("disabled", true);
+                            $("button[name=manager-" + userId + "]").removeClass("gray-color");
+                            $("button[name=manager-" + userId + "]").addClass("brown-color");
+                            //버튼을 활성화하고, 회색으로 색상 변경
+                            $("button[name=normal-" + userId + "]").attr("disabled", false);
+                            $("button[name=normal-" + userId + "]").removeClass("green-color");
+                            $("button[name=normal-" + userId + "]").addClass("gray-color");
+                        } else {
+                            alert(receive.message);
+                        }
+                    }
+                });
+            } else {
+                alert("변경을 취소하셨습니다.");
+            }
+        });
+        
+        //일반 버튼을 누를 경우 동작 처리
+        $(document).on("click", ".normal", function() {
+            var userId = $(this).data('userId');
+            
+            if(confirm("등급을 일반 회원으로 변경하시겠습니까?")) {
+                $.ajax({
+                    url: "/manage/change-normal",
+                    method: "POST",
+                    data: {"userId": userId},
+                    dataType: "json",
+                    success: function(receive) {
+                        if (receive.result == true) {
+                            alert(receive.message);
+                            //버튼을 활성화하고, 회색으로 색상 변경
+                            $("button[name=manager-" + userId + "]").attr("disabled", false);
+                            $("button[name=manager-" + userId + "]").removeClass("brown-color");
+                            $("button[name=manager-" + userId + "]").addClass("gray-color");
+                            //버튼을 비활성화하고, 초록색으로 색상 변경
+                            $("button[name=normal-" + userId + "]").attr("disabled", true);
+                            $("button[name=normal-" + userId + "]").removeClass("gray-color");
+                            $("button[name=normal-" + userId + "]").addClass("green-color");
+                        } else {
+                            alert(receive.message);
+                        }
+                    }
+                });
+            } else {
+                alert("변경을 취소하셨습니다.");
+            }
+        });
+        //삭제 버튼을 누를 경우 동작 처리
+        $(document).on("click", ".del", function() {
+            var userId = $(this).data('userId');
+            
+            if(confirm("해당 회원 정보를 삭제하겠습니까?")) {
+                $.ajax({
+                    url: "/manage/delete-member",
+                    method: "POST",
+                    data: {"userId": userId},
+                    dataType: "json",
+                    success: function(receive) {
+                        if (receive.result == true) {
+                            alert(receive.message);
+                            window.location.reload();
+                        } else {
+                            alert(receive.message);
+                        }
+                    }
+                });
+            } else {
+                alert("삭제를 취소하셨습니다.");
+            }
+        });
     });
+    
 </script>
 <style type="text/css">
 .list-title strong {
@@ -84,11 +173,11 @@ if ($session['storage']->position > 2) {
                 </td>
                 <td>
                     <?php if ($items['position'] == 3) {
-                        echo $this->FormButton('manager', '관리자', array('class' => 'common-btn gray-color manager', 'data-user-id' => $items['id']));
-                        echo $this->FormButton('normal', '일 반', array('class' => 'common-btn green-color normal', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
+                        echo $this->FormButton("manager-".$items['id'], '관리자', array('class' => 'common-btn gray-color manager', 'data-user-id' => $items['id']));
+                        echo $this->FormButton("normal-".$items['id'], '일 반', array('class' => 'common-btn green-color normal', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
                     } else {
-                        echo $this->FormButton('manager', '관리자', array('class' => 'common-btn brown-color manager', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
-                        echo $this->FormButton('normal', '일 반', array('class' => 'common-btn gray-color normal', 'data-user-id' => $items['id']));
+                        echo $this->FormButton("manager-".$items['id'], '관리자', array('class' => 'common-btn brown-color manager', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
+                        echo $this->FormButton("normal-".$items['id'], '일 반', array('class' => 'common-btn gray-color normal', 'data-user-id' => $items['id']));
                     }
                     echo $this->FormButton('member-delete', '삭 제', array('class' => 'common-btn red-color del', 'data-user-id' => $items['id']));
                     ?>

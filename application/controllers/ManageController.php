@@ -97,9 +97,119 @@ class ManageController extends Zend_Controller_Action {
                 $result['message'] = "로그인 제한 상태가 [" . $status . "] 상태로 변경됐습니다.";
             }
         } else {
-            //에외
+            //예외
             $result['result'] = false;
             $result['message'] = '';
+        }
+        
+        $this->_helper->json->sendJson($result);
+    }
+    /**
+     * 관리자로 등급을 변경하는 Action
+     */
+    public function changeManagerAction() {
+         $this->_helper->layout->disableLayout();
+         
+         $result = array(
+             'result'   => false,
+             'message'  => ''
+         );
+         
+         if($this->getRequest()->isXmlHttpRequest()) {
+             $params = $this->getAllParams();
+             $memberTable = new Was_Member_Table_Member();
+             //등급 업데이트, 정상적으로 수행됐다면 영향받은 row 갯수 리턴
+             $num = $memberTable->update(array('position' => 2), "id = '{$params['userId']}'");
+             if ($num) {
+                 $result['result'] = true;
+                 $result['message'] = $params['userId'] . "회원의 등급이 관리자로 변경됐습니다.";
+             } else {
+                 $result['message'] = "회원 등급 변경 중 문제가 발생했습니다.";
+             }
+         } else {
+             //예외
+             $result['result'] = false;
+             $result['message'] = '잘못된 요청입니다.';
+         }
+         
+         $this->_helper->json->sendJson($result);
+    }
+    
+    /**
+     * 일반 회원으로 등급을 변경하는 Action
+     */
+    public function changeNormalAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $result = array(
+            'result'   => false,
+            'message'  => ''
+        );
+        
+        if($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            $memberTable = new Was_Member_Table_Member();
+            //등급 업데이트, 정상적으로 수행됐다면 영향받은 row 갯수 리턴
+            $num = $memberTable->update(array('position' => 3), "id = '{$params['userId']}'");
+            if ($num) {
+                $result['result'] = true;
+                $result['message'] = $params['userId'] . "회원의 등급이 일반 회원으로 변경됐습니다.";
+            } else {
+                $result['message'] = "회원 등급 변경 중 문제가 발생했습니다.";
+            }
+        } else {
+            //예외
+            $result['result'] = false;
+            $result['message'] = '잘못된 요청입니다.';
+        }
+        
+        $this->_helper->json->sendJson($result);
+    }
+    
+    /**
+     * 회원을 삭제하는 Action
+     */
+    public function deleteMemberAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $result = array(
+            'result'   => false,
+            'message'  => ''
+        );
+        
+        if($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            $memberTable = new Was_Member_Table_Member();
+            $identitiyTable = new Was_Auth_Table_Identity();
+            $db = Zend_Db::factory('mysqli', $memberTable->getAdapter()->getConfig());
+            //트랜잭션 시작
+            $db->beginTransaction();
+            try {
+                $num = $memberTable->getAdapter()->delete($memberTable->getTableName(), "id = '{$params['userId']}'");
+                if ($num != 1) {
+                    //문제가 발생 시, rollback
+                    $db->rollBack();
+                    $result['message'] = 'member 테이블의 레코드 삭제 중 문제가 발생했습니다.';
+                }
+                
+                $num2 = $identitiyTable->getAdapter()->delete($identitiyTable->getTableName(), "id = '{$params['userId']}'");
+                if ($num2 != 1) {
+                    //문제가 발생 시, rollback
+                    $db->rollBack();
+                    $result['message'] = 'identity 테이블의 레코드 삭제 중 문제가 발생했습니다.';
+                }
+            } catch (Zend_Db_Exception $e) {
+                //예외 발생시 rollback
+                $db->rollBack();
+                $result['message'] = '회원정보 삭제 중 문제가 발생했습니다.';
+            }
+            $db->commit();
+            $result['result'] = true;
+            $result['message'] = $params['userId'] . "회원 정보 삭제가 완료됐습니다.";
+        } else {
+            //예외
+            $result['result'] = false;
+            $result['message'] = '잘못된 요청입니다.';
         }
         
         $this->_helper->json->sendJson($result);
