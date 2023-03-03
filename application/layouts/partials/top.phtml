@@ -5,7 +5,7 @@
         <?php
         if ($this->position != 3) {
             $managetUrl = $this->url(array('controller' => 'manage', 'action' => 'manage'));
-            echo $this->FormButton('logout', '회원관리', array('class' => 'logout-btn', 'onclick' => "location.href='{$managetUrl}'"));
+            echo $this->FormButton('member-manage', '회원관리', array('class' => 'logout-btn', 'onclick' => "location.href='{$managetUrl}'"));
         }
             $logoutUrl = $this->url(array('controller' => 'login', 'action' => 'logout'));
             echo $this->FormButton('logout', '로그아웃', array('class' => 'logout-btn', 'onclick' => "location.href='{$logoutUrl}'"));

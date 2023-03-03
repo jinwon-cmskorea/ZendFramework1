@@ -12,7 +12,6 @@ if ($session['storage']->position > 2) {
         //누른 체크박스의 data-user-pk를 가져옴
         var userId = $(this).data('userId');
         var checked = $(this).is(":checked");
-        
         if (confirm("로그인 제한 설정을 변경하시겠습니까?")) {
             //action에 ajax 전송
             $.ajax({
@@ -78,7 +77,22 @@ if ($session['storage']->position > 2) {
                 <td class="text-align-left"><?php echo $items['name']; ?></td>
                 <td class="text-align-left"><?php echo $telNumber; ?></td>
                 <td>
-                    <input type="checkbox" class="authable-btn" data-user-id="<?php echo $items['id']; ?>" <?php echo $items['authable'] == 1 ? '' : 'checked'; ?>>
+                    <?php 
+                    //checkbox 생성, 4번째 인수인 option에 1일때 checked, 0일때 not checked 를 지정
+                    echo $this->FormCheckbox('chkBox', $items['authable'] == 1 ? 0 : 1, array('class' => 'authable-btn', 'data-user-id' => $items['id']), array(1, 0));
+                    ?>
+                </td>
+                <td>
+                    <?php if ($items['position'] == 3) {
+                        echo $this->FormButton('manager', '관리자', array('class' => 'manager-btn gray-color', 'data-user-id' => $items['id']));
+                        echo $this->FormButton('normal', '일 반', array('class' => 'normal-btn green-color', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
+                    } else {
+                        echo $this->FormButton('manager', '관리자', array('class' => 'manager-btn brown-color', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
+                        echo $this->FormButton('normal', '일 반', array('class' => 'normal-btn gray-color', 'data-user-id' => $items['id']));
+                    }
+                    echo $this->FormButton('member-delete', '삭 제', array('class' => 'delete-btn', 'data-user-id' => $items['id']));
+                    ?>
+                    
                 </td>
             </tr>
         <?php } ?>
