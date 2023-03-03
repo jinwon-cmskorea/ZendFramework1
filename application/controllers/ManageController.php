@@ -27,11 +27,19 @@ class ManageController extends Zend_Controller_Action {
         if ($this->getRequest()) {
             $identityTable = new Was_Auth_Table_Identity();
             $memberTable = new Was_Member_Table_Member();
+            //position 을 알기 위해 세션을 가져옴
+            $session = Zend_Session::namespaceGet('Was_Auth');
             //table join 작업
             $select = $memberTable->select();
             $select->from(array('a' => $memberTable->getTableName()), array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
             ->join(array('b' => $identityTable->getTableName()), "a.id = b.id")
             ->order("a.pk DESC");
+            //회원 등급에 따라, 다른 리스트가 보여질 수 있도록 where 절 추가
+            if ($session['storage']->position == 1) {
+                $select->where("a.position != ?", $session['storage']->position);
+            } else if ($session['storage']->position == 2) {
+                $select->where("a.position != ?", $session['storage']->position)->where("a.position != ?", 1);
+            }
             //Zend_Db_Table_Select 객체로 join을 사용할 때, 아래와 같이 설정해줘야함
             $select->setIntegrityCheck(false);
             //join 결과를 array로 가져옴

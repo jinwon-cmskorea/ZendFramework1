@@ -1,5 +1,11 @@
 <?php
 $this->headTitle('회원관리');
+$session = Zend_Session::namespaceGet('Was_Auth');
+if ($session['storage']->position > 2) {
+    echo "<script>alert('관리자가 아닌 회원은 접근할 수 없습니다.');</script>";
+    echo "<script>history.back(-1);</script>";
+    return;
+}
 ?>
 <script type="text/javascript">
     $(document).on("click", ".authable-btn", function() {
