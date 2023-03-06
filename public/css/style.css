@@ -453,6 +453,16 @@
     background-color: #FF0000;
 }
 
+/* /manage/modify 회원수정 페이지 요소 */
+.change-pw-btn {
+    background-color: #B4C7E7;
+    border: none;
+    padding: 7px 20px;
+    margin: 0 0 20px 9px;
+    color: #000000;
+    font-weight: bold;
+}
+
 /* boardList.php - 게시글 리스트 요소 */
 th, td {
     text-align: center;
