@@ -302,7 +302,14 @@
 
 /* boardList.php - 게시글 상단 요소 */
 
+/*
 .search-member-form {
+    margin: 1em 0;
+    float: left;
+}
+*/
+
+.zend_form {
     margin: 1em 0;
     float: left;
 }

@@ -23,17 +23,45 @@ class ManageController extends Zend_Controller_Action {
      */
     public function manageAction() {
         $request = $this->getRequest();
+        //form name을 지정해주기 위해 main 및 subform 설정
+        $searchForm = new Zend_Form();
+        $manageForm = new Was_Member_Form_Manage();
+        $searchForm->setMethod(Zend_Form::METHOD_GET);
+        $searchForm->addSubForm($manageForm, 'search');
+        
+        $params = $request->getParams();
         
         if ($this->getRequest()) {
             $identityTable = new Was_Auth_Table_Identity();
             $memberTable = new Was_Member_Table_Member();
             //position 을 알기 위해 세션을 가져옴
             $session = Zend_Session::namespaceGet('Was_Auth');
-            //table join 작업
-            $select = $memberTable->select();
-            $select->from(array('a' => $memberTable->getTableName()), array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
-            ->join(array('b' => $identityTable->getTableName()), "a.id = b.id")
-            ->order("a.pk DESC");
+            //검색 값이 존재하는 경우
+            if (isset($params['search'])) {
+                $param = $params['search'];
+                
+                if ($param['category'] && $param['search']) {
+                    //카테고리 및 찾으려하는 정보를 조건으로 가지는 레코드 검색
+                    $select = $memberTable->select();
+                    $select->from(array('a' => $memberTable->getTableName()), array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
+                    ->join(array('b' => $identityTable->getTableName()), "a.id = b.id")
+                    ->order("a.pk DESC")
+                    ->where("a.{$param['category']} LIKE ?", "%".$param['search']."%");
+                } else {
+                    //table join 작업
+                    $select = $memberTable->select();
+                    $select->from(array('a' => $memberTable->getTableName()), array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
+                    ->join(array('b' => $identityTable->getTableName()), "a.id = b.id")
+                    ->order("a.pk DESC");
+                }
+            } else {
+                //table join 작업
+                $select = $memberTable->select();
+                $select->from(array('a' => $memberTable->getTableName()), array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
+                ->join(array('b' => $identityTable->getTableName()), "a.id = b.id")
+                ->order("a.pk DESC");
+            }
+            
             //회원 등급에 따라, 다른 리스트가 보여질 수 있도록 where 절 추가
             if ($session['storage']->position == 1) {
                 $select->where("a.position != ?", $session['storage']->position);
@@ -55,15 +83,16 @@ class ManageController extends Zend_Controller_Action {
             $this->view->recordCount = count($result);
         }
         
-        $form = new Was_Member_Form_Manage();
         //select 요소의 option 설정
-        $category = $form->getElement('category');
+        $category = $manageForm->getElement('category');
         $category->setMultiOptions(array(
             'id'    => '아이디',
             'name'  => '이름'
         ));
+        //검색 시, 선택한 category 및 search 유지해줌
+        $manageForm->setDefaults($params);
         
-        $this->view->form = $form;
+        $this->view->form = $searchForm;
     }
     
     /**

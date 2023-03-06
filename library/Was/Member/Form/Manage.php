@@ -9,7 +9,7 @@ require_once 'Zend/Form.php';
  * @package    Was
  * @subpackage Was_Member_Form
  */
-class Was_Member_Form_Manage extends Zend_Form {
+class Was_Member_Form_Manage extends Zend_Form_SubForm {
     /*
      * {@inheritDoc}
      * @see Zend_Form::init()
@@ -28,7 +28,6 @@ class Was_Member_Form_Manage extends Zend_Form {
             "ViewHelper",
             "Description"
         ));
-        $this->addElement('hidden', 'page', array('value' => '1'));
         
         $this->addElement('select', 'category', array(
             'class'     => 'selectbox'

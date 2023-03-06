@@ -15,8 +15,19 @@
     
     <!-- Numbered page links -->
     <?php foreach ($this->pagesInRange as $page): ?>
+        <?php 
+        $params = "";
+        if (isset($this->searchForm) && is_array($this->searchForm)) {
+            $searchParams = array(
+                'search' => $this->searchForm
+            );
+            $params = http_build_query($searchParams);
+            $params = trim($params, '&');
+        }
+        if ($params) $params = '?' . $params;
+        ?>
         <?php if ($page != $this->current): ?>
-            <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page; ?></a>
+            <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $page)) . $params; ?>"><?php echo $page; ?></a>
         <?php else: ?>
             <span class="page-btn current-page"><?php echo $page; ?></span>
         <?php endif; ?>

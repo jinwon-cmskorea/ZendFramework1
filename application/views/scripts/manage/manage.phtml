@@ -6,6 +6,7 @@ if ($session['storage']->position > 2) {
     echo "<script>history.back(-1);</script>";
     return;
 }
+
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -188,6 +189,9 @@ if ($session['storage']->position > 2) {
         </tbody>
     </table>
     <?php 
-    echo $this->paginator->render();
+    echo $this->paginationControl($this->paginator, null, null, array('searchForm' => array(
+        'category' => $this->form->search->category->getValue(),
+        'search'    => $this->form->search->search->getValue(),
+    )));
     ?>
 </div>
