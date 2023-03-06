@@ -174,7 +174,10 @@ if ($session['storage']->position > 2) {
                 </td>
                 <td>
                     <?php if ($items['position'] == 3) {
-                        echo $this->FormButton("manager-".$items['id'], '관리자', array('class' => 'common-btn gray-color manager', 'data-user-id' => $items['id']));
+                        //관리자 변경 버튼은 최종 관리자만 보여지도록 if문 사용
+                        if ($session['storage']->position == 1) {
+                            echo $this->FormButton("manager-".$items['id'], '관리자', array('class' => 'common-btn gray-color manager', 'data-user-id' => $items['id']));
+                        }
                         echo $this->FormButton("normal-".$items['id'], '일 반', array('class' => 'common-btn green-color normal', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
                     } else {
                         echo $this->FormButton("manager-".$items['id'], '관리자', array('class' => 'common-btn brown-color manager', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
