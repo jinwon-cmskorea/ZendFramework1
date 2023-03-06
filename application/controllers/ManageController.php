@@ -24,13 +24,22 @@ class ManageController extends Zend_Controller_Action {
     public function manageAction() {
         $request = $this->getRequest();
         //form name을 지정해주기 위해 main 및 subform 설정
-        $searchForm = new Zend_Form();
+        $searchForm = new Zend_Form(array('class' => 'member-search'));
         $manageForm = new Was_Member_Form_Manage();
+        $manageForm->addElement('hidden', 'isSearch', array('value' => 0));
         $searchForm->setMethod(Zend_Form::METHOD_GET);
         $searchForm->addSubForm($manageForm, 'search');
         
         $params = $request->getParams();
         
+        /*
+         * 만약 검색 버튼을 눌렀을 경우, page 파라미터를 없애고, 검색 여부를 0으로 초기화
+         * 페이지네이터의 기본 페이지가 1로 설정되있으므로 1페이지로 이동
+         */
+        if (isset($params['search']['isSearch']) && $params['search']['isSearch'] == 1) {
+             $this->setParam('page', null);
+             $params['search']['isSearch'] = 0;
+        }
         if ($this->getRequest()) {
             $identityTable = new Was_Auth_Table_Identity();
             $memberTable = new Was_Member_Table_Member();
@@ -63,11 +72,7 @@ class ManageController extends Zend_Controller_Action {
             }
             
             //회원 등급에 따라, 다른 리스트가 보여질 수 있도록 where 절 추가
-            if ($session['storage']->position == 1) {
-                $select->where("a.position != ?", $session['storage']->position);
-            } else if ($session['storage']->position == 2) {
-                $select->where("a.position != ?", $session['storage']->position)->where("a.position != ?", 1);
-            }
+            $select->where("a.position > ?", $session['storage']->position);
             //Zend_Db_Table_Select 객체로 join을 사용할 때, 아래와 같이 설정해줘야함
             $select->setIntegrityCheck(false);
             //join 결과를 array로 가져옴
@@ -76,19 +81,18 @@ class ManageController extends Zend_Controller_Action {
             //paginator 객체 생성
             $paginator = Zend_Paginator::factory($result);
             //현재 페이지를 _getParam 을 이용해 설정해줌(2번째 인수는 default로 설정할 값)
-            $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+            $paginator->setCurrentPageNumber($this->getParam('page', 1));
             //paginator 객체 할당
             $this->view->paginator = $paginator;
             //전체 member 레코드 갯수 구하기
-            $memberTable2 = clone $memberTable;
-            $select2 = $memberTable2->select();
-            $select2->from($memberTable2->getTableName(), array('count' => new Zend_Db_Expr('COUNT(*)')));
-            if ($session['storage']->position == 1) {
-                $select2->where("position != ?", $session['storage']->position);
-            } else if ($session['storage']->position == 2) {
-                $select2->where("position != ?", $session['storage']->position)->where("position != ?", 1);
-            }
-            $total = $memberTable->getAdapter()->fetchRow($select2);
+            //이전에 사용한 select 객체 초기화
+            $select->reset(Zend_Db_Select::COLUMNS);
+            $select->reset(Zend_Db_Select::WHERE);
+            $select->reset(Zend_Db_Select::FROM);
+            $select->reset(Zend_Db_Select::ORDER);
+            $select->from($memberTable->getTableName(), array('count' => new Zend_Db_Expr('COUNT(*)')));
+            $select->where("position > ?", $session['storage']->position);
+            $total = $memberTable->getAdapter()->fetchRow($select);
             //전체 레코드 갯수와 검색된 레코드 갯수 할당
             $this->view->totalCount = $total['count'];
             $this->view->recordCount = count($result);

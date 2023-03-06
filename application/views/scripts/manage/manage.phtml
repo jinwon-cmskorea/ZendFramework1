@@ -122,6 +122,10 @@ if ($session['storage']->position > 2) {
                 alert("삭제를 취소하셨습니다.");
             }
         });
+        
+        $(".member-search").on("submit", function() {
+            $("#search-isSearch").val(1);
+        });
     });
     
 </script>
@@ -173,7 +177,8 @@ if ($session['storage']->position > 2) {
                     ?>
                 </td>
                 <td>
-                    <?php if ($items['position'] == 3) {
+                    <?php 
+                    if ($items['position'] == 3) {
                         //관리자 변경 버튼은 최종 관리자만 보여지도록 if문 사용
                         if ($session['storage']->position == 1) {
                             echo $this->FormButton("manager-".$items['id'], '관리자', array('class' => 'common-btn gray-color manager', 'data-user-id' => $items['id']));
