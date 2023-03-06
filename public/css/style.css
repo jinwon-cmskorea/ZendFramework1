@@ -271,6 +271,7 @@
     margin-top: 5px;
     padding: 15px;
     font-size: large;
+    cursor: pointer;
 }
 
 .logout-btn {
@@ -342,6 +343,9 @@
     clear: both;
 }
 
+.member-name {
+    cursor: pointer;
+}
 
 .write-btn-div {
     float: right;

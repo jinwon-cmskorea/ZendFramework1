@@ -111,6 +111,36 @@ class ManageController extends Zend_Controller_Action {
     }
     
     /**
+     * 회원정보 수정 Action
+     */
+    public function modifyAction() {
+        //상단 바가 필요없으므로, default 레이아웃 사용
+        $this->_helper->layout->disableLayout();
+        $this->_helper->layout->setLayout('default');
+        
+        $modifyForm = new Was_Member_Form_Member();
+        $pwForm = new Was_Auth_Form_Password();
+        
+        //회원수정(member) form 에 비밀번호 칸 삭제 및 비밀번호 변경 버튼 추가
+        $modifyForm->removeElement('pw');
+        $modifyForm->addElement('button', 'change-pw', array(
+            'class'     => 'change-pw-btn',
+            'label'     => '비밀번호 변경',
+            'order'     => 1
+        ));
+        $changePw = $modifyForm->getElement('change-pw');
+        $changePw->removeDecorator('label');
+        $changePw->removeDecorator('HtmlTag');
+        
+        $submit = $modifyForm->getElement('submit');
+        $submit->setLabel('수 정');
+        
+        //form 을 view에 전달
+        $this->view->modifyForm = $modifyForm;
+        $this->view->pwForm = $pwForm;
+    }
+    
+    /**
      * 로그인 제한 관리 Action
      */
     public function authableManageAction() {

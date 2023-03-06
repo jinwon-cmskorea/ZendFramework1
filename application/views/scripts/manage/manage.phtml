@@ -122,6 +122,32 @@ if ($session['storage']->position > 2) {
                 alert("삭제를 취소하셨습니다.");
             }
         });
+        //상단 바의 유저 이름을 클릭했을 경우, 수정 창 출력
+        $(".user-info").on("click", function() {
+            //팝업창 크기
+            var popUpWidth = 500
+            var popUpHeight = 555;
+            //팝업창 위치 조절
+            var popUpX = (document.body.offsetWidth / 2) - (popUpWidth / 2);
+            //듀얼 모니터인 경우 넣어줘야함.
+            popUpX += window.screenLeft;
+            var popUpY = (window.screen.height / 2) - (popUpHeight / 2);
+            
+            window.open('/manage/modify', '회원정보수정', 'scrollbars=no, resizable=no, width=' + popUpWidth + ', height=' + popUpHeight + ', left='+ popUpX + ',top='+ popUpY);
+        });
+        //회원 관리 페이지에서 유저 이름을 클릭했을 경우, 수정 창 출력
+        $(".member-name").on("click", function() {
+            //팝업창 크기
+            var popUpWidth = 500
+            var popUpHeight = 555;
+            //팝업창 위치 조절
+            var popUpX = (document.body.offsetWidth / 2) - (popUpWidth / 2);
+            //듀얼 모니터인 경우 넣어줘야함.
+            popUpX += window.screenLeft;
+            var popUpY = (window.screen.height / 2) - (popUpHeight / 2);
+            
+            window.open('/manage/modify', '회원정보수정', 'scrollbars=no, resizable=no, width=' + popUpWidth + ', height=' + popUpHeight + ', left='+ popUpX + ',top='+ popUpY);
+        });
         
         $(".member-search").on("submit", function() {
             $("#search-isSearch").val(1);
@@ -168,7 +194,7 @@ if ($session['storage']->position > 2) {
             <tr class="add-bottom-line">
                 <td><?php echo $items['pk']; ?></td>
                 <td class="text-align-left"><?php echo $items['id']; ?></td>
-                <td class="text-align-left"><?php echo $items['name']; ?></td>
+                <td class="text-align-left member-name" data-user-id="<?php echo $items['name']; ?>"><?php echo $items['name']; ?></td>
                 <td class="text-align-left"><?php echo $telNumber; ?></td>
                 <td>
                     <?php 

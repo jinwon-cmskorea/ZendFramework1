@@ -1,0 +1,14 @@
+<?php
+$this->headTitle("회원수정");
+?>
+<div class="center">
+    <div class="col-sm-12 fence">
+        <div class="signup-title">
+            <strong>씨엠에스코리아 게시판</strong><small class="subtitle">- 회원수정 -</small>
+        </div>
+        <?php
+            echo $this->modifyForm->render();
+            echo $this->pwForm->render(); 
+        ?>
+    </div>
+</div>
