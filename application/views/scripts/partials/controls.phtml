@@ -1,31 +1,31 @@
+<?php 
+    $params = "";
+    if (isset($this->searchForm) && is_array($this->searchForm)) {
+        $searchParams = array(
+            'search' => $this->searchForm
+        );
+        $params = http_build_query($searchParams);
+        $params = trim($params, '&');
+    }
+    if ($params) $params = '?' . $params;
+?>
 <div class="pagination-class">
     <!-- First page link -->
     <?php if (isset($this->previous)): ?>
-        <a class="front-and-back active-color" href="<?php echo $this->url(array('page' => $this->first)); ?>">First</a>
+        <a class="front-and-back active-color" href="<?php echo $this->url(array('page' => $this->first)) . $params; ?>">First</a>
     <?php else: ?>
         <span class="disabled front-and-back disable-btn">First</span>
     <?php endif; ?>
  
     <!-- Previous page link -->
     <?php if (isset($this->previous)): ?>
-        <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $this->previous)); ?>">&lt; </a>
+        <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $this->previous)) . $params; ?>">&lt; </a>
     <?php else: ?>
         <span class="disabled page-btn">&lt;</span>
     <?php endif; ?>
     
     <!-- Numbered page links -->
     <?php foreach ($this->pagesInRange as $page): ?>
-        <?php 
-        $params = "";
-        if (isset($this->searchForm) && is_array($this->searchForm)) {
-            $searchParams = array(
-                'search' => $this->searchForm
-            );
-            $params = http_build_query($searchParams);
-            $params = trim($params, '&');
-        }
-        if ($params) $params = '?' . $params;
-        ?>
         <?php if ($page != $this->current): ?>
             <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $page)) . $params; ?>"><?php echo $page; ?></a>
         <?php else: ?>
@@ -35,14 +35,14 @@
      
     <!-- Next page link -->
     <?php if (isset($this->next)): ?>
-        <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $this->next)); ?>">&gt;</a>
+        <a class="page-btn active-color" href="<?php echo $this->url(array('page' => $this->next)) . $params; ?>">&gt;</a>
     <?php else: ?>
         <span class="disabled page-btn">&gt;</span>
     <?php endif; ?>
     
     <!-- Last page link -->
     <?php if (isset($this->next)): ?>
-        <a class="front-and-back active-color" href="<?php echo $this->url(array('page' => $this->last)); ?>">Last</a>
+        <a class="front-and-back active-color" href="<?php echo $this->url(array('page' => $this->last)) . $params; ?>">Last</a>
     <?php else: ?>
         <span class="disabled front-and-back disable-btn">Last</span>
     <?php endif; ?>

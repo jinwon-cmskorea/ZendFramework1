@@ -77,9 +77,20 @@ class ManageController extends Zend_Controller_Action {
             $paginator = Zend_Paginator::factory($result);
             //현재 페이지를 _getParam 을 이용해 설정해줌(2번째 인수는 default로 설정할 값)
             $paginator->setCurrentPageNumber($this->_getParam('page', 1));
-            
+            //paginator 객체 할당
             $this->view->paginator = $paginator;
-            $this->view->totalCount = $paginator->getTotalItemCount();
+            //전체 member 레코드 갯수 구하기
+            $memberTable2 = clone $memberTable;
+            $select2 = $memberTable2->select();
+            $select2->from($memberTable2->getTableName(), array('count' => new Zend_Db_Expr('COUNT(*)')));
+            if ($session['storage']->position == 1) {
+                $select2->where("position != ?", $session['storage']->position);
+            } else if ($session['storage']->position == 2) {
+                $select2->where("position != ?", $session['storage']->position)->where("position != ?", 1);
+            }
+            $total = $memberTable->getAdapter()->fetchRow($select2);
+            //전체 레코드 갯수와 검색된 레코드 갯수 할당
+            $this->view->totalCount = $total['count'];
             $this->view->recordCount = count($result);
         }
         
