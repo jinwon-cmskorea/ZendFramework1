@@ -129,10 +129,14 @@ class ManageController extends Zend_Controller_Action {
             $memberTable = new Was_Member_Table_Member();
             //클릭한 userId 의 회원 정보를 가져옴
             $select = $memberTable->select();
-            $select->from($memberTable->getTableName(), array('id', 'name', 'telNumber', 'email'))
+            $select->from($memberTable->getTableName(), array('id', 'name', 'telNumber', 'email', 'position'))
             ->where("id = ?", $params['userId']);
             $row = $memberTable->getAdapter()->fetchRow($select);
             
+            if ($row['position'] == 1) {
+                $this->view->message = "최종관리자는 회원 정보를 수정할 수 없습니다.";
+            }
+                
             $id = $modifyForm->getElement('id');
             $id->setValue($row['id']);
             

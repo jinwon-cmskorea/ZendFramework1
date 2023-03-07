@@ -5,6 +5,12 @@ $pwForm = preg_replace('/\r\n|\r|\n/','', $this->pwForm->render());
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
+    <?php if (isset($this->message)) : ?>
+    var message = '<?php echo $this->message; ?>';
+    alert(message);
+    window.close();
+    <?php endif;?>
+
     $(".change-pw-btn").on("click", function() {
         //개행문자 제거한 form 문자열 추가
         var formElement = '<?php echo $pwForm;?>';
