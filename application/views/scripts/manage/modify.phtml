@@ -1,14 +1,29 @@
 <?php
 $this->headTitle("회원수정");
+//렌더링 시킬 form의 개행문자를 제거.(한줄로 입력하기 위해서)
+$pwForm = preg_replace('/\r\n|\r|\n/','', $this->pwForm->render());
 ?>
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".change-pw-btn").on("click", function() {
+        //개행문자 제거한 form 문자열 추가
+        var formElement = '<?php echo $pwForm;?>';
+        $(this).after(formElement);
+        //버튼 제거
+        $(this).remove();
+        //title css 속성 변경
+        $("div[name=title]").removeClass("title-before");
+        $("div[name=title]").addClass("title-after");
+    });
+});
+</script>
 <div class="center">
     <div class="col-sm-12 fence">
-        <div class="signup-title">
+        <div class="member-modify-title title-before" name="title">
             <strong>씨엠에스코리아 게시판</strong><small class="subtitle">- 회원수정 -</small>
         </div>
         <?php
             echo $this->modifyForm->render();
-            echo $this->pwForm->render(); 
         ?>
     </div>
 </div>

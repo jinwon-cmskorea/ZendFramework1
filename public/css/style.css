@@ -463,6 +463,52 @@
     font-weight: bold;
 }
 
+.pwPart {
+    margin-bottom: 15px;
+}
+
+.pw-category-design {
+    background-color: #BFBFBF;
+    color: black;
+    text-align: center;
+    padding: 7px;
+    font-size: 13px;
+    width: 120px;
+    margin-left: 9px;
+    margin-bottom: 10px;
+}
+
+.myform-control4 {
+    width: 66.5%;
+    height: 32px;
+    margin: 0 0 0 13px;
+    padding: 6px 12px 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 2px solid black;
+}
+
+.member-modify-title {
+    font-size: medium;
+    margin-top: 10%;
+}
+
+.title-before {
+    margin-bottom: 35%;
+}
+
+.title-after {
+    margin-bottom: 16%;
+}
+
+.modify-button {
+    float: right;
+    margin: 0 4px 20px 0;
+}
+
 /* boardList.php - 게시글 리스트 요소 */
 th, td {
     text-align: center;

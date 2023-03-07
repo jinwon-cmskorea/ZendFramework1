@@ -131,9 +131,19 @@ class ManageController extends Zend_Controller_Action {
         $changePw = $modifyForm->getElement('change-pw');
         $changePw->removeDecorator('label');
         $changePw->removeDecorator('HtmlTag');
-        
+        //제출 버튼 문구 변경
         $submit = $modifyForm->getElement('submit');
         $submit->setLabel('수 정');
+        //취소 누를 시, 창 닫기
+        $cancle = $modifyForm->getElement('cancle');
+        $cancle->setAttrib("onclick", "window.close()");
+        //하단의 버튼 displaygroup 속성 변경
+        $group = $modifyForm->getDisplayGroup('btns');
+        $group->clearDecorators();
+        $group->addDecorators(array(
+            'FormElements',
+            array('HtmlTag', array('tag' => 'div', 'class' => 'modify-button'))
+        ));
         
         //form 을 view에 전달
         $this->view->modifyForm = $modifyForm;
