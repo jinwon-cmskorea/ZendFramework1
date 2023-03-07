@@ -57,6 +57,11 @@ $(document).ready(function() {
                         $("#confirmPw").removeClass("background-gray");
                         $("#newPw").attr("readonly", false);
                         $("#confirmPw").attr("readonly", false);
+                    } else {
+                        $("#newPw").addClass("background-gray");
+                        $("#confirmPw").addClass("background-gray");
+                        $("#newPw").attr("readonly", true);
+                        $("#confirmPw").attr("readonly", true);
                     }
                 }
             });
