@@ -22,7 +22,7 @@ class Was_Auth_Form_Password extends Zend_Form {
         $decorators = array(
             "Description",
             "FormElements",
-            array("Fieldset", array('class' => 'pwPart'))
+            array("Fieldset", array('class' => 'pwPart display-none'))
         );
         
         $this->setDecorators($decorators);

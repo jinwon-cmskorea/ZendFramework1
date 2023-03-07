@@ -132,13 +132,14 @@ class ManageController extends Zend_Controller_Action {
             $select->from($memberTable->getTableName(), array('id', 'name', 'telNumber', 'email', 'position'))
             ->where("id = ?", $params['userId']);
             $row = $memberTable->getAdapter()->fetchRow($select);
-            
+            //최종 관리자는 회원정보 수정이 불가능하므로 alert 창 출력
             if ($row['position'] == 1) {
                 $this->view->message = "최종관리자는 회원 정보를 수정할 수 없습니다.";
             }
-                
+            //각 input 창에 회원 정보 출력
             $id = $modifyForm->getElement('id');
             $id->setValue($row['id']);
+            $id->setAttrib('readonly', true);
             
             $name = $modifyForm->getElement('name');
             $name->setValue($row['name']);
@@ -149,6 +150,8 @@ class ManageController extends Zend_Controller_Action {
             
             $email = $modifyForm->getElement('email');
             $email->setValue($row['email']);
+            
+            $this->view->userId = $params['userId'];
         }
         
         //회원수정(member) form 에 비밀번호 칸 삭제 및 비밀번호 변경 버튼 추가
@@ -324,6 +327,31 @@ class ManageController extends Zend_Controller_Action {
             //예외
             $result['result'] = false;
             $result['message'] = '잘못된 요청입니다.';
+        }
+        
+        $this->_helper->json->sendJson($result);
+    }
+    
+    /**
+     * 현재 비밀번호를 체크하는 Action
+     */
+    public function checkPwAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $result = array('result' => false);
+        
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            //비밀번호가 들어있는 테이블인 identity 를 가져옴
+            $identityTable = new Was_Auth_Table_Identity();
+            //비밀번호 컬럼을 가져옴
+            $select = $identityTable->select();
+            $select->from($identityTable->getTableName(), array('pw'))->where("id = ?", $params['userId']);
+            $row = $identityTable->getAdapter()->fetchRow($select);
+            
+            if (md5($params['nowPw']) == $row['pw']) {
+                $result['result'] = true;
+            }
         }
         
         $this->_helper->json->sendJson($result);

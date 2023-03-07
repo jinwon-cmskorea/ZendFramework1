@@ -467,6 +467,14 @@
     margin-bottom: 15px;
 }
 
+.display-none {
+    display: none;
+}
+
+.display-block {
+    display: block;
+}
+
 .pw-category-design {
     background-color: #BFBFBF;
     color: black;
@@ -486,8 +494,6 @@
     font-size: 14px;
     line-height: 1.42857143;
     color: #555;
-    background-color: #fff;
-    background-image: none;
     border: 2px solid black;
 }
 
@@ -507,6 +513,10 @@
 .modify-button {
     float: right;
     margin: 0 4px 20px 0;
+}
+
+.background-gray {
+    background-color: #E7E6E6;
 }
 
 /* boardList.php - 게시글 리스트 요소 */

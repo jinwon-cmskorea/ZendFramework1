@@ -10,17 +10,58 @@ $(document).ready(function() {
     alert(message);
     window.close();
     <?php endif;?>
-
+    
+    //개행문자 제거한 form 문자열 추가
+    var formElement = '<?php echo $pwForm;?>';
+    $(".change-pw-btn").after(formElement);
+    
+    //현재 비밀번호가 일치하는 지 체크하는 변수. default 는 true;
+    var pwOk = true;
+    var userId = '<?php echo $this->userId ?>';
+    
+    //비밀번호 변경 버튼 누를시, 비밀번호 변경 form이 보이도록 변경
     $(".change-pw-btn").on("click", function() {
-        //개행문자 제거한 form 문자열 추가
-        var formElement = '<?php echo $pwForm;?>';
-        $(this).after(formElement);
+        pwOk = false;
+        //비밀번호 입력 form 이 보이도록 속성 변경
+        $(".pwPart").removeClass("display-none");
+        $(".pwPart").addClass("display-block");
         //버튼 제거
         $(this).remove();
         //title css 속성 변경
         $("div[name=title]").removeClass("title-before");
         $("div[name=title]").addClass("title-after");
     });
+    
+    //제출 버튼 초기 배경색 설정
+    $(".submit-btn").addClass("submit-gray-color");
+    
+    //비밀번호 입력창이 떴는지 확인
+    if ($(".pwPart").length) {
+        //초기 비밀번호 변경, 확인 배경색 및 readonly 적용
+        $("#newPw").addClass("background-gray");
+        $("#confirmPw").addClass("background-gray");
+        $("#newPw").attr("readonly", true);
+        $("#confirmPw").attr("readonly", true);
+        //현재 비밀번호 입력할 때마다 감지, 확인
+        $("#nowPw").on("keyup", function() {
+            var nowPw = $(this).val();
+            
+            $.ajax({
+                url: "/manage/check-pw",
+                data: {"nowPw": nowPw, "userId": userId},
+                dataType: "json",
+                method: "POST",
+                success: function(receive) {
+                    if (receive.result == true) {
+                        $("#newPw").removeClass("background-gray");
+                        $("#confirmPw").removeClass("background-gray");
+                        $("#newPw").attr("readonly", false);
+                        $("#confirmPw").attr("readonly", false);
+                    }
+                }
+            });
+        });
+    }
 });
 </script>
 <div class="center">
