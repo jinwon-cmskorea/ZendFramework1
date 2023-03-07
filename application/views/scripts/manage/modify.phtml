@@ -96,7 +96,7 @@ $(document).ready(function() {
     //입력값이 모두 입력됐는지 체크하는 변수
     var isEmpty = true;
     //각 input이 변경되었을 때 실행
-    $(".signup-form").find("input[type=text]").change(function() {
+    $(".signup-form").find("input[type=text]").on("change keyup paste input focus", function() {
         var Elements = $(".signup-form input[type=text]");
         for (var i = 0; i < Elements.length - 1; i++) {
             //비어있지 않으면 false 입력, 비어있으면 true 입력
