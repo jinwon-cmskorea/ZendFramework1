@@ -42,6 +42,8 @@ $(document).ready(function() {
         $("#confirmPw").addClass("background-gray");
         $("#newPw").attr("readonly", true);
         $("#confirmPw").attr("readonly", true);
+        $("#newPw").attr("disabled", true);
+        $("#confirmPw").attr("disabled", true);
         //현재 비밀번호 입력할 때마다 감지, 확인
         $("#nowPw").on("keyup", function() {
             var nowPw = $(this).val();
@@ -64,12 +66,16 @@ $(document).ready(function() {
                         $("#confirmPw").removeClass("background-gray");
                         $("#newPw").attr("readonly", false);
                         $("#confirmPw").attr("readonly", false);
+                        $("#newPw").attr("disabled", false);
+                        $("#confirmPw").attr("disabled", false);
                     } else {
                         //일치하지 않거나, 현재 비밀번호를 지운 경우, 초기 설정으로 변경, 입력한 값 초기화
                         $("#newPw").addClass("background-gray");
                         $("#confirmPw").addClass("background-gray");
                         $("#newPw").attr("readonly", true);
                         $("#confirmPw").attr("readonly", true);
+                        $("#newPw").attr("disabled", true);
+                        $("#confirmPw").attr("disabled", true);
                         $("#newPw").val("");
                         $("#confirmPw").val("");
                     }
@@ -84,6 +90,32 @@ $(document).ready(function() {
             pwOk = true;
         } else {
             pwOk = false;
+        }
+    });
+    
+    //입력값이 모두 입력됐는지 체크하는 변수
+    var isEmpty = true;
+    //각 input이 변경되었을 때 실행
+    $(".signup-form").find("input[type=text]").change(function() {
+        var Elements = $(".signup-form input[type=text]");
+        for (var i = 0; i < Elements.length - 1; i++) {
+            //비어있지 않으면 false 입력, 비어있으면 true 입력
+            if ($(Elements[i]).val() != "" && $(Elements[i]).val() != null) {
+                isEmpty = false;
+            } else {
+                isEmpty = true;
+                break;
+            }
+        }
+        //입력값이 모두 들어있고, 아이디 중복체크를 통과했으면 제출 비활성화 해제 
+        if (!isEmpty && pwOk) {
+            $(".submit-btn").attr("disabled", false);
+            $(".submit-btn").removeClass("submit-gray-color");
+            $(".submit-btn").addClass("submit-green-color");
+        } else {
+            $(".submit-btn").attr("disabled", true);
+            $(".submit-btn").removeClass("submit-green-color");
+            $(".submit-btn").addClass("submit-gray-color");
         }
     });
 });
