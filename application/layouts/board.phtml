@@ -22,6 +22,7 @@ echo $this->headScript()
 $this->addScriptPath(__DIR__ . '/partials');
 echo $this->partial('top.phtml', array(
     'name'          => $this->name,
+    'id'            => $this->id,
     'position'      => $this->position
 ));
 echo $this->layout()->content;

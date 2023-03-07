@@ -1,7 +1,7 @@
 <div class="menubar">
     <div class="menutitle"><a href="/board/list">CMSKOREA Board</a></div>
     <div class="info-group">
-        <div class="user-info"><?php echo $this->name; ?></div>
+        <div class="user-info" data-user-id="<?php echo $this->id; ?>"><?php echo $this->name; ?></div>
         <?php
         if ($this->position != 3) {
             $managetUrl = $this->url(array('controller' => 'manage', 'action' => 'manage', 'page' => 1));

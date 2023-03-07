@@ -15,6 +15,7 @@ class BoardController extends Zend_Controller_Action {
         
         $info = Zend_Session::namespaceGet('Was_Auth');
         $this->view->name = $info['storage']->name;
+        $this->view->id = $info['storage']->id;
         $this->view->position = $info['storage']->position;
     }
     /**
