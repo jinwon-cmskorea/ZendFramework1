@@ -115,12 +115,37 @@ class ManageController extends Zend_Controller_Action {
      * 회원정보 수정 Action
      */
     public function modifyAction() {
+        $request = $this->getRequest();
         //상단 바가 필요없으므로, default 레이아웃 사용
         $this->_helper->layout->disableLayout();
         $this->_helper->layout->setLayout('default');
         
+        $params = $request->getParams();
+        
         $modifyForm = new Was_Member_Form_Member();
         $pwForm = new Was_Auth_Form_Password();
+        
+        if (isset($params['userId']) && $params['userId']) {
+            $memberTable = new Was_Member_Table_Member();
+            //클릭한 userId 의 회원 정보를 가져옴
+            $select = $memberTable->select();
+            $select->from($memberTable->getTableName(), array('id', 'name', 'telNumber', 'email'))
+            ->where("id = ?", $params['userId']);
+            $row = $memberTable->getAdapter()->fetchRow($select);
+            
+            $id = $modifyForm->getElement('id');
+            $id->setValue($row['id']);
+            
+            $name = $modifyForm->getElement('name');
+            $name->setValue($row['name']);
+            
+            $tel = preg_replace("/([0-9]{3})([0-9]{3,4})([0-9]{4})$/","\\1-\\2-\\3" ,$row['telNumber']);
+            $telNumber = $modifyForm->getElement('telNumber');
+            $telNumber->setValue($tel);
+            
+            $email = $modifyForm->getElement('email');
+            $email->setValue($row['email']);
+        }
         
         //회원수정(member) form 에 비밀번호 칸 삭제 및 비밀번호 변경 버튼 추가
         $modifyForm->removeElement('pw');
