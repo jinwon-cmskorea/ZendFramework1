@@ -78,7 +78,14 @@ $(document).ready(function() {
         });
     }
     
-    
+    //비밀번호 확인 입력창 입력시, 변경창의 입력값과 동일한 지 실시간 비교
+    $("#confirmPw").on("keyup", function() {
+        if($("#newPw").val() != '' && ($("#newPw").val() == $("#confirmPw").val())) {
+            pwOk = true;
+        } else {
+            pwOk = false;
+        }
+    });
 });
 </script>
 <div class="center">
