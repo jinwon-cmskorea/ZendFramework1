@@ -45,6 +45,12 @@ $(document).ready(function() {
         //현재 비밀번호 입력할 때마다 감지, 확인
         $("#nowPw").on("keyup", function() {
             var nowPw = $(this).val();
+            //기존 비밀번호 미입력시, 비밀번호를 변경하지 않는 것으로 간주
+            if (nowPw == '') {
+                pwOk = true;
+            } else {
+                pwOk = false;
+            }
             
             $.ajax({
                 url: "/manage/check-pw",
@@ -53,20 +59,26 @@ $(document).ready(function() {
                 method: "POST",
                 success: function(receive) {
                     if (receive.result == true) {
+                        //입력된 비밀번호 값이 현재 비밀번호와 일치하는 경우, 변경, 확인을 입력할 수 있도록 설정
                         $("#newPw").removeClass("background-gray");
                         $("#confirmPw").removeClass("background-gray");
                         $("#newPw").attr("readonly", false);
                         $("#confirmPw").attr("readonly", false);
                     } else {
+                        //일치하지 않거나, 현재 비밀번호를 지운 경우, 초기 설정으로 변경, 입력한 값 초기화
                         $("#newPw").addClass("background-gray");
                         $("#confirmPw").addClass("background-gray");
                         $("#newPw").attr("readonly", true);
                         $("#confirmPw").attr("readonly", true);
+                        $("#newPw").val("");
+                        $("#confirmPw").val("");
                     }
                 }
             });
         });
     }
+    
+    
 });
 </script>
 <div class="center">
