@@ -369,9 +369,9 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
         
         try {
             $this->member->modifyMember($contents, 1);
-            $this->assertFalse(true);
-        } catch (Was_Member_Exception $e) {
             $this->assertTrue(true);
+        } catch (Was_Member_Exception $e) {
+            $this->assertFalse(true);
         }
         
         //잘못된 이름 형식
@@ -447,7 +447,7 @@ class Was_MemberTest extends PHPUnit_Framework_TestCase
             'email'     => 'regist@test.com'
         );
         
-        $this->assertFalse($this->member->modifyMember($contents, 1));
+        $this->assertEquals(1, $this->member->modifyMember($contents, 1));
         
         //빈 이름 형식
         $contents = array(

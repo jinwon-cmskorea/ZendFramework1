@@ -75,7 +75,7 @@ class Was_Member {
          * 형식에 안맞으면 예외 에러문 리턴
          */
         try {
-            if (!$this->_isValid($contents)) {
+            if (!$this->_isValid($contents, true)) {
                 return false;
             }
             
@@ -126,7 +126,7 @@ class Was_Member {
          * 형식에 안맞으면 예외 에러문 리턴
          */
         try {
-            if (!$this->_isValid($contents)) {
+            if (!$this->_isValid($contents, false)) {
                 return false;
             }
             
@@ -171,10 +171,11 @@ class Was_Member {
      *            'telNumber'   => '휴대전화번호',
      *            'email'       => '이메일'
      *        )
+     * @param bool pw 체크 여부
      * @throws Was_Member_Exception
      * @return 비어있는 contents가 있으면 false, 모든 Validate 통과하면 true 반환
      */
-    protected function _isValid(array $contents) {
+    protected function _isValid(array $contents, $pwCheck = true) {
         if (isset($contents['id']) && $contents['id']) {
             $idValidator = new Zend_Validate_Alnum();
             if (!$idValidator->isValid($contents['id'])) {
@@ -184,13 +185,15 @@ class Was_Member {
             return false;
         }
         
-        if (isset($contents['pw'])  && $contents['pw']) {
-            $pwValidator = new Zend_Validate_Regex('/(?=.*[~`!@#$%\^&*()-+=])[A-Za-z0-9~`!@#$%\^&*()-+=]+$/');
-            if (!$pwValidator->isValid($contents['pw'])) {
-                throw new Was_Member_Exception('The Password format is not correct.');
+        if ($pwCheck) {
+            if (isset($contents['pw'])  && $contents['pw']) {
+                $pwValidator = new Zend_Validate_Regex('/(?=.*[~`!@#$%\^&*()-+=])[A-Za-z0-9~`!@#$%\^&*()-+=]+$/');
+                if (!$pwValidator->isValid($contents['pw'])) {
+                    throw new Was_Member_Exception('The Password format is not correct.');
+                }
+            } else {
+                return false;
             }
-        } else {
-            return false;
         }
         
         if (isset($contents['name']) && $contents['name']) {
