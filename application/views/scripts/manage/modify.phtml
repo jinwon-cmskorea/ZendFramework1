@@ -40,12 +40,10 @@ $(document).ready(function() {
         //초기 비밀번호 변경, 확인 배경색 및 readonly 적용
         $("#newPw").addClass("background-gray");
         $("#confirmPw").addClass("background-gray");
-        $("#newPw").attr("readonly", true);
-        $("#confirmPw").attr("readonly", true);
-        $("#newPw").attr("disabled", true);
-        $("#confirmPw").attr("disabled", true);
+        $("#newPw").attr({readonly: true, disabled: true});
+        $("#confirmPw").attr({readonly: true, disabled: true});
         //현재 비밀번호 입력할 때마다 감지, 확인
-        $("#nowPw").on("keyup", function() {
+        $("#nowPw").on("change keyup input focus", function() {
             var nowPw = $(this).val();
             //기존 비밀번호 미입력시, 비밀번호를 변경하지 않는 것으로 간주
             if (nowPw == '') {
@@ -64,18 +62,14 @@ $(document).ready(function() {
                         //입력된 비밀번호 값이 현재 비밀번호와 일치하는 경우, 변경, 확인을 입력할 수 있도록 설정
                         $("#newPw").removeClass("background-gray");
                         $("#confirmPw").removeClass("background-gray");
-                        $("#newPw").attr("readonly", false);
-                        $("#confirmPw").attr("readonly", false);
-                        $("#newPw").attr("disabled", false);
-                        $("#confirmPw").attr("disabled", false);
+                        $("#newPw").attr({readonly: false, disabled: false});
+                        $("#confirmPw").attr({readonly: false, disabled: false});
                     } else {
                         //일치하지 않거나, 현재 비밀번호를 지운 경우, 초기 설정으로 변경, 입력한 값 초기화
                         $("#newPw").addClass("background-gray");
                         $("#confirmPw").addClass("background-gray");
-                        $("#newPw").attr("readonly", true);
-                        $("#confirmPw").attr("readonly", true);
-                        $("#newPw").attr("disabled", true);
-                        $("#confirmPw").attr("disabled", true);
+                        $("#newPw").attr({readonly: true, disabled: true});
+                        $("#confirmPw").attr({readonly: true, disabled: true});
                         $("#newPw").val("");
                         $("#confirmPw").val("");
                     }
@@ -85,7 +79,7 @@ $(document).ready(function() {
     }
     
     //비밀번호 확인 입력창 입력시, 변경창의 입력값과 동일한 지 실시간 비교
-    $("#confirmPw").on("keyup", function() {
+    $("#confirmPw").on("change keyup input focus", function() {
         if($("#newPw").val() != '' && ($("#newPw").val() == $("#confirmPw").val())) {
             pwOk = true;
         } else {
@@ -94,9 +88,9 @@ $(document).ready(function() {
     });
     
     //입력값이 모두 입력됐는지 체크하는 변수
-    var isEmpty = true;
+    var isEmpty = false;
     //각 input이 변경되었을 때 실행
-    $(".signup-form").find("input[type=text]").on("change keyup paste input focus", function() {
+    $(".signup-form").find("input[type=text], input[type=password]").on("change keyup input focus", function() {
         var Elements = $(".signup-form input[type=text]");
         for (var i = 0; i < Elements.length - 1; i++) {
             //비어있지 않으면 false 입력, 비어있으면 true 입력
@@ -107,7 +101,7 @@ $(document).ready(function() {
                 break;
             }
         }
-        //입력값이 모두 들어있고, 아이디 중복체크를 통과했으면 제출 비활성화 해제 
+        //필수 입력값이 모두 들어있고, 비밀번호 체크를 통과했으면 제출 비활성화 해제 
         if (!isEmpty && pwOk) {
             $(".submit-btn").attr("disabled", false);
             $(".submit-btn").removeClass("submit-gray-color");
@@ -118,6 +112,13 @@ $(document).ready(function() {
             $(".submit-btn").addClass("submit-gray-color");
         }
     });
+    
+    //초기 회원수정 페이지가 로드 됐을 때는, 필수요소가 전부 채워져 있으므로 수정버튼이 활성화되있음
+    if (!isEmpty && pwOk) {
+        $(".submit-btn").attr("disabled", false);
+        $(".submit-btn").removeClass("submit-gray-color");
+        $(".submit-btn").addClass("submit-green-color");
+    }
 });
 </script>
 <div class="center">

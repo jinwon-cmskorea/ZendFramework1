@@ -125,6 +125,31 @@ class ManageController extends Zend_Controller_Action {
         $modifyForm = new Was_Member_Form_Member();
         $pwForm = new Was_Auth_Form_Password();
         
+        //회원수정(member) form 에 비밀번호 칸 삭제 및 비밀번호 변경 버튼 추가
+        $modifyForm->removeElement('pw');
+        $modifyForm->addElement('button', 'change-pw', array(
+            'class'     => 'change-pw-btn',
+            'label'     => '비밀번호 변경',
+            'order'     => 1
+        ));
+        $changePw = $modifyForm->getElement('change-pw');
+        $changePw->removeDecorator('label');
+        $changePw->removeDecorator('HtmlTag');
+        //제출 버튼 문구 변경
+        $submit = $modifyForm->getElement('submit');
+        $submit->setLabel('수 정');
+        //취소 누를 시, 창 닫기
+        $cancle = $modifyForm->getElement('cancle');
+        $cancle->setAttrib("onclick", "window.close()");
+        //하단의 버튼 displaygroup 속성 변경
+        $group = $modifyForm->getDisplayGroup('btns');
+        $group->clearDecorators();
+        $group->addDecorators(array(
+            'FormElements',
+            array('HtmlTag', array('tag' => 'div', 'class' => 'modify-button'))
+        ));
+        
+        //get 파라미터로 받아온 userId를 통해 레코드를 가져옴
         if (isset($params['userId']) && $params['userId']) {
             $memberTable = new Was_Member_Table_Member();
             //클릭한 userId 의 회원 정보를 가져옴
@@ -154,29 +179,11 @@ class ManageController extends Zend_Controller_Action {
             $this->view->userId = $params['userId'];
         }
         
-        //회원수정(member) form 에 비밀번호 칸 삭제 및 비밀번호 변경 버튼 추가
-        $modifyForm->removeElement('pw');
-        $modifyForm->addElement('button', 'change-pw', array(
-            'class'     => 'change-pw-btn',
-            'label'     => '비밀번호 변경',
-            'order'     => 1
-        ));
-        $changePw = $modifyForm->getElement('change-pw');
-        $changePw->removeDecorator('label');
-        $changePw->removeDecorator('HtmlTag');
-        //제출 버튼 문구 변경
-        $submit = $modifyForm->getElement('submit');
-        $submit->setLabel('수 정');
-        //취소 누를 시, 창 닫기
-        $cancle = $modifyForm->getElement('cancle');
-        $cancle->setAttrib("onclick", "window.close()");
-        //하단의 버튼 displaygroup 속성 변경
-        $group = $modifyForm->getDisplayGroup('btns');
-        $group->clearDecorators();
-        $group->addDecorators(array(
-            'FormElements',
-            array('HtmlTag', array('tag' => 'div', 'class' => 'modify-button'))
-        ));
+        if ($this->getRequest()->isPost()) {
+            $params = $request->getPost();
+            Zend_Debug::dump($params);
+            Zend_Debug::dump($modifyForm->isValid($params));
+        }
         
         //form 을 view에 전달
         $this->view->modifyForm = $modifyForm;
