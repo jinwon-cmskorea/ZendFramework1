@@ -154,7 +154,7 @@ class ManageController extends Zend_Controller_Action {
             $memberTable = new Was_Member_Table_Member();
             //클릭한 userId 의 회원 정보를 가져옴
             $select = $memberTable->select();
-            $select->from($memberTable->getTableName(), array('id', 'name', 'telNumber', 'email', 'position'))
+            $select->from($memberTable->getTableName(), array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
             ->where("id = ?", $params['userId']);
             $row = $memberTable->getAdapter()->fetchRow($select);
             //최종 관리자는 회원정보 수정이 불가능하므로 alert 창 출력
@@ -181,6 +181,10 @@ class ManageController extends Zend_Controller_Action {
         
         if ($this->getRequest()->isPost()) {
             $post = $request->getPost();
+            
+            $this->view->updateResult = false;
+            $this->view->updateMessage = '';
+            
             //pw valid 기본값 설정, 비밀번호를 입력안했을 경우 비밀번호를 체크할 필요가 없기 때문
             $pwValidResult = true;
             //member form validate 를 위한 배열
@@ -201,7 +205,41 @@ class ManageController extends Zend_Controller_Action {
             }
             //아이디, 이름, 휴대전화번호, 이메일 (추가로 비밀번호) validate를 통과한 경우 db update
             if ($modifyForm->isValid($memberValid) && $pwValidResult) {
-                echo "validate 통과";
+                $member = new Was_Member($memberTable);
+                $identityTable = new Was_Auth_Table_Identity();
+                $db = Zend_Db::factory('mysqli', $memberTable->getAdapter()->getConfig());
+                //비밀번호 입력이 없을 시, 이름만 변경하므로 이름만 먼저 배열에 추가
+                $identityArray = array('name' => $post['name']);
+                
+                if (isset($post['nowPw']) && $post['nowPw']) {
+                    $identityArray['pw'] = new Zend_Db_Expr("MD5('{$post['newPw']}')");
+                }
+                //트랜잭션 시작
+                $db->beginTransaction();
+                try {
+                    $memberResult = false;
+                    $memberResult = $member->modifyMember($memberValid, $row['pk']);
+                    
+                    $identityTable->update($identityArray, "id = '{$post['id']}'");
+                } catch (Was_Member_Exception $e) {
+                    $db->rollBack();
+                    $this->view->updateMessage = $e->getMessage();
+                } catch (Was_Member_Table_Exception $e) {
+                    $db->rollBack();
+                    $this->view->updateMessage = $e->getMessage();
+                } catch (Zend_Db_Exception $e) {
+                    $db->rollBack();
+                    $this->view->updateMessage = $e->getMessage();
+                }
+                
+                if ($memberResult == 1) {
+                    $this->view->updateResult = true;
+                    $this->view->updateMessage = "회원 정보 수정이 완료됐습니다.";
+                }
+                
+                $db->commit();
+            } else {
+                $this->view->updateMessage = "회원 정보 수정을 실패했습니다. 입력값 형식을 확인하십시오.";
             }
         }
         

@@ -11,6 +11,18 @@ $(document).ready(function() {
     window.close();
     <?php endif;?>
     
+    <?php if (isset($this->updateResult)) : ?>
+    var updateResult = '<?php echo $this->updateResult; ?>';
+    var updateMessage = '<?php echo $this->updateMessage; ?>';
+    if (updateResult == true) {
+        alert(updateMessage);
+        opener.parent.location.reload();
+        window.close();
+    } else {
+        alert(updateMessage);
+    }
+    <?php endif;?>
+    
     //개행문자 제거한 form 문자열 추가
     var formElement = '<?php echo $pwForm;?>';
     $(".change-pw-btn").after(formElement);

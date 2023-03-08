@@ -45,6 +45,15 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
             'insertTime'    => new Zend_Db_Expr('NOW()'),
             'updateTime'    => new Zend_Db_Expr('NOW()')
         ));
+        $this->memberTable->insert(array(
+            'id'          => 'test2',
+            'name'        => '테스터two',
+            'telNumber'   => '01010021002',
+            'email'       => 'test2@example.com',
+            'position'    => Was_Member::POWER_MEMBER,
+            'insertTime'    => new Zend_Db_Expr('NOW()'),
+            'updateTime'    => new Zend_Db_Expr('NOW()')
+        ));
     }
 
     /**
@@ -166,7 +175,7 @@ class Was_Member_Table_MemberTest extends PHPUnit_Framework_TestCase
         $contents = array(
             'id'        => 'testModify',
             'name'      => '수정테스트',
-            'telNumber' => '010-1234-1234',
+            'telNumber' => '010-1002-1002',
             'email'     => 'regist@test.com'
         );
         
