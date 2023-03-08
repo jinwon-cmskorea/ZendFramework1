@@ -119,6 +119,43 @@ $(document).ready(function() {
         $(".submit-btn").removeClass("submit-gray-color");
         $(".submit-btn").addClass("submit-green-color");
     }
+    //제출 버튼 누를 시, 정규식으로 입력값 검증
+    $(".signup-form").on("submit", function() {
+        var id = $("#id").val();
+        var nowPw = $("#nowPw").val();
+        var newPw = $("#newPw").val();
+        var confirmPw = $("#confirmPw").val();
+        var name = $("#name").val();
+        var telNumber = $("#telNumber").val();
+        var email = $("#email").val();
+        //validate 정규식
+        var idReg = /^[a-zA-Z0-9]*$/;
+        var pwReg = /(?=.*[~`!@#$%\^&*()-+=])[A-Za-z0-9~`!@#$%\^&*()-+=]+$/;
+        var nameReg = /^[가-힣A-Za-z]+$/;
+        var telNumberReg = /^01(0|1|6|7|8|9)-?([0-9]{3,4})-?([0-9]{4})$/;
+        var emailReg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        
+        if (!idReg.test(id)) {
+            alert("아이디 형식이 잘못됐습니다.");
+            return false;
+        }
+        if (nowPw != '' && (!pwReg.test(nowPw) || !pwReg.test(newPw) || !pwReg.test(confirmPw))) {
+            alert("비밀번호 형식이 잘못됐습니다.");
+            return false;
+        }
+        if (!nameReg.test(name)) {
+            alert("이름 형식이 잘못됐습니다.");
+            return false;
+        }
+        if (!telNumberReg.test(telNumber)) {
+            alert("휴대전화 번호 형식이 잘못됐습니다.");
+            return false;
+        }
+        if (email != '' && !emailReg.test(email)) {
+            alert("이메일 형식이 잘못됐습니다.");
+            return false;
+        }
+    });
 });
 </script>
 <div class="center">
