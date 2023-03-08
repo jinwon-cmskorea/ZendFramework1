@@ -4,6 +4,10 @@
  */
 require_once 'Zend/Form.php';
 /**
+ * @see Zend_Form_SubForm
+ */
+require_once 'Zend/Form/SubForm.php';
+/**
  * Was_Member_Form_Manage
  *
  * @package    Was

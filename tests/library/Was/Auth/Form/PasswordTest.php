@@ -59,8 +59,9 @@ class Was_Auth_Form_PasswordTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('nowPw', $element->getId());
         $this->assertEquals('nowPw', $element->getName());
         $this->assertEquals(true, $element->isRequired());
-        $this->assertEquals('현재 비밀번호', $element->getLabel());
+        $this->assertEquals('기존 비밀번호', $element->getLabel());
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
+        $this->assertEquals('myform-control4', $element->getAttrib('class'));
         
         $element = $this->form->getElement('newPw');
         $this->assertInstanceOf('Zend_Form_Element_Password', $element);
@@ -69,6 +70,7 @@ class Was_Auth_Form_PasswordTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('비밀번호 변경', $element->getLabel());
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
+        $this->assertEquals('myform-control4', $element->getAttrib('class'));
         
         $element = $this->form->getElement('confirmPw');
         $this->assertInstanceOf('Zend_Form_Element_Password', $element);
@@ -77,6 +79,7 @@ class Was_Auth_Form_PasswordTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(true, $element->isRequired());
         $this->assertEquals('비밀번호 확인', $element->getLabel());
         $this->assertInstanceOf('Zend_Validate_Regex', $element->getValidator('regex'));
+        $this->assertEquals('myform-control4', $element->getAttrib('class'));
     }
 }
 

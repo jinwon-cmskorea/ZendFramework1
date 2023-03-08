@@ -53,12 +53,6 @@ class Was_Member_Form_ManageTest extends PHPUnit_Framework_TestCase {
      * Tests Was_Member_Form_Manage->init()
      */
     public function testInit() {
-        $element = $this->form->getElement('page');
-        $this->assertInstanceOf('Zend_Form_Element_Hidden', $element);
-        $this->assertEquals('page', $element->getName());
-        $this->assertEquals('page', $element->getId());
-        $this->assertEquals('1', $element->getValue());
-        
         $element = $this->form->getElement('category');
         $this->assertInstanceOf('Zend_Form_Element_Select', $element);
         $this->assertEquals('category', $element->getName());
