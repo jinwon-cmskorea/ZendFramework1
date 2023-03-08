@@ -180,9 +180,29 @@ class ManageController extends Zend_Controller_Action {
         }
         
         if ($this->getRequest()->isPost()) {
-            $params = $request->getPost();
-            Zend_Debug::dump($params);
-            Zend_Debug::dump($modifyForm->isValid($params));
+            $post = $request->getPost();
+            //pw valid 기본값 설정, 비밀번호를 입력안했을 경우 비밀번호를 체크할 필요가 없기 때문
+            $pwValidResult = true;
+            //member form validate 를 위한 배열
+            $memberValid = array(
+                'id'        => $post['id'],
+                'name'      => $post['name'],
+                'telNumber' => $post['telNumber'],
+                'email'     => $post['email']
+            );
+            //현재 비밀번호를 입력했다면 비밀번호를 변경한다는 경우이므로, password form validate를 위한 배열 생성
+            if (isset($post['nowPw']) && $post['nowPw']) {
+                $pwValid = array(
+                    'nowPw'     => $post['nowPw'],
+                    'newPw'     => $post['newPw'],
+                    'confirmPw' => $post['confirmPw']
+                );
+                $pwValidResult = $pwForm->isValid($pwValid);
+            }
+            //아이디, 이름, 휴대전화번호, 이메일 (추가로 비밀번호) validate를 통과한 경우 db update
+            if ($modifyForm->isValid($memberValid) && $pwValidResult) {
+                echo "validate 통과";
+            }
         }
         
         //form 을 view에 전달
