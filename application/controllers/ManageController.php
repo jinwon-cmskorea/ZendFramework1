@@ -158,7 +158,7 @@ class ManageController extends Zend_Controller_Action {
             ->where("id = ?", $params['userId']);
             $row = $memberTable->getAdapter()->fetchRow($select);
             //최종 관리자는 회원정보 수정이 불가능하므로 alert 창 출력
-            if ($row['position'] == 1) {
+            if ($row['position'] == Was_Member::POWER_MASTER) {
                 $this->view->message = "최종관리자는 회원 정보를 수정할 수 없습니다.";
             }
             //각 input 창에 회원 정보 출력
@@ -301,7 +301,7 @@ class ManageController extends Zend_Controller_Action {
              $params = $this->getAllParams();
              $memberTable = new Was_Member_Table_Member();
              //등급 업데이트, 정상적으로 수행됐다면 영향받은 row 갯수 리턴
-             $num = $memberTable->update(array('position' => 2), "id = '{$params['userId']}'");
+             $num = $memberTable->update(array('position' => Was_Member::POWER_MANAGER), "id = '{$params['userId']}'");
              if ($num) {
                  $result['result'] = true;
                  $result['message'] = $params['userId'] . "회원의 등급이 관리자로 변경됐습니다.";
@@ -332,7 +332,7 @@ class ManageController extends Zend_Controller_Action {
             $params = $this->getAllParams();
             $memberTable = new Was_Member_Table_Member();
             //등급 업데이트, 정상적으로 수행됐다면 영향받은 row 갯수 리턴
-            $num = $memberTable->update(array('position' => 3), "id = '{$params['userId']}'");
+            $num = $memberTable->update(array('position' => Was_Member::POWER_MEMBER), "id = '{$params['userId']}'");
             if ($num) {
                 $result['result'] = true;
                 $result['message'] = $params['userId'] . "회원의 등급이 일반 회원으로 변경됐습니다.";
@@ -409,12 +409,14 @@ class ManageController extends Zend_Controller_Action {
             $params = $this->getAllParams();
             //비밀번호가 들어있는 테이블인 identity 를 가져옴
             $identityTable = new Was_Auth_Table_Identity();
-            //비밀번호 컬럼을 가져옴
+            //새 비밀번호 파라미터를 이용해, 레코드가 존재하는 지 확인
             $select = $identityTable->select();
-            $select->from($identityTable->getTableName(), array('pw'))->where("id = ?", $params['userId']);
+            $select->from($identityTable->getTableName(), array('pw'))
+                   ->where("id = ?", $params['userId'])
+                   ->where("pw = ?", new Zend_Db_Expr("MD5('{$params['nowPw']}')"));
             $row = $identityTable->getAdapter()->fetchRow($select);
-            
-            if (md5($params['nowPw']) == $row['pw']) {
+            //레코드가 존재하면 현재 비밀번호를 올바르게 입력한 것임
+            if ($row) {
                 $result['result'] = true;
             }
         }
