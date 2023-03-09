@@ -113,7 +113,7 @@
 /* searchid.phtml css 요소 */
 .searchid-input {
     display: block;
-    width: 72.5%;
+    width: 72.2%;
     height: 38px;
     padding: 6px 12px;
     font-size: 14px;
@@ -136,8 +136,8 @@
     float: right;
     background-color: #70AD47;
     color: #fff;
-    margin: 15px 0 10px 5px;
-    padding: 9px 22px;
+    margin: 20px 0 10px 5px;
+    padding: 7px 24px;
     border: none;
 }
 
