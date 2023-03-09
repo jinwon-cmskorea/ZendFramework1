@@ -157,10 +157,7 @@ class ManageController extends Zend_Controller_Action {
             $select->from($memberTable->getTableName(), array('pk', 'id', 'name', 'telNumber', 'email', 'position'))
             ->where("id = ?", $params['userId']);
             $row = $memberTable->getAdapter()->fetchRow($select);
-            //최종 관리자는 회원정보 수정이 불가능하므로 alert 창 출력
-            if ($row['position'] == Was_Member::POWER_MASTER) {
-                $this->view->message = "최종관리자는 회원 정보를 수정할 수 없습니다.";
-            }
+            
             //각 input 창에 회원 정보 출력
             $id = $modifyForm->getElement('id');
             $id->setValue($row['id']);
