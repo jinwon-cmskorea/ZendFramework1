@@ -364,6 +364,17 @@ class ManageController extends Zend_Controller_Action {
             $memberTable = new Was_Member_Table_Member();
             $identitiyTable = new Was_Auth_Table_Identity();
             $db = Zend_Db::factory('mysqli', $memberTable->getAdapter()->getConfig());
+            
+            //삭제 전, 존재하는 회원인 지 확인
+            $select = $memberTable->select();
+            $select->where("id = ?", $params['userId']);
+            $memberRow = $memberTable->getAdapter()->fetchRow($select);
+            if (!$memberRow) {
+                //이미 삭제된 회원인 경우, 메세지를 만든 후 json 전송
+                $result['message'] = '이미 삭제된 회원입니다.';
+                $this->_helper->json->sendJson($result);
+            }
+            
             //트랜잭션 시작
             $db->beginTransaction();
             try {
