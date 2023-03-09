@@ -19,7 +19,7 @@ $this->headTitle('회원가입');
         //제출 버튼 초기 배경색 설정
         $(".submit-btn").addClass("submit-gray-color");
         //id 중복 체크 변수
-        var idDupOk = false;
+        var idDupOk = true;
         //아이디를 입력받는 #id 에서 keyup 이벤트 발생시 처리
         $("#id").on("keyup", function() {
             var self = $(this);
@@ -48,7 +48,7 @@ $this->headTitle('회원가입');
         //입력값이 모두 입력됐는지 체크하는 변수
         var isEmpty = true;
         //각 input이 변경되었을 때 실행
-        $(".signup-form").find("input[type=text], input[type=password]").change(function() {
+        $(".signup-form").find("input[type=text], input[type=password]").on("change keyup input focus",function() {
             var Elements = $(".signup-form input[type=text], .signup-form input[type=password]");
             for (var i = 0; i < Elements.length - 1; i++) {
                 //비어있지 않으면 false 입력, 비어있으면 true 입력
