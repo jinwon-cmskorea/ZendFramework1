@@ -1,6 +1,22 @@
 <?php
 $this->headTitle('게시글 리스트');
 ?>
+<script type="text/javascript">
+//상단 바의 유저 이름을 클릭했을 경우, 수정 창 출력
+$(".user-info").on("click", function() {
+    var userId = $(this).data('userId');
+    //팝업창 크기
+    var popUpWidth = 500
+    var popUpHeight = 555;
+    //팝업창 위치 조절
+    var popUpX = (document.body.offsetWidth / 2) - (popUpWidth / 2);
+    //듀얼 모니터인 경우 넣어줘야함.
+    popUpX += window.screenLeft;
+    var popUpY = (window.screen.height / 2) - (popUpHeight / 2);
+    
+    window.open('/manage/modify?userId=' + userId, '회원정보수정', 'scrollbars=no, resizable=no, width=' + popUpWidth + ', height=' + popUpHeight + ', left='+ popUpX + ',top='+ popUpY);
+});
+</script>
 <style type="text/css">
 .list-title strong {
     color: #595959;
