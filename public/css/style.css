@@ -29,7 +29,6 @@
 .myForm-control {
     display: block;
     width: 80.5%;
-    height: 38px;
     padding: 6px 12px;
     font-size: 14px;
     height: 38px;
@@ -126,7 +125,7 @@
 }
 
 .searchid-btn {
-    padding: 6px 0 4px 0;
+    padding: 8px 0 8px 0;
     background-color: #4472C4;
     color: #fff;
     border: none;
@@ -138,14 +137,14 @@
     background-color: #70AD47;
     color: #fff;
     margin: 15px 0 10px 5px;
-    padding: 5px 20px;
+    padding: 9px 22px;
     border: none;
 }
 
 .search-result {
     text-align: center;
     font-size: x-large;
-    padding: 30px 0 30px 0;
+    padding: 46px 0 46px 0;
 }
 
 .searched-id {
