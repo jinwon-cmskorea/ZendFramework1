@@ -55,7 +55,7 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
                 return false;
             }
             if (!idReg.test(id) || !pwReg.test(pw)) {
-                alert("아이디 또는 비밀번호의 형식이 맞지않습니다.");
+                alert("아이디 또는 비밀번호가 일치하지 않습니다.");
                 return false;
             }
         });
