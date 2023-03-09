@@ -49,7 +49,7 @@ $(document).ready(function() {
         $("#newPw").attr({readonly: true, disabled: true});
         $("#confirmPw").attr({readonly: true, disabled: true});
         //현재 비밀번호 입력할 때마다 감지, 확인
-        $("#nowPw").on("change keyup input focus", function() {
+        $("#nowPw").on("keyup", function() {
             var nowPw = $(this).val();
             //기존 비밀번호 미입력시, 비밀번호를 변경하지 않는 것으로 간주
             if (nowPw == '') {
@@ -85,7 +85,7 @@ $(document).ready(function() {
     }
     
     //비밀번호 확인 입력창 입력시, 변경창의 입력값과 동일한 지 실시간 비교
-    $("#confirmPw").on("change keyup input focus", function() {
+    $("#confirmPw, #newPw").on("keyup", function() {
         if($("#newPw").val() != '' && ($("#newPw").val() == $("#confirmPw").val())) {
             pwOk = true;
         } else {
@@ -96,7 +96,7 @@ $(document).ready(function() {
     //입력값이 모두 입력됐는지 체크하는 변수
     var isEmpty = false;
     //각 input이 변경되었을 때 실행
-    $(".signup-form").find("input[type=text], input[type=password]").on("change keyup input focus", function() {
+    $(".signup-form").find("input[type=text], input[type=password]").on("keyup", function() {
         var Elements = $(".signup-form input[type=text]");
         for (var i = 0; i < Elements.length - 1; i++) {
             //비어있지 않으면 false 입력, 비어있으면 true 입력
