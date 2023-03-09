@@ -86,8 +86,10 @@ class Was_Auth_Storage implements Zend_Auth_Storage_Interface {
     public function clear() {
         // 현재 접속중인 인증정보 제거
         $sessionIdentity = $this->_session->read();
-        $this->_accessTable->find($sessionIdentity->id)->current()->delete();
-
+        $accessRow = $this->_accessTable->find($sessionIdentity->id)->current();
+        if ($accessRow) {
+            $accessRow->delete();
+        }
         // 세션 초기화
         $this->_session->clear();
     }
