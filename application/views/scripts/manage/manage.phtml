@@ -1,8 +1,6 @@
 <?php
 $this->headTitle('회원관리');
-//개선할 부분. controller 에서 작성한 view->position 을사용하면 될듯?
-$session = Zend_Session::namespaceGet('Was_Auth');
-if ($session['storage']->position > Was_Member::POWER_MANAGER) {
+if ($this->position > Was_Member::POWER_MANAGER) {
     echo "<script>alert('관리자가 아닌 회원은 접근할 수 없습니다.');</script>";
     echo "<script>history.back(-1);</script>";
     return;
@@ -209,7 +207,7 @@ if ($session['storage']->position > Was_Member::POWER_MANAGER) {
                     <?php 
                     if ($items['position'] == Was_Member::POWER_MEMBER) {
                         //관리자 변경 버튼은 최종 관리자만 보여지도록 if문 사용
-                        if ($session['storage']->position == Was_Member::POWER_MASTER) {
+                        if ($this->position == Was_Member::POWER_MASTER) {
                             echo $this->FormButton("manager-".$items['id'], '관리자', array('class' => 'common-btn gray-color manager', 'data-user-id' => $items['id']));
                         }
                         echo $this->FormButton("normal-".$items['id'], '일 반', array('class' => 'common-btn green-color normal', 'data-user-id' => $items['id'], 'disabled' => 'disabled'));
