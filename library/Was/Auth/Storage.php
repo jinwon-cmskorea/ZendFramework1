@@ -136,6 +136,12 @@ class Was_Auth_Storage implements Zend_Auth_Storage_Interface {
         // 세션에 기록
         $this->_session->write($contents);
 
+        //로그아웃 안하고 창 닫기등, 세션은 없는데 로그인 시도할 경우 access 테이블에 레코드가 남아있으므로 이를 삭제 후 레코드 insert
+        $accessRow = $this->_accessTable->find($contents->id)->current();
+        if ($accessRow) {
+            $accessRow->delete();
+        }
+        
         // 현재 접속자 테이블에 기록
         $this->_accessTable->newAccess($contents->id, $contents->remoteIp, $contents->sessionId);
 
