@@ -31,6 +31,8 @@ $this->headTitle('회원가입');
                 method: "POST",
                 data: {"userId" : userId},
                 dataType: "json",
+                //응답방식을 동기식으로 설정
+                async: false,
                 success: function(receive) {
                     if (receive.result == true) {
                         alert(receive.message);
@@ -41,7 +43,6 @@ $this->headTitle('회원가입');
                     }
                 }
             });
-            
         });
         
         
@@ -61,7 +62,6 @@ $this->headTitle('회원가입');
             }
             
             //입력값이 모두 들어있고, 아이디 중복체크를 통과했으면 제출 비활성화 해제 
-            // ajax 결과값을 받는 부분이 비어있으므로 추가 필요
             if (!isEmpty && idDupOk) {
                 $(".submit-btn").attr("disabled", false);
                 $(".submit-btn").removeClass("submit-gray-color");
