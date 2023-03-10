@@ -110,7 +110,7 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
         popUpX += window.screenLeft;
         var popUpY = (window.screen.height / 2) - (popUpHeight / 2);
         
-        window.open('signup', '회원가입', 'scrollbars=no, resizable=no, width=' + popUpWidth + ', height=' + popUpHeight + ', left='+ popUpX + ',top='+ popUpY);
+        window.open('/login/signup', '회원가입', 'scrollbars=no, resizable=no, width=' + popUpWidth + ', height=' + popUpHeight + ', left='+ popUpX + ',top='+ popUpY);
     }
 </script>
 <style type="text/css">
@@ -137,7 +137,7 @@ if (Zend_Session::namespaceGet('Was_Auth')) {
                 <div class="links">
                 <?php 
                     echo $this->FormButton('signUp', '회원가입', array('class' => 'signup-btn', 'onclick' => "popUp();"));
-                    echo $this->FormButton('searchId', '아이디찾기', array('class' => 'searchId-btn', 'onclick' => "location.href='searchid'"));
+                    echo $this->FormButton('searchId', '아이디찾기', array('class' => 'searchId-btn', 'onclick' => "location.href='/login/searchid'"));
                 ?>
                 </div>
             </div>
