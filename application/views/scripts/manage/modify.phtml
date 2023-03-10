@@ -1,7 +1,5 @@
 <?php
 $this->headTitle("회원수정");
-//렌더링 시킬 form의 개행문자를 제거.(한줄로 입력하기 위해서)
-$pwForm = preg_replace('/\r\n|\r|\n/','', $this->pwForm->render());
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -16,10 +14,6 @@ $(document).ready(function() {
         alert(updateMessage);
     }
     <?php endif;?>
-    
-    //개행문자 제거한 form 문자열 추가
-    var formElement = '<?php echo $pwForm;?>';
-    $(".change-pw-btn").after(formElement);
     
     //현재 비밀번호가 일치하는 지 체크하는 변수. default 는 true;
     var pwOk = true;
@@ -169,8 +163,18 @@ $(document).ready(function() {
         <div class="member-modify-title title-before" name="title">
             <strong>씨엠에스코리아 게시판</strong><small class="subtitle">- 회원수정 -</small>
         </div>
-        <?php
-            echo $this->modifyForm->render();
-        ?>
+        <form class="form-horizontal signup-form" enctype="application/x-www-form-urlencoded" method="<?php echo $this->modifyForm->getMethod(); ?>">
+            <?php echo $this->modifyForm->id; ?>
+            <?php echo $this->FormButton('change-pw', '비밀번호 변경', array('class' => 'change-pw-btn')); ?>
+                <fieldset class="pwPart display-none">
+                    <?php echo $this->pwForm->nowPw; ?>
+                    <?php echo $this->pwForm->newPw; ?>
+                    <?php echo $this->pwForm->confirmPw; ?>
+                </fieldset>
+            <?php echo $this->modifyForm->name; ?>
+            <?php echo $this->modifyForm->telNumber; ?>
+            <?php echo $this->modifyForm->email; ?>
+            <?php echo $this->modifyForm->btns; ?>
+        </form>
     </div>
 </div>

@@ -125,16 +125,9 @@ class ManageController extends Zend_Controller_Action {
         $modifyForm = new Was_Member_Form_Member();
         $pwForm = new Was_Auth_Form_Password();
         
-        //회원수정(member) form 에 비밀번호 칸 삭제 및 비밀번호 변경 버튼 추가
+        //회원수정(member) form 에서 사용하지 않는 비밀번호 칸 삭제
         $modifyForm->removeElement('pw');
-        $modifyForm->addElement('button', 'change-pw', array(
-            'class'     => 'change-pw-btn',
-            'label'     => '비밀번호 변경',
-            'order'     => 1
-        ));
-        $changePw = $modifyForm->getElement('change-pw');
-        $changePw->removeDecorator('label');
-        $changePw->removeDecorator('HtmlTag');
+        
         //제출 버튼 문구 변경
         $submit = $modifyForm->getElement('submit');
         $submit->setLabel('수 정');
