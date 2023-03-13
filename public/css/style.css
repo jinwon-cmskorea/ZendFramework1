@@ -348,6 +348,7 @@
 
 .write-btn-div {
     float: right;
+    margin-top: 16px;
 }
 
 .write-btn-div::after {
@@ -371,8 +372,11 @@
 }
 
 .write-btn {
-	padding-left: 30px;
-	padding-right: 30px;
+    padding: 5px 25px;
+    color: white;
+    background-color: #50AAFF;
+    border: none;
+    border-radius: 5px;
 }
 
 .view-btn {
@@ -530,6 +534,18 @@ th {
 td {
     padding: 10px 0;
 }
+
+.board-SearchCnt {
+    float: left;
+    margin: 1.4em 0 0 2em;
+}
+/*
+.board-SearchCnt::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+*/
 
 .myTable {
     margin-top: 15px;
