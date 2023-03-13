@@ -17,6 +17,10 @@ class BoardController extends Zend_Controller_Action {
         $this->view->name = $info['storage']->name;
         $this->view->id = $info['storage']->id;
         $this->view->position = $info['storage']->position;
+        //로그인을 하지않아 session 이 없는 경우, 로그인 페이지로 리다이렉트
+        if (!Zend_Session::namespaceGet("Was_Auth")) {
+            $this->redirect('/login/signin');
+        }
     }
     /**
      * 게시글 리스트 Action
