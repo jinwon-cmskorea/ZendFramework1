@@ -2,7 +2,7 @@
 if (!Zend_Session::namespaceGet('Was_Auth')) {
     $url = $this->url(array('controller' => 'login', 'action' => 'signin'));
 } else {
-    $url = $this->url(array('controller' => 'board', 'action' => 'boardlist'));
+    $url = $this->url(array('controller' => 'board', 'action' => 'list'));
 }
 header("location: {$url}");
 
