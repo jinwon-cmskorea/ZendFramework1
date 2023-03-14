@@ -45,6 +45,36 @@ class BoardController extends Zend_Controller_Action {
         //검색 시, 선택한 category 및 search 유지해줌
         $manageForm->setDefaults($params);
         
+        if (isset($params['search']['isSearch']) && $params['search']['isSearch'] == 1) {
+            $this->setParam('page', null);
+            $params['search']['isSearch'] = 0;
+        }
+        
+        if ($this->getRequest()) {
+            $boardTable = new Was_Board_Table_Board();
+            $board = new Was_Board($boardTable->getAdapter());
+            
+            $boardWhere = array();
+            if (isset($params['search'])) {
+                $param = $params['search'];
+                
+                if ($param['category'] && $param['search']) {
+                    $boardWhere['category'] = $param['category'];
+                    $boardWhere['search'] = $param['search'];
+                }
+            }
+            
+            if (isset($params['fieldName']) && $params['fieldName'] && isset($params['order']) && $params['order']) {
+                $boardWhere['fieldName'] = $params['fieldName'];
+                $boardWhere['order'] = $params['order'];
+            }
+            
+            $fetchAll = $board->reads($boardWhere);
+            $paginator = Zend_Paginator::factory($fetchAll);
+            $paginator->setCurrentPageNumber($this->getParam('page', 1));
+            $this->view->paginator = $paginator;
+        }
+        
         $this->view->form = $searchForm;
     }
 }

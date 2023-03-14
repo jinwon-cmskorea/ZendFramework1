@@ -489,12 +489,12 @@ class Was_Board {
             $select->order("pk DESC");
         }
         
-        //페이징 조건이 있을 경우
-        if (array_key_exists('start', $where)) {
-            $select->limit(10, $where['start']);
-        } else {
-            $select->limit(10, 0);
-        }
+//         //페이징 조건이 있을 경우
+//         if (array_key_exists('start', $where)) {
+//             $select->limit(10, $where['start']);
+//         } else {
+//             $select->limit(10, 0);
+//         }
         $datas = $boardTable->getAdapter()->fetchAll($select);
         
         if (!$datas) return array();
