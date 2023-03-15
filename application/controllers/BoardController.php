@@ -42,8 +42,6 @@ class BoardController extends Zend_Controller_Action {
             'title'         => '제목',
             'insertTime'    => '작성일자'
         ));
-        //검색 시, 선택한 category 및 search 유지해줌
-        $manageForm->setDefaults($params);
         
         if (isset($params['search']['isSearch']) && $params['search']['isSearch'] == 1) {
             $this->setParam('page', null);
@@ -74,6 +72,9 @@ class BoardController extends Zend_Controller_Action {
             $paginator->setCurrentPageNumber($this->getParam('page', 1));
             $this->view->paginator = $paginator;
         }
+        
+        //검색 시, 선택한 category 및 search 유지해줌
+        $manageForm->setDefaults($params);
         
         $this->view->form = $searchForm;
     }
