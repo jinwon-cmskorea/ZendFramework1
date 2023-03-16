@@ -27,6 +27,23 @@ $(document).ready(function() {
     $(".board-search").on("submit", function() {
         $("#search-isSearch").val(1);
     });
+    
+    //url get parameter 들을 가져옴
+    const link = window.location.href;
+    var url = new URL(link);
+    var urlParams = url.searchParams;
+    $(".pk, .insertTime, .views").on("click", function() {
+        var fieldName = $(this).attr('id');
+        
+        urlParams.set("fieldName", fieldName);
+        if (!urlParams.has("order") || urlParams.get("order") == "ASC") {
+            urlParams.set("order", "DESC");
+        } else {
+            urlParams.set("order", "ASC");
+        }
+        const pathname = window.location.pathname;
+        location.href = pathname + "?" + urlParams;
+    });
 });
 </script>
 <style type="text/css">
@@ -60,11 +77,11 @@ $(document).ready(function() {
     <table class="table-design">
         <thead class="add-top-line">
             <tr>
-                <th class="col-sm-1 cursor-pointer">번호</th>
+                <th class="col-sm-1 cursor-pointer pk" id="pk">번호</th>
                 <th class="col-sm-6">제목</th>
                 <th class="col-sm-2">작성자</th>
-                <th class="col-sm-1 cursor-pointer">작성일자</th>
-                <th class="col-sm-1 cursor-pointer">조회수</th>
+                <th class="col-sm-1 cursor-pointer insertTime" id="insertTime">작성일자</th>
+                <th class="col-sm-1 cursor-pointer views" id="views">조회수</th>
                 <th class="col-sm-1">작업</th>
             </tr>
         </thead>
