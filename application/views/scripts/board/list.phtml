@@ -37,6 +37,9 @@ $(document).ready(function() {
 .list-title small {
     color: #8497B0;
 }
+.cursor-pointer {
+    cursor: pointer;
+}
 </style>
 <div class="col-sm-12">
     <div class="list-title">
@@ -57,11 +60,11 @@ $(document).ready(function() {
     <table class="table-design">
         <thead class="add-top-line">
             <tr>
-                <th class="col-sm-1">번호</th>
-                <th class="col-sm-5">제목</th>
+                <th class="col-sm-1 cursor-pointer">번호</th>
+                <th class="col-sm-6">제목</th>
                 <th class="col-sm-2">작성자</th>
-                <th class="col-sm-2">작성일자</th>
-                <th class="col-sm-1">조회수</th>
+                <th class="col-sm-1 cursor-pointer">작성일자</th>
+                <th class="col-sm-1 cursor-pointer">조회수</th>
                 <th class="col-sm-1">작업</th>
             </tr>
         </thead>
@@ -73,7 +76,7 @@ $(document).ready(function() {
                 <td><?php echo $items['pk']; ?></td>
                 <td class="text-align-left"><?php echo $items['title']; ?></td>
                 <td><?php echo $items['writer']; ?></td>
-                <td><?php echo $items['insertTime']; ?></td>
+                <td><?php echo substr($items['insertTime'], 0, 10); ?></td>
                 <td><?php echo $items['views']; ?></td>
                 <td>
                 <?php echo $this->FormButton('read-board', '조 회', array('class' => 'read-button'));?>
@@ -85,7 +88,9 @@ $(document).ready(function() {
     <?php 
         echo $this->paginationControl($this->paginator, null, null, array('searchForm' => array(
             'category'      => $this->form->search->category->getValue(),
-            'search'        => $this->form->search->search->getValue()
+            'search'        => $this->form->search->search->getValue(),
+            'fieldName'     => $this->fieldName,
+            'order'         => $this->order
         )));
     ?>
 </div>

@@ -65,6 +65,8 @@ class BoardController extends Zend_Controller_Action {
             if (isset($params['fieldName']) && $params['fieldName'] && isset($params['order']) && $params['order']) {
                 $boardWhere['fieldName'] = $params['fieldName'];
                 $boardWhere['order'] = $params['order'];
+                $this->view->fieldName = $params['fieldName'];
+                $this->view->order = $params['order'];
             }
             
             $fetchAll = $board->reads($boardWhere);
