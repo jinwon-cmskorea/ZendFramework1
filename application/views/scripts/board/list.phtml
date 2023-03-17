@@ -3,6 +3,11 @@ $this->headTitle('게시글 리스트');
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
+    //정렬값이 있는 경우, 오름차순 내림차순에 따라 화살표 표시 변경
+    <?php if ($this->fieldName && $this->char) : ?>
+        var text = $("#<?php echo $this->fieldName;?>").text();
+        $("#<?php echo $this->fieldName;?>").text(text + "<?php echo $this->char; ?>");
+    <?php endif; ?>
     //상단 바의 유저 이름을 클릭했을 경우, 수정 창 출력
     $(".user-info").on("click", function() {
         var userId = $(this).data('userId');
@@ -106,8 +111,7 @@ $(document).ready(function() {
         echo $this->paginationControl($this->paginator, null, null, array('searchForm' => array(
             'category'      => $this->form->search->category->getValue(),
             'search'        => $this->form->search->search->getValue(),
-            'fieldName'     => $this->fieldName,
-            'order'         => $this->order
-        )));
+            
+        ), 'fieldName' => $this->fieldName,'order' => $this->order));
     ?>
 </div>

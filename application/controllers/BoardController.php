@@ -67,6 +67,11 @@ class BoardController extends Zend_Controller_Action {
                 $boardWhere['order'] = $params['order'];
                 $this->view->fieldName = $params['fieldName'];
                 $this->view->order = $params['order'];
+                
+                $char = "";
+                if ($params['order'] == "DESC") $char = "▼";
+                else if ($params['order'] == "ASC") $char = "▲";
+                $this->view->char = $char;
             }
             
             $fetchAll = $board->reads($boardWhere);

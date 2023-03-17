@@ -7,6 +7,15 @@
         $params = http_build_query($searchParams);
         $params = trim($params, '&');
     }
+    if (isset($this->fieldName) && isset($this->order)) {
+        $sortParams = array(
+            'fieldName' => $this->fieldName,
+            'order'     => $this->order
+        );
+        if ($params) $params .= "&";
+        $params .= http_build_query($sortParams);
+        $params = trim($params, '&');
+    }
     if ($params) $params = '?' . $params;
 ?>
 <div class="pagination-class">
