@@ -93,5 +93,11 @@ class BoardController extends Zend_Controller_Action {
         
         $this->view->form = $searchForm;
     }
+    
+    public function writeAction() {
+        $boardForm = new Was_Board_Form_Board();
+        
+        $this->view->boardForm = $boardForm;
+    }
 }
 

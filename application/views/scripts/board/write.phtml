@@ -1,0 +1,27 @@
+<?php
+$this->headTitle('게시글 작성');
+?>
+<script type="text/javascript">
+
+</script>
+<style type="text/css">
+.list-title strong {
+    color: #595959;
+}
+
+.list-title small {
+    color: #8497B0;
+}
+</style>
+<div class="col-sm-12">
+    <div class="list-title">
+        <strong>씨엠에스코리아 게시판</strong>
+        <small>- 작성 -</small>
+    </div>
+    <div class="col-sm-12 list-descript">
+        게시판 글을 작성합니다.
+    </div>
+</div>
+<div class="col-sm-10 col-sm-offset-1 list-body">
+<?php echo $this->boardForm->render(); ?>
+</div>
