@@ -51,7 +51,7 @@ class BoardController extends Zend_Controller_Action {
         if ($this->getRequest()) {
             $boardTable = new Was_Board_Table_Board();
             $board = new Was_Board($boardTable->getAdapter());
-            
+            //검색조건, 정렬조건이 있는 경우, 메소드에 전달할 배열 설정
             $boardWhere = array();
             if (isset($params['search'])) {
                 $param = $params['search'];
@@ -78,6 +78,14 @@ class BoardController extends Zend_Controller_Action {
             $paginator = Zend_Paginator::factory($fetchAll);
             $paginator->setCurrentPageNumber($this->getParam('page', 1));
             $this->view->paginator = $paginator;
+            //board 테이블의 전체 레코드 갯수를 구하기 위해 COUNT 사용
+            $select = $boardTable->select();
+            $select->from($boardTable->getTableName(), array('count' => new Zend_Db_Expr('COUNT(*)')));
+            $total = $boardTable->getAdapter()->fetchRow($select);
+            //board 테이블의 전체 레코드 갯수 전달
+            $this->view->totalCount = $total['count'];
+            //select된 레코드 갯수 전달
+            $this->view->recordCount = count($fetchAll);
         }
         
         //검색 시, 선택한 category 및 search 유지해줌

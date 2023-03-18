@@ -75,7 +75,7 @@ $(document).ready(function() {
 </div>
 <div class="col-sm-12 list-body">
     <?php echo $this->form->render(); ?>
-    <div class="board-SearchCnt"><?php echo number_format(0) . " / " . number_format(1000) . " 건";?></div>
+    <div class="board-SearchCnt"><?php echo number_format($this->recordCount) . " / " . number_format($this->totalCount) . " 건";?></div>
     <div class="write-btn-div">
         <?php echo $this->FormButton('write-btn', '작 성', array('class' => 'write-btn')); ?>
     </div>
