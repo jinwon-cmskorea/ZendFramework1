@@ -1,5 +1,9 @@
 <?php
 $this->headTitle('게시글 작성');
+$session = Zend_Session::namespaceGet('Was_Auth');
+//hidden input 에 현재 로그인한 유저의 pk 정보 설정
+$memberPk = $this->boardForm->getElement('memberPk');
+$memberPk->setValue($session['storage']->pk);
 ?>
 <script type="text/javascript">
 $(document).ready(function() {

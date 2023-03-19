@@ -54,9 +54,10 @@ class LoginController extends Zend_Controller_Action {
                     $select = $memberTable->select();
                     $select->where('id = ?', $param['id']);
                     $row = $memberTable->getAdapter()->fetchRow($select);
-                    //session 정보를 불러온 뒤, position 정보를 session 에 삽입
+                    //session 정보를 불러온 뒤, position 및 pk 정보를 session 에 삽입
                     $info = Zend_Session::namespaceGet('Was_Auth');
                     $info['storage']->position = $row['position'];
+                    $info['storage']->pk = $row['pk'];
                     
                     $this->redirect('/board/list');
                 } else if (!$authRes->isValid()) {

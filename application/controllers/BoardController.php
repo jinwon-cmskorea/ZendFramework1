@@ -97,6 +97,8 @@ class BoardController extends Zend_Controller_Action {
     public function writeAction() {
         $boardForm = new Was_Board_Form_Board();
         
+        $boardForm->addElement('hidden', 'memberPk');
+        
         $submit = $boardForm->getElement('submit');
         $submit->setLabel('작 성');
         $this->view->boardForm = $boardForm;
