@@ -2,7 +2,11 @@
 $this->headTitle('게시글 작성');
 ?>
 <script type="text/javascript">
-
+$(document).ready(function() {
+    $('#cancle').on('click', function() {
+        window.location.href = "/board/list";
+    });
+});
 </script>
 <style type="text/css">
 .list-title strong {

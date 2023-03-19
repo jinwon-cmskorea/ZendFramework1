@@ -49,6 +49,10 @@ $(document).ready(function() {
         const pathname = window.location.pathname;
         location.href = pathname + "?" + urlParams;
     });
+    
+    $('#write-btn').on('click', function() {
+        window.location.href = "/board/write";
+    });
 });
 </script>
 <style type="text/css">
