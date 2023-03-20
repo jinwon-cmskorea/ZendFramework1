@@ -35,5 +35,15 @@ input[type="file"] {
     </div>
 </div>
 <div class="write-body">
-<?php echo $this->boardForm->render(); ?>
+    <form enctype="multipart/form-data" method="<?php echo $this->boardForm->getMethod(); ?>">
+        <?php echo $this->boardForm->title; ?>
+        <?php echo $this->boardForm->content; ?>
+        <?php echo $this->boardForm->writer; ?>
+        <div class="form-group">
+            <?php echo $this->boardForm->uploadFile; ?>
+            <?php echo $this->FormButton('remove-file', 'X', array('class' => 'remove-file-element')); ?>
+        </div>
+        <?php echo $this->FormButton('add-file', '+', array('class' => 'remove-file-element')); ?>
+        <?php echo $this->boardForm->btns; ?>
+    </form>
 </div>

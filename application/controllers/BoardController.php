@@ -99,6 +99,9 @@ class BoardController extends Zend_Controller_Action {
         
         $boardForm->addElement('hidden', 'memberPk');
         
+        $uploadFile = $boardForm->getElement('uploadFile');
+        $uploadFile->removeDecorator('HtmlTag');
+        
         $submit = $boardForm->getElement('submit');
         $submit->setLabel('작 성');
         $this->view->boardForm = $boardForm;
