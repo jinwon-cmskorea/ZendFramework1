@@ -10,6 +10,14 @@ $(document).ready(function() {
     $('#cancle').on('click', function() {
         window.location.href = "/board/list";
     });
+    
+    var fileCount = 1;
+    $('.add-file-element').on('click', function() {
+        var copy = $('.file-element' + fileCount).clone();
+        copy.prop("class", 'form-group file-element' + (fileCount + 1)).insertAfter('.file-element' + fileCount);
+        copy.children('input[name=uploadFile' + fileCount + ']').attr('name', 'uploadFile' + (fileCount + 1));
+        fileCount = fileCount + 1;
+    });
 });
 </script>
 <style type="text/css">
@@ -39,11 +47,11 @@ input[type="file"] {
         <?php echo $this->boardForm->title; ?>
         <?php echo $this->boardForm->content; ?>
         <?php echo $this->boardForm->writer; ?>
-        <div class="form-group">
+        <div class="form-group file-element1">
             <?php echo $this->boardForm->uploadFile; ?>
             <?php echo $this->FormButton('remove-file', 'X', array('class' => 'remove-file-element')); ?>
         </div>
-        <?php echo $this->FormButton('add-file', '+', array('class' => 'remove-file-element')); ?>
+        <?php echo $this->FormButton('add-file', '+', array('class' => 'add-file-element')); ?>
         <?php echo $this->boardForm->btns; ?>
     </form>
 </div>

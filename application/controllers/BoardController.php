@@ -100,6 +100,7 @@ class BoardController extends Zend_Controller_Action {
         $boardForm->addElement('hidden', 'memberPk');
         
         $uploadFile = $boardForm->getElement('uploadFile');
+        $uploadFile->setName('uploadFile1');
         $uploadFile->removeDecorator('HtmlTag');
         
         $submit = $boardForm->getElement('submit');
