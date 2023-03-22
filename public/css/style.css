@@ -696,6 +696,21 @@ td {
     font-size: 15px;
 }
 
+#remove-file {
+    background-color: #ED7D31;
+    border: 1px solid #AC5A23;
+    color: #FFFFFF;
+    font-size: medium;
+}
+
+#add-file {
+    background-color: #ED7D31;
+    border: 1px solid #AC5A23;
+    color: #FFFFFF;
+    font-size: large;
+    margin-left: 150px;
+}
+
 /* viewBoard.php 요소 */
 .view-box {
 	margin: 150px 30px 0 30px;

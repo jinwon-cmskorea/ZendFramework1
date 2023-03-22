@@ -12,11 +12,36 @@ $(document).ready(function() {
     });
     
     var fileCount = 1;
+    
     $('.add-file-element').on('click', function() {
+        //파일 업로드 요소 복제(clone)
         var copy = $('.file-element' + fileCount).clone();
+        //클래스 옆에번호를 증가시킨 뒤, 이전  파일 요소 뒤에 추가
         copy.prop("class", 'form-group file-element' + (fileCount + 1)).insertAfter('.file-element' + fileCount);
         copy.children('input[name=uploadFile' + fileCount + ']').attr('name', 'uploadFile' + (fileCount + 1));
+        copy.children('label[for=uploadFile' + fileCount + ']').attr('for', 'uploadFile' + (fileCount + 1));
+        copy.children('.remove-file-element' + fileCount).attr('class', 'remove-file-element' + (fileCount + 1));
+        $('.remove-file-element' + fileCount).hide();
+        $('.remove-file-element' + (fileCount + 1)).show();
         fileCount = fileCount + 1;
+    });
+    
+    $(document).on('click', '[name*=remove-file]', function() {
+        if (fileCount == 1) {
+            alert('삭제할 수 없습니다.');
+            return false;
+        }
+        //버튼을 누른 부모 요소의 자식 요소들 삭제
+        $(this).parent('.file-element' + fileCount).empty();
+        //부모 요소까지 삭제
+        $('.file-element' + fileCount).remove();
+        fileCount = fileCount - 1;
+        //fileCount가 2 이상이면 삭제 버튼이 뜨도록 유지, 1이면 버튼 display none
+        if (fileCount > 1) {
+            $('.remove-file-element' + fileCount).show();
+        } else if (fileCount == 1) {
+            $('.remove-file-element' + fileCount).hide();
+        }
     });
 });
 </script>
@@ -31,6 +56,10 @@ $(document).ready(function() {
 /*bootstrap3 input file 요소의  display 속성 무효*/
 input[type="file"] {
     display: inline;
+}
+
+#remove-file {
+    display: none;
 }
 </style>
 <div class="col-sm-12">
@@ -49,7 +78,7 @@ input[type="file"] {
         <?php echo $this->boardForm->writer; ?>
         <div class="form-group file-element1">
             <?php echo $this->boardForm->uploadFile; ?>
-            <?php echo $this->FormButton('remove-file', 'X', array('class' => 'remove-file-element')); ?>
+            <?php echo $this->FormButton('remove-file', 'X', array('class' => 'remove-file-element1')); ?>
         </div>
         <?php echo $this->FormButton('add-file', '+', array('class' => 'add-file-element')); ?>
         <?php echo $this->boardForm->btns; ?>
