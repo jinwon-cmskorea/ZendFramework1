@@ -11,6 +11,8 @@ $(document).ready(function() {
         window.location.href = "/board/list";
     });
     
+    $('#MAX_FILE_SIZE').attr('value', 1024 * 1024 * 3 + 1);
+    
     var fileCount = 1;
     
     $('.add-file-element').on('click', function() {
@@ -72,7 +74,7 @@ input[type="file"] {
     </div>
 </div>
 <div class="write-body">
-    <form enctype="multipart/form-data" method="<?php echo $this->boardForm->getMethod(); ?>">
+    <form class="write-form" enctype="multipart/form-data" method="<?php echo $this->boardForm->getMethod(); ?>">
         <?php echo $this->boardForm->title; ?>
         <?php echo $this->boardForm->content; ?>
         <?php echo $this->boardForm->writer; ?>
