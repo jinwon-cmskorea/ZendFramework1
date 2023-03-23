@@ -95,6 +95,44 @@ class BoardController extends Zend_Controller_Action {
     }
     
     public function writeAction() {
+        $request = $this->getRequest();
+        
+        if ($this->getRequest()->isPost()) {
+            $params = $request->getParams();
+            
+            $this->view->writeResult = false;
+            $this->view->writeMessage = '';
+            
+            //board 클래스 세팅 및 허용된 파일 확장자를 불러옴
+            $boardTable = new Was_Board_Table_Board();
+            $board = new Was_Board($boardTable->getAdapter());
+            $allowFiles = $board->getValidFileTypes();
+            
+            $contents = array(
+                'title'     => $params['title'],
+                'content'   => $params['content'],
+                'writer'    => $params['writer']
+            );
+            
+            $files = $_FILES;
+            foreach ($files as $file) {
+                Zend_Debug::dump($file['name']);
+            }
+            
+            //게시글 작성
+            try {
+                $result = $board->write($contents, $params['memberPk']);
+                
+                if (!$result) {
+                    $this->view->writeMessage = "게시글 작성에 실패했습니다.";
+                } else {
+                    $this->view->writeResult = true;
+                    $this->view->writeMessage = "게시글 작성했습니다.";
+                }
+            } catch (Was_Board_Exception $e) {
+                $this->view->writeMessage = $e->getMessage();
+            }
+        }
         $boardForm = new Was_Board_Form_Board();
         
         $boardForm->addElement('hidden', 'memberPk');

@@ -4,9 +4,23 @@ $session = Zend_Session::namespaceGet('Was_Auth');
 //hidden input 에 현재 로그인한 유저의 pk 정보 설정
 $memberPk = $this->boardForm->getElement('memberPk');
 $memberPk->setValue($session['storage']->pk);
+
+$writer = $this->boardForm->getElement('writer');
+$writer->setValue($session['storage']->name);
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
+    <?php if (isset($this->writeResult)) : ?>
+        var writeResult = <?php echo $this->writeResult ? 'true' : 'false'; ?>;
+        var writeMessage = '<?php echo $this->writeMessage; ?>';
+        
+        if (!writeResult && writeMessage != '') {
+            alert(writeMessage);
+        } else {
+            window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list'))?>?message=success';
+        }
+    <?php endif; ?>
+
     $('#cancle').on('click', function() {
         window.location.href = "/board/list";
     });
@@ -75,6 +89,7 @@ input[type="file"] {
 </div>
 <div class="write-body">
     <form class="write-form" enctype="multipart/form-data" method="<?php echo $this->boardForm->getMethod(); ?>">
+        <?php echo $this->boardForm->memberPk; ?>
         <?php echo $this->boardForm->title; ?>
         <?php echo $this->boardForm->content; ?>
         <?php echo $this->boardForm->writer; ?>
