@@ -96,43 +96,7 @@ class BoardController extends Zend_Controller_Action {
     
     public function writeAction() {
         $request = $this->getRequest();
-        
-        if ($this->getRequest()->isPost()) {
-            $params = $request->getParams();
-            
-            $this->view->writeResult = false;
-            $this->view->writeMessage = '';
-            
-            //board 클래스 세팅 및 허용된 파일 확장자를 불러옴
-            $boardTable = new Was_Board_Table_Board();
-            $board = new Was_Board($boardTable->getAdapter());
-            $allowFiles = $board->getValidFileTypes();
-            
-            $contents = array(
-                'title'     => $params['title'],
-                'content'   => $params['content'],
-                'writer'    => $params['writer']
-            );
-            
-            $files = $_FILES;
-            foreach ($files as $file) {
-                Zend_Debug::dump($file['name']);
-            }
-            
-            //게시글 작성
-            try {
-                $result = $board->write($contents, $params['memberPk']);
-                
-                if (!$result) {
-                    $this->view->writeMessage = "게시글 작성에 실패했습니다.";
-                } else {
-                    $this->view->writeResult = true;
-                    $this->view->writeMessage = "게시글 작성했습니다.";
-                }
-            } catch (Was_Board_Exception $e) {
-                $this->view->writeMessage = $e->getMessage();
-            }
-        }
+        //boardForm 에 필요한 요소 추가 및 수정
         $boardForm = new Was_Board_Form_Board();
         
         $boardForm->addElement('hidden', 'memberPk');
@@ -143,6 +107,58 @@ class BoardController extends Zend_Controller_Action {
         
         $submit = $boardForm->getElement('submit');
         $submit->setLabel('작 성');
+        
+        if ($this->getRequest()->isPost()) {
+            $params = $request->getParams();
+            //작성 완료시 view 에 리턴해줄 변수 설정
+            $this->view->writeResult = false;
+            $this->view->writeMessage = '';
+            //파일 업로드를 위한 배열 선언
+            $fileArray = array();
+            
+            $contents = array(
+                'title'     => $params['title'],
+                'content'   => $params['content'],
+                'writer'    => $params['writer']
+            );
+            
+            $files = $_FILES;
+            foreach ($files as $file) {
+                
+            }
+            
+            if ($boardForm->isValid($contents)) {
+                //board 클래스 세팅 및 허용된 파일 확장자를 불러옴
+                $boardTable = new Was_Board_Table_Board();
+                $board = new Was_Board($boardTable->getAdapter());
+                $allowFiles = $board->getValidFileTypes();
+                
+                $db = Zend_Db::factory('mysqli', $boardTable->getAdapter()->getConfig());
+                //트랜잭션 시작
+                $db->beginTransaction();
+                //게시글 작성
+                try {
+                    $result = $board->write($contents, $params['memberPk']);
+                    
+                    if (!$result) {
+                        $db->rollBack();
+                        $this->view->writeMessage = "게시글 작성에 실패했습니다.";
+                    } else {
+                        $this->view->writeResult = true;
+                        $this->view->writeMessage = "게시글 작성했습니다.";
+                    }
+                } catch (Was_Board_Exception $e) {
+                    $db->rollBack();
+                    $this->view->writeMessage = $e->getMessage();
+                } catch (Zend_Db_Exception $e) {
+                    $db->rollBack();
+                    $this->view->writeMessage = $e->getMessage();
+                }
+            } else {
+                $this->view->writeMessage = "게시글 작성 형식을 지켜주세요.";
+            }
+        }
+        
         $this->view->boardForm = $boardForm;
     }
 }

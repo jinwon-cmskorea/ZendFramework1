@@ -27,7 +27,6 @@ class Was_Board_Form_Board extends Zend_Form {
         //element 데코레이터 설정
         $this->setElementDecorators(array(
             "ViewHelper",
-            "Errors",
             "Description",
             array("Label", array("class" => "control-label-center")),
             array("HtmlTag", array("tag" => "div", "class" => "form-group"))

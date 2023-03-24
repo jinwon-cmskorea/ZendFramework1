@@ -16,7 +16,7 @@ $(document).ready(function() {
         
         if (!writeResult && writeMessage != '') {
             alert(writeMessage);
-        } else {
+        } else if (writeResult) {
             window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list'))?>?message=success';
         }
     <?php endif; ?>
