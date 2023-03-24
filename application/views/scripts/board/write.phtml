@@ -36,6 +36,8 @@ $(document).ready(function() {
         copy.prop("class", 'form-group file-element' + (fileCount + 1)).insertAfter('.file-element' + fileCount);
         copy.children('input[name=uploadFile' + fileCount + ']').attr('name', 'uploadFile' + (fileCount + 1));
         copy.children('label[for=uploadFile' + fileCount + ']').attr('for', 'uploadFile' + (fileCount + 1));
+        //input 내부에 파일이 있는 경우를 대비해 내부를 비워줌
+        copy.children('input[name=uploadFile' + (fileCount + 1) + ']').val("");
         copy.children('.remove-file-element' + fileCount).attr('class', 'remove-file-element' + (fileCount + 1));
         $('.remove-file-element' + fileCount).hide();
         $('.remove-file-element' + (fileCount + 1)).show();
