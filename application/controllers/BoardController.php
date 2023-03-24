@@ -114,24 +114,35 @@ class BoardController extends Zend_Controller_Action {
             $this->view->writeResult = false;
             $this->view->writeMessage = '';
             //파일 업로드를 위한 배열 선언
-            $fileArray = array();
+            $fileArrays = array();
             
             $contents = array(
                 'title'     => $params['title'],
                 'content'   => $params['content'],
                 'writer'    => $params['writer']
             );
-            
+            //파일 업로드를 위해, 업로드한 파일 정보들을 담은 배열 생성
             $files = $_FILES;
             foreach ($files as $file) {
+                if (!$file['name'] || $file['error']) {
+                    continue;
+                }
+                $fileType = explode('/', $file['type']);
+                $fileContent = file_get_contents($file['tmp_name']);
                 
+                $temp = array(
+                    'name'      => $file['name'],
+                    'type'      => $fileType[1],
+                    'size'      => $file['size'],
+                    'content'   => $fileContent
+                );
+                array_push($fileArrays, $temp);
             }
             
             if ($boardForm->isValid($contents)) {
                 //board 클래스 세팅 및 허용된 파일 확장자를 불러옴
                 $boardTable = new Was_Board_Table_Board();
                 $board = new Was_Board($boardTable->getAdapter());
-                $allowFiles = $board->getValidFileTypes();
                 
                 $db = Zend_Db::factory('mysqli', $boardTable->getAdapter()->getConfig());
                 //트랜잭션 시작
@@ -140,9 +151,20 @@ class BoardController extends Zend_Controller_Action {
                 try {
                     $result = $board->write($contents, $params['memberPk']);
                     
+                    if ($fileArrays) {
+                        foreach ($fileArrays as $fileArray) {
+                            $fileResult = $board->addFile($result['pk'], $fileArray);
+                            if (!$fileResult) {
+                                break;
+                            }
+                        }
+                    }
                     if (!$result) {
                         $db->rollBack();
                         $this->view->writeMessage = "게시글 작성에 실패했습니다.";
+                    } else if (isset($fileResult) && !$fileResult) {
+                        $db->rollBack();
+                        $this->view->writeMessage = "파일 업로드를 실패하여 게시글 작성에 실패했습니다.";
                     } else {
                         $this->view->writeResult = true;
                         $this->view->writeMessage = "게시글 작성했습니다.";
@@ -154,6 +176,7 @@ class BoardController extends Zend_Controller_Action {
                     $db->rollBack();
                     $this->view->writeMessage = $e->getMessage();
                 }
+                $db->commit();
             } else {
                 $this->view->writeMessage = "게시글 작성 형식을 지켜주세요.";
             }
