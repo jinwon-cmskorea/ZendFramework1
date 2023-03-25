@@ -766,6 +766,7 @@ td {
     padding: 20px 20px 30px 20px;
     font-size: medium;
     border-bottom: 3px dashed #eee;
+    color: #808080;
 }
 
 .time-left {
@@ -783,6 +784,27 @@ td {
     color: rgb(127, 127, 127);
 }
 
+.reply {
+    color: #808080;
+    margin: 10px 0;
+}
+
+.reply-title {
+    margin-left: 45px;
+    font-weight: bold;
+}
+
+.reply table th {
+    padding: 1px;
+}
+
+.remove-reply-btn {
+    background-color: #ED7D31;
+    border: 1px solid #AC5A23;
+    color: #FFFFFF;
+    font-size: medium;
+}
+
 .view-page-button {
     font-size: medium;
     margin: 20px;
@@ -791,8 +813,8 @@ td {
 .view-page-button .delete-btn {
     background-color: #FF0000;
     color: #FFFFFF;
-    padding-left: 40px;
-    padding-right: 40px;
+    padding-left: 50px;
+    padding-right: 50px;
     margin-top: 1px;
     border: none;
     float: left;

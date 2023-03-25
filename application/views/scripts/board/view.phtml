@@ -47,11 +47,31 @@ $session = Zend_Session::namespaceGet('Was_Auth');
          
     </div>
     <div class="time-info">
-         <div class="time-left">등록시간 &emsp; &nbsp; &nbsp; &nbsp; :&nbsp;&nbsp;<?php echo $board['insertTime']; ?></div>
-         <div class="time-right">마지막 수정시간 :&nbsp; <?php echo $board['updateTime']; ?></div>
+         <div class="time-left"><strong>등록시간 &emsp; &nbsp; &nbsp; &nbsp; :</strong>&nbsp;&nbsp;<?php echo $board['insertTime']; ?></div>
+         <div class="time-right"><strong>마지막 수정시간 :</strong>&nbsp; <?php echo $board['updateTime']; ?></div>
     </div>
     <div class="reply">
-    
+        <div class='reply-title'>댓 &nbsp; 글</div>
+        <table class="col-sm-12">
+            <thead>
+                <tr>
+                    <th class="col-sm-2"></th>
+                    <th class="col-sm-7"></th>
+                    <th class="col-sm-2"></th>
+                    <th class="col-sm-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                   <td><strong>· 아무개 </strong></td>
+                   <td>댓글1, 가나다라마바사</td>
+                   <td>2020-02-06-17:15:20</td>
+                   <td>
+                       <?php echo $this->FormButton('remove-reply', 'X', array('class' => 'remove-reply-btn')); ?>
+                   </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div class="view-page-button">
         <?php
