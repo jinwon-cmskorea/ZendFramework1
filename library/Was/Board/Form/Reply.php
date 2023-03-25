@@ -28,7 +28,7 @@ class Was_Board_Form_Reply extends Zend_Form {
             array("HtmlTag", array("tag" => "div"))
         ));
         
-        $this->addElement('text', 'reply-contnet', array(
+        $this->addElement('text', 'content', array(
            'class'          => 'reply-content',
            'placeholder'    => '댓글을 남겨요'
         ));

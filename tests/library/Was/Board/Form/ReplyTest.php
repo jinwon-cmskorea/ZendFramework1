@@ -56,10 +56,10 @@ class Was_Board_Form_ReplyTest extends PHPUnit_Framework_TestCase {
      */
     public function testInit()
     {
-        $element = $this->form->getElement('reply-contnet');
+        $element = $this->form->getElement('content');
         $this->assertInstanceOf('Zend_Form_Element_Text', $element);
-        $this->assertEquals('reply-contnet', $element->getId());
-        $this->assertEquals('reply-contnet', $element->getName());
+        $this->assertEquals('content', $element->getId());
+        $this->assertEquals('content', $element->getName());
         $this->assertEquals('댓글을 남겨요', $element->getAttrib('placeholder'));
         $this->assertEquals('reply-content', $element->getAttrib('class'));
         
