@@ -719,7 +719,7 @@ td {
 .page-header-custom {
     font-size: x-large;
     margin: 50px 20px 0;
-    padding: 10px 20px 10px;
+    padding: 10px 0 10px;
     border-bottom: 3px dashed #eee;
     color: rgb(118, 113, 113);
 }
@@ -763,13 +763,19 @@ td {
 
 .time-info {
 	margin: 0 20px;
-    padding: 20px;
+    padding: 20px 20px 30px 20px;
     font-size: medium;
+    border-bottom: 3px dashed #eee;
 }
 
-.time-info .line {
-    display: flex;
-    margin: 5px 0;
+.time-left {
+    float: left;
+    margin-left: 5px;
+    
+}
+
+.time-right {
+    float: right;
 }
 
 .time-title {
@@ -778,24 +784,38 @@ td {
 }
 
 .view-page-button {
-    float: right;
     font-size: medium;
+    margin: 20px;
 }
 
-.view-page-button .submit-btn {
-    background-color: rgb(112, 173, 71);
+.view-page-button .delete-btn {
+    background-color: #FF0000;
+    color: #FFFFFF;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-top: 1px;
+    border: none;
+    float: left;
+}
+
+.button-right {
+    float: right;
+}
+
+.view-page-button .button-right .submit-btn {
+    background-color: #70AD47;
     margin-right: 10px;
-    color: white;
+    color: #FFFFFF;
     padding-left: 40px;
     padding-right: 40px;
     border: none;
 }
-.view-page-button .cancle-btn {
-    background-color: rgb(255, 255, 255);
+.view-page-button .button-right .cancle-btn {
+    background-color: #FFFFFF;
     margin-left: 10px;
     padding-left: 40px;
     padding-right: 40px;
-    border: 1px solid rgb(166, 166, 166);
+    border: 1px solid #A6A6A6;
 }
 
 .list-btn {

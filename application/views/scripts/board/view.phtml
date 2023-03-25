@@ -1,5 +1,6 @@
 <?php
 $board = $this->board;
+$session = Zend_Session::namespaceGet('Was_Auth');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -32,10 +33,37 @@ $board = $this->board;
         게시판 글을 조회합니다.
     </div>
 </div>
-<?php
-    echo $board['title'];
-    echo $board['writer'];
-    echo $board['content'];
-    echo $board['insertTime'];
-    echo $board['updateTime'];
-?>
+<div class="view-box">
+    <div class="page-header-custom">
+        <?php echo $board['title']; ?>
+        <div class="info">
+            <small class="space writer-info">작성자 &emsp; &emsp; : <?php echo $board['writer']; ?></small>
+        </div>
+    </div>
+    <div class="text-box">
+        <?php echo nl2br($board['content']); ?>
+    </div>
+    <div class="file-info">
+         
+    </div>
+    <div class="time-info">
+         <div class="time-left">등록시간 &emsp; &nbsp; &nbsp; &nbsp; :&nbsp;&nbsp;<?php echo $board['insertTime']; ?></div>
+         <div class="time-right">마지막 수정시간 :&nbsp; <?php echo $board['updateTime']; ?></div>
+    </div>
+    <div class="reply">
+    
+    </div>
+    <div class="view-page-button">
+        <?php
+        if (($session['storage']->pk == $board['memberPk']) || ($session['storage']->pk == 1)) {
+            echo $this->FormButton('delet-btn', '삭 제', array('class' => 'delete-btn', 'data-pk' => $board['pk']));
+        }
+        ?>
+        <div class="button-right">
+            <?php if ($session['storage']->pk == $board['memberPk']) {?>
+                <input type="submit" class="submit-btn" value="수 &emsp; 정">
+            <?php } ?>
+            <input type="button" class="cancle-btn" value="닫 &emsp; 기">
+        </div>
+    </div>
+</div>
