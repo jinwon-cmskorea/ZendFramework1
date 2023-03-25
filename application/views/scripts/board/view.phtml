@@ -73,6 +73,12 @@ $session = Zend_Session::namespaceGet('Was_Auth');
             </tbody>
         </table>
     </div>
+    <form class="reply-form" method="<?php echo $this->replyForm->getMethod(); ?>">
+        <?php echo $this->replyForm->memberPk; ?>
+        <?php echo $this->replyForm->name; ?>
+        <?php echo $this->replyForm->content; ?>
+        <?php echo $this->replyForm->submit; ?>
+    </form>
     <div class="view-page-button">
         <?php
         if (($session['storage']->pk == $board['memberPk']) || ($session['storage']->pk == 1)) {

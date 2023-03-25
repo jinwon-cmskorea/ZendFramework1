@@ -211,6 +211,15 @@ class BoardController extends Zend_Controller_Action {
             }
             
         }
+        
+        $replyForm = new Was_Board_Form_Reply();
+        $replyForm->addElement('hidden', 'memberPk');
+        $replyForm->addElement('hidden', 'name');
+        
+        $content = $replyForm->getElement('content');
+        $content->removeDecorator('Label');
+        
+        $this->view->replyForm = $replyForm;
     }
 }
 
