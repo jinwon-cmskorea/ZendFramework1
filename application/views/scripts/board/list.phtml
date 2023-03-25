@@ -53,6 +53,12 @@ $(document).ready(function() {
     $('#write-btn').on('click', function() {
         window.location.href = "/board/write";
     });
+    
+    $('.view-btn').on('click', function() {
+        var pk = $(this).data('pk');
+        
+        window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'view'));?>?pk='+ pk; 
+    });
 });
 
 $(window).on('load', function() {
@@ -118,7 +124,7 @@ $(window).on('load', function() {
                 <td><?php echo substr($items['insertTime'], 0, 10); ?></td>
                 <td><?php echo $items['views']; ?></td>
                 <td>
-                <?php echo $this->FormButton('read-board', '조 회', array('class' => 'view-btn'));?>
+                <?php echo $this->FormButton('read-board', '조 회', array('class' => 'view-btn', 'data-pk' => $items['pk']));?>
                 </td>
             </tr>
         <?php } ?>

@@ -1,0 +1,41 @@
+<?php
+$board = $this->board;
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        <?php if (isset($this->boardResult)) : ?>
+        var result = <?php echo $this->boardResult ? 'true' : 'false';?>;
+        var message = '<?php echo $this->boardMessage; ?>';
+        
+        if (!result) {
+            alert(message);
+            window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list'))?>';
+        }
+        <?php endif; ?>
+    });
+</script>
+<style type="text/css">
+.list-title strong {
+    color: #595959;
+}
+
+.list-title small {
+    color: #8497B0;
+}
+</style>
+<div class="col-sm-12">
+    <div class="list-title">
+        <strong>씨엠에스코리아 게시판</strong>
+        <small>- 조회 -</small>
+    </div>
+    <div class="col-sm-12 list-descript">
+        게시판 글을 조회합니다.
+    </div>
+</div>
+<?php
+    echo $board['title'];
+    echo $board['writer'];
+    echo $board['content'];
+    echo $board['insertTime'];
+    echo $board['updateTime'];
+?>

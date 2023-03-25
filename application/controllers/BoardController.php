@@ -94,6 +94,9 @@ class BoardController extends Zend_Controller_Action {
         $this->view->form = $searchForm;
     }
     
+    /**
+     * 게시글 작성 Action
+     */
     public function writeAction() {
         $request = $this->getRequest();
         //boardForm 에 필요한 요소 추가 및 수정
@@ -183,6 +186,31 @@ class BoardController extends Zend_Controller_Action {
         }
         
         $this->view->boardForm = $boardForm;
+    }
+    
+    /**
+     * 게시글 조회 Action
+     */
+    public function viewAction() {
+        $request = $this->getRequest();
+        
+        if ($this->getRequest()) {
+            $this->view->boardResult = false;
+            $this->view->boardMessage = '';
+            
+            $params = $request->getParams();
+            $pk = $params['pk'];
+            
+            $boardTable = new Was_Board_Table_Board();
+            $board = new Was_Board($boardTable->getAdapter());
+            try {
+                $this->view->board = $board->read($pk);
+                $this->view->boardResult = true;
+            } catch (Was_Board_Exception $e) {
+                $this->view->boardMessage = "존재하지 않는 게시글입니다.";
+            }
+            
+        }
     }
 }
 
