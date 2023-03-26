@@ -295,5 +295,45 @@ class BoardController extends Zend_Controller_Action {
         
         $this->_helper->json->sendJson($result);
     }
+    
+    /**
+     * 댓글 삭제 Action
+     */
+    public function deleteReplyAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $result = array(
+            'result'   => false,
+            'message'  => ''
+        );
+        
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            
+            $replyTable = new Was_Board_Table_BoardReply();
+            $board = new Was_Board($replyTable->getAdapter());
+            
+            try {
+                $deleteReplyResult = $board->deleteReply($params['replyPk']);
+                
+                if (!$deleteReplyResult) {
+                    $result['message'] = '댓글을 삭제 중 문제가 발생했습니다.';
+                } else {
+                    $result['result'] = true;
+                    $result['message'] = '댓글을 삭제했습니다.';
+                }
+            } catch (Was_Board_Exception $e) {
+                $result['message'] = '존재하지 않는 게시글입니다.';
+            } catch (Zend_Db_Exception $e) {
+                $result['message'] = '댓글을 삭제 중 문제가 발생했습니다.';
+            }
+        } else {
+            //예외
+            $result['result'] = false;
+            $result['message'] = '잘못된 요청입니다.';
+        }
+        
+        $this->_helper->json->sendJson($result);
+    }
 }
 
