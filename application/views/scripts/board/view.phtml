@@ -1,6 +1,7 @@
 <?php
 $board = $this->board;
 $replys = $this->replys;
+$files = $this->files;
 
 $session = Zend_Session::namespaceGet('Was_Auth');
 $memberTabe = new Was_Member_Table_Member();
@@ -125,9 +126,15 @@ $memberTabe = new Was_Member_Table_Member();
     <div class="text-box">
         <?php echo nl2br($board['content']); ?>
     </div>
-    <div class="file-info">
-         
-    </div>
+    <?php if ($files) :?>
+        <div class="file-info">
+            <?php
+                foreach ($files as $file) {
+                    echo "<li><a href=\"#\">{$file['filename']}</a></li>";
+                }
+            ?>
+        </div>
+    <?php endif; ?>
     <div class="time-info">
          <div class="time-left"><strong>등록시간 &emsp; &nbsp; &nbsp; &nbsp; &nbsp; :</strong>&nbsp;&nbsp;<?php echo $board['insertTime']; ?></div>
          <div class="time-right"><strong>마지막 수정시간 :</strong>&nbsp; <?php echo $board['updateTime']; ?></div>

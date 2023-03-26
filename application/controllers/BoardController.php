@@ -207,6 +207,7 @@ class BoardController extends Zend_Controller_Action {
             try {
                 $this->view->board = $board->read($pk);
                 $this->view->replys = $board->getReply($pk);
+                $this->view->files = $board->getFiles($pk);
                 $this->view->boardResult = true;
             } catch (Was_Board_Exception $e) {
                 $this->view->boardMessage = "존재하지 않는 게시글입니다.";
