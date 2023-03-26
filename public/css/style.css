@@ -798,6 +798,24 @@ td {
     padding: 1px;
 }
 
+.reply-group .reply-content {
+    width: 40%;
+    height: 36px;
+    padding: 5px;
+    line-height: 36px;
+    border: 2px solid #BFBFBF;
+    color: #767171;
+}
+
+.reply-group .reply-submit {
+    background-color: #BFBFBF;
+    color: white;
+    width: 50px;
+    height: 36px;
+    border: 1px solid #BFBFBF;
+    margin-left: -4px;
+}
+
 .remove-reply-btn {
     background-color: #ED7D31;
     border: 1px solid #AC5A23;

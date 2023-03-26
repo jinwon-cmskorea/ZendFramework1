@@ -33,6 +33,10 @@ class Was_Board_Form_Reply extends Zend_Form {
            'placeholder'    => '댓글을 남겨요'
         ));
         
+        $content = $this->getElement('content');
+        $content->removeDecorator('label');
+        $content->removeDecorator('HtmlTag');
+        
         $this->addElement('submit', 'submit', array(
             'label'         => '등록',
             'class'         => 'reply-submit'

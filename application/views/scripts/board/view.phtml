@@ -47,7 +47,7 @@ $session = Zend_Session::namespaceGet('Was_Auth');
          
     </div>
     <div class="time-info">
-         <div class="time-left"><strong>등록시간 &emsp; &nbsp; &nbsp; &nbsp; :</strong>&nbsp;&nbsp;<?php echo $board['insertTime']; ?></div>
+         <div class="time-left"><strong>등록시간 &emsp; &nbsp; &nbsp; &nbsp; &nbsp; :</strong>&nbsp;&nbsp;<?php echo $board['insertTime']; ?></div>
          <div class="time-right"><strong>마지막 수정시간 :</strong>&nbsp; <?php echo $board['updateTime']; ?></div>
     </div>
     <div class="reply">
@@ -64,7 +64,7 @@ $session = Zend_Session::namespaceGet('Was_Auth');
             <tbody>
                 <tr>
                    <td><strong>· 아무개 </strong></td>
-                   <td>댓글1, 가나다라마바사</td>
+                   <td class="text-align-left">댓글1, 가나다라마바사</td>
                    <td>2020-02-06-17:15:20</td>
                    <td>
                        <?php echo $this->FormButton('remove-reply', 'X', array('class' => 'remove-reply-btn')); ?>
@@ -76,8 +76,10 @@ $session = Zend_Session::namespaceGet('Was_Auth');
     <form class="reply-form" method="<?php echo $this->replyForm->getMethod(); ?>">
         <?php echo $this->replyForm->memberPk; ?>
         <?php echo $this->replyForm->name; ?>
-        <?php echo $this->replyForm->content; ?>
-        <?php echo $this->replyForm->submit; ?>
+        <div class="reply-group col-sm-offset-2">
+            <?php echo $this->replyForm->content; ?>
+            <?php echo $this->replyForm->submit; ?>
+        </div>
     </form>
     <div class="view-page-button">
         <?php

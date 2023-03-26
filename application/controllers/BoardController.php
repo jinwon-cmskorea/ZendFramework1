@@ -216,9 +216,6 @@ class BoardController extends Zend_Controller_Action {
         $replyForm->addElement('hidden', 'memberPk');
         $replyForm->addElement('hidden', 'name');
         
-        $content = $replyForm->getElement('content');
-        $content->removeDecorator('Label');
-        
         $this->view->replyForm = $replyForm;
     }
 }
