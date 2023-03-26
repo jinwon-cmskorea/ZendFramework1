@@ -213,8 +213,8 @@ class BoardController extends Zend_Controller_Action {
         }
         
         $replyForm = new Was_Board_Form_Reply();
+        $replyForm->addElement('hidden', 'boardPk');
         $replyForm->addElement('hidden', 'memberPk');
-        $replyForm->addElement('hidden', 'name');
         
         $this->view->replyForm = $replyForm;
     }
@@ -243,6 +243,44 @@ class BoardController extends Zend_Controller_Action {
                 } else {
                     $result['result'] = true;
                     $result['message'] = '게시글을 삭제했습니다.';
+                }
+            } catch (Was_Board_Exception $e) {
+                $result['message'] = '존재하지 않는 게시글입니다.';
+            }
+        } else {
+            //예외
+            $result['result'] = false;
+            $result['message'] = '잘못된 요청입니다.';
+        }
+        
+        $this->_helper->json->sendJson($result);
+    }
+    
+    /**
+     * 댓글 작성 Action
+     */
+    public function writeReplyAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $result = array(
+            'result'   => false,
+            'message'  => ''
+        );
+        
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            
+            $replyTable = new Was_Board_Table_BoardReply();
+            $board = new Was_Board($replyTable->getAdapter());
+            
+            try {
+                $writeReplyResult = $board->writeReply($params['boardPk'], $params['memberPk'], $params['content']);
+                
+                if (!$writeReplyResult) {
+                    $result['message'] = '댓글을 등록 중 문제가 발생했습니다.';
+                } else {
+                    $result['result'] = true;
+                    $result['message'] = '댓글을 등록했습니다.';
                 }
             } catch (Was_Board_Exception $e) {
                 $result['message'] = '존재하지 않는 게시글입니다.';
