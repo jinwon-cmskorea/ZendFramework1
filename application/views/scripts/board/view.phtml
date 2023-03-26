@@ -1,6 +1,9 @@
 <?php
 $board = $this->board;
+$replys = $this->replys;
+
 $session = Zend_Session::namespaceGet('Was_Auth');
+$memberTabe = new Was_Member_Table_Member();
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -120,14 +123,23 @@ $session = Zend_Session::namespaceGet('Was_Auth');
                 </tr>
             </thead>
             <tbody>
+            <?php
+                foreach ($replys as $reply) {
+                    
+                    $select = $memberTabe->select();
+                    $select->from($memberTabe->getTableName(), array('name'))->where('pk = ?', $reply['memberPk']);
+                    
+                    $name = $memberTabe->getAdapter()->fetchRow($select);
+            ?>
                 <tr>
-                   <td><strong>· 아무개 </strong></td>
-                   <td class="text-align-left">댓글1, 가나다라마바사</td>
-                   <td>2020-02-06-17:15:20</td>
+                   <td class="text-align-left"><strong>· <?php echo $name['name']; ?> </strong></td>
+                   <td class="text-align-left"><?php echo $reply['content']; ?></td>
+                   <td><?php echo $reply['insertTime']; ?></td>
                    <td>
-                       <?php echo $this->FormButton('remove-reply', 'X', array('class' => 'remove-reply-btn')); ?>
+                       <?php echo $this->FormButton('remove-reply', 'X', array('class' => 'remove-reply-btn', 'data-reply-pk' => $reply['pk'])); ?>
                    </td>
                 </tr>
+            <?php } ?>
             </tbody>
         </table>
     </div>

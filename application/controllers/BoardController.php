@@ -203,15 +203,17 @@ class BoardController extends Zend_Controller_Action {
             
             $boardTable = new Was_Board_Table_Board();
             $board = new Was_Board($boardTable->getAdapter());
+            //해당 게시글이 보유한 내용, 파일, 댓글을 가져옴
             try {
                 $this->view->board = $board->read($pk);
+                $this->view->replys = $board->getReply($pk);
                 $this->view->boardResult = true;
             } catch (Was_Board_Exception $e) {
                 $this->view->boardMessage = "존재하지 않는 게시글입니다.";
             }
             
         }
-        
+        //댓글 작성을 위해 hidden 요소 추가
         $replyForm = new Was_Board_Form_Reply();
         $replyForm->addElement('hidden', 'boardPk');
         $replyForm->addElement('hidden', 'memberPk');
