@@ -1,0 +1,33 @@
+<?php
+$fileArray = $this->fileArray;
+?>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.file-download').on('click', function() {
+        var filePk = $(this).data('filePk');
+        
+        if (confirm('이미지를 다운로드 하시겠습니까?')) {
+            $.ajax({
+                url: "/board/file-download",
+                method: "POST",
+                data: {"filePk": filePk},
+                dataType: "json",
+                success: function(receive) {
+                    alert(receive.message);
+                }
+            });
+        }
+    });
+});
+</script>
+<img src="data:image;base64, <?php echo $fileArray['content']; ?>" alt="image" style="width: 500px; height: 500px;">
+<div>
+<?php 
+    echo $this->FormButton('file-download', '파일 다운로드', array('class' => 'file-download', 'data-file-pk' => $fileArray['pk']));
+?>
+</div>
+<div>
+<?php 
+    echo $this->FormButton('close-popup', '창 닫기', array('class' => 'close-popup'));
+?>
+</div>

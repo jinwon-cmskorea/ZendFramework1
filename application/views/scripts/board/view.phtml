@@ -34,7 +34,7 @@ $memberTabe = new Was_Member_Table_Member();
                     success: function(receive) {
                         alert(receive.message);
                         if (receive.result == true) {
-                            window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list'))?>';
+                            window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list'));?>';
                         } else {
                             window.location.reload();
                         }
@@ -94,6 +94,21 @@ $memberTabe = new Was_Member_Table_Member();
             }
         });
         
+        $('.file-link').on('click', function() {
+            var filePk = $(this).data('filePk');
+            
+            //팝업창 크기
+            var popUpWidth = 500
+            var popUpHeight = 540;
+            //팝업창 위치 조절
+            var popUpX = (document.body.offsetWidth / 2) - (popUpWidth / 2);
+            //듀얼 모니터인 경우 넣어줘야함.
+            popUpX += window.screenLeft;
+            var popUpY = (window.screen.height / 2) - (popUpHeight / 2);
+            
+            window.open('<?php echo $this->url(array('controller' => 'board', 'action' => 'view-image')); ?>?filePk=' + filePk, '이미지 보기', 'scrollbars=no, resizable=no, width=' + popUpWidth + ', height=' + popUpHeight + ', left='+ popUpX + ',top='+ popUpY);
+        });
+        
         $('#boardPk').val('<?php echo $board['pk'];?>');
         $('#memberPk').val('<?php echo $session['storage']->pk;?>');
     });
@@ -130,7 +145,7 @@ $memberTabe = new Was_Member_Table_Member();
         <div class="file-info">
             <?php
                 foreach ($files as $file) {
-                    echo "<li><a href=\"#\">{$file['filename']}</a></li>";
+                    echo '<a class="file-link" data-file-pk="'. $file['pk'] .'"><img src="data:image;base64, '. base64_encode($file['content']) .'" alt="image" style="width: 50px; height: 50px;"></a>';
                 }
             ?>
         </div>

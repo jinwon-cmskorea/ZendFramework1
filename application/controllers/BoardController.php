@@ -336,5 +336,38 @@ class BoardController extends Zend_Controller_Action {
         
         $this->_helper->json->sendJson($result);
     }
+    
+    /**
+     * 이미지 미리보기 Action
+     */
+    public function viewImageAction() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->layout->setLayout('default');
+        $request = $this->getRequest();
+        
+        if ($this->getRequest()) {
+            //filePk를 가져옴
+            $params = $request->getParams();
+            //파일 정보를 불러오기 위해 테이블 클래스 객체 생성
+            $fileTable = new Was_Board_Table_File();
+            $detailsTable = new Was_Board_Table_FileDetails();
+            
+            //pk, 파일 이름, 타입, 크기를 가져옴
+            $fileArray = array();
+            $select = $fileTable->select();
+            $select->from($fileTable->getTableName(), array('pk', 'filename', 'fileType', 'fileSize'))
+            ->where('pk = ?', $params['filePk']);
+            $fileArray = $fileTable->getAdapter()->fetchRow($select);
+            
+            //filePk 에 해당하는 파일 내용을 가져옴
+            $select2 = $detailsTable->select();
+            $select2->from($detailsTable->getTableName(), array('content'))
+            ->where('filePk = ?', $params['filePk']);
+            $row = $detailsTable->getAdapter()->fetchRow($select2);
+            $fileArray['content'] = $row['content'];
+            
+            $this->view->fileArray = $fileArray;
+        }
+    }
 }
 
