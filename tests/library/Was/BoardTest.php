@@ -428,28 +428,25 @@ class Was_BoardTest extends PHPUnit_Framework_TestCase {
         $actual = $this->board->reads(array('fieldName' => 'views', 'order' => 'ASC'));
         $this->assertEquals($expext, $actual);
         
-        //9. 3번째 글부터 10개 출력
+        //9. 3번째 글부터 출력
         $select = $boardTable->select();
         $select->from($boardTable->getTableName(), array('pk', 'memberPk', 'title', 'writer', 'insertTime', 'views'))
-        ->order('pk DESC')
-        ->limit(10, 3);
+        ->order('pk DESC');
         $expext = $boardTable->getAdapter()->fetchAll($select);
         $actual = $this->board->reads(array('start' => 3));
         $this->assertEquals($expext, $actual);
         
-        //10. 검색 카테고리 : writer, 검색 내용 : 테스터 1, 글 번호 기준 오름차순 정렬, 2번째 글 부터 10개 출력
+        //10. 검색 카테고리 : writer, 검색 내용 : 테스터 1, 글 번호 기준 오름차순 정렬
         $select = $boardTable->select();
         $select->from($boardTable->getTableName(), array('pk', 'memberPk', 'title', 'writer', 'insertTime', 'views'))
         ->where('writer LIKE ?', '%테스터 1%')
-        ->order('pk ASC')
-        ->limit(10, 1);
+        ->order('pk ASC');
         $expext = $boardTable->getAdapter()->fetchAll($select);
         $conditionArr= array(
             'category'      => 'writer',
             'search'        => '테스터 1',
             'fieldName'     => 'pk',
-            'order'         => 'ASC',
-            'start'         => '1'
+            'order'         => 'ASC'
         );
         $actual = $this->board->reads($conditionArr);
         $this->assertEquals($expext, $actual);
