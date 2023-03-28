@@ -201,7 +201,7 @@ $memberTabe = new Was_Member_Table_Member();
     </form>
     <div class="view-page-button">
         <?php
-        if (($session['storage']->pk == $board['memberPk']) || ($session['storage']->pk == 1)) {
+        if (($session['storage']->pk == $board['memberPk']) || ($session['storage']->position <= 2)) {
             echo $this->FormButton('delet-btn', '삭 제', array('class' => 'delete-btn', 'data-pk' => $board['pk']));
         }
         ?>

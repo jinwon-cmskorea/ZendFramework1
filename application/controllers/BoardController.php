@@ -369,5 +369,60 @@ class BoardController extends Zend_Controller_Action {
             $this->view->fileArray = $fileArray;
         }
     }
+    
+    /**
+     * 파일 다운로드 Action
+     */
+    public function fileDownloadAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $request = $this->getRequest();
+        
+        if ($this->getRequest()) {
+            //filePk를 가져옴
+            $params = $request->getParams();
+            //파일 정보를 불러오기 위해 테이블 클래스 객체 생성
+            $fileTable = new Was_Board_Table_File();
+            $detailsTable = new Was_Board_Table_FileDetails();
+            
+            //pk, 파일 이름, 타입, 크기를 가져옴
+            $fileArray = array();
+            $select = $fileTable->select();
+            $select->from($fileTable->getTableName(), array('pk', 'filename', 'fileType', 'fileSize'))
+            ->where('pk = ?', $params['filePk']);
+            $fileArray = $fileTable->getAdapter()->fetchRow($select);
+            
+            //filePk 에 해당하는 파일 내용을 가져옴
+            $select2 = $detailsTable->select();
+            $select2->from($detailsTable->getTableName(), array('content'))
+            ->where('filePk = ?', $params['filePk']);
+            $row = $detailsTable->getAdapter()->fetchRow($select2);
+            $fileArray['content'] = $row['content'];
+            
+            /*
+             * data 폴더에 파일을 조립하고 저장
+             * 한글 파일명의 경우, 그대로 사용하면 인식을 못해서 에러 발생
+             * 그래서 iconv 함수를 이용해 인코딩을 변경해줌
+             */
+            $tmpFileName = iconv('utf-8', 'cp949', $fileArray['filename']);
+            $saveDir = __DIR__ . '/../../data/' . $tmpFileName;
+            file_put_contents($saveDir, base64_decode($fileArray['content']));
+            
+            //파일 다운로드 기능을 위한 헤더 설정
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='. $tmpFileName);
+            header('Content-Transfer-Encoding: binary');
+            header('Content-Length: '. $fileArray['fileSize']);
+            header('Expires: 0');
+            header('Pragma: public');
+            
+            ob_clean();//출력 없이 버퍼만 비우고, 종료는 안함
+            flush();//버퍼에 저장되어있는 내용을 브라우저로 출력후 버퍼를 비움
+            readfile($saveDir);
+            unlink($saveDir);
+            
+            exit;
+        }
+    }
 }
 
