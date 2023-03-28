@@ -212,10 +212,12 @@ $memberTabe = new Was_Member_Table_Member();
         }
         ?>
         <div class="button-right">
-            <?php if ($session['storage']->pk == $board['memberPk']) {?>
-                <input type="submit" class="submit-btn" value="수 &emsp; 정">
-            <?php } ?>
-            <input type="button" class="cancle-btn" value="닫 &emsp; 기">
+            <?php
+            if ($session['storage']->pk == $board['memberPk']) {
+                echo $this->FormButton('edit-btn', '수 정', array('class' => 'submit-btn edit-btn', 'data-pk' => $board['pk']));
+            }
+            echo $this->FormButton('cancle-btn', '닫 기', array('class' => 'cancle-btn'));
+            ?>
         </div>
     </div>
 </div>

@@ -203,14 +203,27 @@ class BoardController extends Zend_Controller_Action {
             
             $boardTable = new Was_Board_Table_Board();
             $board = new Was_Board($boardTable->getAdapter());
-            //해당 게시글이 보유한 내용, 파일, 댓글을 가져옴
+            
+            //게시글 조회수를 가져옴
+            $select = $boardTable->select();
+            $select->from($boardTable->getTableName(), array('views'))->where("pk = ?", $pk);
+            $row = $boardTable->getAdapter()->fetchRow($select);
+            
+            $views = $row['views'];
+            
+            //해당 게시글이 보유한 내용, 파일, 댓글을 가져옴, 조회수 증가
             try {
+                $views++;
+                $boardTable->update(array('views' => $views), "pk = {$pk}");
+                
                 $this->view->board = $board->read($pk);
                 $this->view->replys = $board->getReply($pk);
                 $this->view->files = $board->getFiles($pk);
                 $this->view->boardResult = true;
             } catch (Was_Board_Exception $e) {
                 $this->view->boardMessage = "존재하지 않는 게시글입니다.";
+            } catch (Zend_Db_Exception $e) {
+                $this->view->boardMessage = "db 작업 중 문제가 발생했습니다.";
             }
             
         }

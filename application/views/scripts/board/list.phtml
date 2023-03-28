@@ -1,5 +1,7 @@
 <?php
 $this->headTitle('게시글 리스트');
+
+$replyTable = new Was_Board_Table_BoardReply();
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -116,10 +118,22 @@ $(window).on('load', function() {
         <tbody>
         <?php 
             foreach ($this->paginator as $items) {
+                //댓글
+                $select = $replyTable->select();
+                $select->from($replyTable->getTableName(), array('count' => new Zend_Db_Expr('COUNT(*)')))
+                ->where('boardPk = ?', $items['pk']);
+                $row = $replyTable->getAdapter()->fetchRow($select);
         ?>
             <tr class="add-bottom-line">
                 <td><?php echo $items['pk']; ?></td>
-                <td class="text-align-left"><?php echo $items['title']; ?></td>
+                <td class="text-align-left">
+                <?php
+                    echo $items['title'];
+                    if ($row['count'] > 0) {
+                        echo "&nbsp;&nbsp;&nbsp;(" . $row['count'] . ")";
+                    }
+                ?>
+                </td>
                 <td><?php echo $items['writer']; ?></td>
                 <td><?php echo substr($items['insertTime'], 0, 10); ?></td>
                 <td><?php echo $items['views']; ?></td>
