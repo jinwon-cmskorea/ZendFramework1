@@ -283,6 +283,24 @@ class BoardController extends Zend_Controller_Action {
                     'writer'    => $params['writer']
                 );
                 
+                //파일 업로드를 위해, 업로드한 파일 정보들을 담은 배열 생성
+                $files = $_FILES;
+                foreach ($files as $file) {
+                    if (!$file['name'] || $file['error']) {
+                        continue;
+                    }
+                    $fileType = explode('/', $file['type']);
+                    $fileContent = file_get_contents($file['tmp_name']);
+                    
+                    $temp = array(
+                        'name'      => $file['name'],
+                        'type'      => $fileType[1],
+                        'size'      => $file['size'],
+                        'content'   => $fileContent
+                    );
+                    array_push($fileArrays, $temp);
+                }
+                
                 if ($boardForm->isValid($contents)) {
                     //board 클래스 세팅
                     $boardTable = new Was_Board_Table_Board();
@@ -291,24 +309,25 @@ class BoardController extends Zend_Controller_Action {
                     $db = Zend_Db::factory('mysqli', $boardTable->getAdapter()->getConfig());
                     //트랜잭션 시작
                     $db->beginTransaction();
-                    //게시글 작성
+                    //게시글 수정
                     try {
-                        $result = $board->edit($contents, $pk);
+                        //게시글 수정 메소드 호출
+                        $result = $board->edit($contents, $params['boardPk']);
                         
-//                         if ($fileArrays) {
-//                             foreach ($fileArrays as $fileArray) {
-//                                 $fileResult = $board->addFile($result['pk'], $fileArray);
-//                                 if (!$fileResult) {
-//                                     break;
-//                                 }
-//                             }
-//                         }
+                        if ($fileArrays) {
+                            foreach ($fileArrays as $fileArray) {
+                                $fileResult = $board->addFile($params['boardPk'], $fileArray);
+                                if (!$fileResult) {
+                                    break;
+                                }
+                            }
+                        }
                         if (!$result) {
                             $db->rollBack();
                             $this->view->editMessage = "게시글 수정에 실패했습니다.";
-//                         } else if (isset($fileResult) && !$fileResult) {
-//                             $db->rollBack();
-//                             $this->view->writeMessage = "파일 업로드를 실패하여 게시글 작성에 실패했습니다.";
+                        } else if (isset($fileResult) && !$fileResult) {
+                            $db->rollBack();
+                            $this->view->writeMessage = "파일 업로드를 실패하여 게시글 수정에 실패했습니다.";
                         } else {
                             $this->view->editResult = true;
                             $this->view->editMessage = "게시글 수정했습니다.";
