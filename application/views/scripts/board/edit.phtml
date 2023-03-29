@@ -57,6 +57,31 @@ $board = $this->board;
                 $('.remove-file-element' + fileCount).hide();
             }
         });
+        
+        //파일명 옆 x버튼 누를시, 파일 삭제
+        $('.del-file-btn').on('click') {
+            var filePk = $(this).data('filePk');
+            
+            if (confirm("첨부파일을 삭제하시겠습니까?")) {
+                $.ajax({
+                    url: "/board/file-delete",
+                    method: "POST",
+                    data: {"filePk" : filePk},
+                    dataType: "json",
+                    success: function(receive) {
+                        if (receive.status == 1) {
+                            alert("해당 파일을 삭제했습니다.");
+                            window.location.reload();
+                        } else {
+                            alert("파일을 삭제하는 도중 문제가 발생했습니다.");
+                        }
+                    },
+                    error: function() {
+                        alert("파일을 삭제하는 도중 문제가 발생했습니다.");
+                    }
+                });
+            }
+        }
     });
 </script>
 <style type="text/css">
@@ -97,7 +122,7 @@ input[type="file"] {
             <?php 
                 //작성된 게시물에 첨부되어있는 파일 불러오기
                 foreach ($fileArray as $file) {
-                    echo "<div class='file-name'>ㆍ {$file['filename']} <input class='del-file-btn' type='button' value='X' data-filepk=\"{$file['pk']}\"></div>";
+                    echo "<div class='file-name'>ㆍ {$file['filename']} <input class='del-file-btn' type='button' value='X' data-file-pk=\"{$file['pk']}\"></div>";
                 }
             ?>
                 
