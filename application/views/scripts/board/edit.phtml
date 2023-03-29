@@ -77,6 +77,20 @@ input[type="file"] {
         <?php echo $this->boardForm->boardPk; ?>
         <?php echo $this->boardForm->title; ?>
         <?php echo $this->boardForm->content; ?>
+        
+        <div class="" style="margin: 0 5% 0 7%;">
+            <div style="display: flex; flex-flow: wrap;">
+            <?php 
+//                 //작성된 게시물에 첨부되어있는 파일 불러오기
+//                 $fileArrays = $board->getFiles($pk);
+//                 for ($i = 0; $i < count($fileArrays); $i++) {
+//                     echo "<div class='file-name'>ㆍ {$fileArrays[$i]['filename']} <input class='del-file-btn' type='button' value='X' data-filepk=\"{$fileArrays[$i]['pk']}\"></div>";
+//                 }
+            ?>
+                <div class='file-name'>ㆍ 등록된파일 <input class='del-file-btn' type='button' value='X' data-filepk="19"></div>
+            </div>
+        </div>
+        
         <?php echo $this->boardForm->writer; ?>
         <div class="form-group file-element1">
             <?php echo $this->boardForm->uploadFile; ?>

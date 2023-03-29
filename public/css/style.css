@@ -901,11 +901,12 @@ tbody tr td  strong {
 
 .time-info2 {
     font-size: medium;
+    margin-top: 20px;
+    padding-top: 10px;
 }
 
 .edit-time-float {
     float: left;
-    margin-top: 10px;
 }
 
 .edit-time-diplay {
