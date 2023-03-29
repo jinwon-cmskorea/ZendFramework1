@@ -142,14 +142,14 @@ $memberTabe = new Was_Member_Table_Member();
     <div class="text-box">
         <?php echo nl2br($board['content']); ?>
     </div>
-    <?php if ($files) :?>
+    <?php if ($files) : ?>
         <div class="file-info">
             <?php
                 foreach ($files as $file) {
                     if (in_array($file['fileType'], $photo)) {
                         echo '<a class="file-link" data-file-pk="'. $file['pk'] .'"><img src="data:image;base64, '. base64_encode($file['content']) .'" alt="image" style="width: 50px; height: 50px;"></a>';
                     } else if ($file['fileType'] == 'pdf') {
-                        echo '<a href="' . $this->url(array('controller' => 'board', 'action' => 'file-download')) . '?filePk=' . $file['pk'] . '"><img src="/ZendFramework1/data/pdf.png" alt="png Icon" width="50px" height="50px"></a>';
+                        echo '<a href="' . $this->url(array('controller' => 'board', 'action' => 'file-download')) . '?filePk=' . $file['pk'] . '"><img src="' . $this->baseUrl("/icon/pdf.png") . '" alt="png Icon" width="50px" height="50px"></a>';
                     }
                     
                 }
