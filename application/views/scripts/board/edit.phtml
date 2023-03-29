@@ -59,7 +59,7 @@ $board = $this->board;
         });
         
         //파일명 옆 x버튼 누를시, 파일 삭제
-        $('.del-file-btn').on('click') {
+        $('.del-file-btn').on('click', function() { 
             var filePk = $(this).data('filePk');
             
             if (confirm("첨부파일을 삭제하시겠습니까?")) {
@@ -69,19 +69,19 @@ $board = $this->board;
                     data: {"filePk" : filePk},
                     dataType: "json",
                     success: function(receive) {
-                        if (receive.status == 1) {
-                            alert("해당 파일을 삭제했습니다.");
+                        if (receive.result == true) {
+                            alert(receive.message);
                             window.location.reload();
                         } else {
-                            alert("파일을 삭제하는 도중 문제가 발생했습니다.");
+                            alert(receive.message);
                         }
                     },
                     error: function() {
-                        alert("파일을 삭제하는 도중 문제가 발생했습니다.");
+                        alert(receive.message);
                     }
                 });
             }
-        }
+        });
     });
 </script>
 <style type="text/css">

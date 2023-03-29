@@ -250,7 +250,7 @@ class BoardController extends Zend_Controller_Action {
         $uploadFile->removeDecorator('HtmlTag');
         
         $submit = $boardForm->getElement('submit');
-        $submit->setLabel('작 성');
+        $submit->setLabel('수 정');
         
         //pk를 가져와 해당 게시글의 정보를 가져옴
         if ($this->getRequest()) {
@@ -555,6 +555,46 @@ class BoardController extends Zend_Controller_Action {
             
             exit;
         }
+    }
+    
+    /**
+     * 파일 삭제 Action
+     */
+    public function fileDeleteAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $result = array(
+            'result'   => false,
+            'message'  => ''
+        );
+        
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            
+            $boardTable = new Was_Board_Table_Board();
+            $board = new Was_Board($boardTable->getAdapter());
+            
+            try {
+                $deleteFileResult = $board->deleteFile($params['filePk']);
+                
+                if (!$deleteFileResult) {
+                    $result['message'] = '파일을 삭제 중 문제가 발생했습니다.';
+                } else {
+                    $result['result'] = true;
+                    $result['message'] = '파일을 삭제했습니다.';
+                }
+            } catch (Was_Board_Exception $e) {
+                $result['message'] = '존재하지 않는 게시글입니다.';
+            } catch (Zend_Db_Exception $e) {
+                $result['message'] = '파일을 삭제 중 문제가 발생했습니다.';
+            }
+        } else {
+            //예외
+            $result['result'] = false;
+            $result['message'] = '잘못된 요청입니다.';
+        }
+        
+        $this->_helper->json->sendJson($result);
     }
 }
 
