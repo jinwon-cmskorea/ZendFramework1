@@ -6,6 +6,17 @@ $board = $this->board;
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
+        <?php if (isset($this->editResult)) : ?>
+            var editResult = <?php echo $this->editResult ? 'true' : 'false'; ?>;
+            var editMessage = '<?php echo $this->editMessage; ?>';
+            
+            if (!editResult && editMessage != '') {
+                alert(editMessage);
+            } else if (editResult) {
+                window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>?message=editSuccess';
+            }
+        <?php endif; ?>
+    
         $('#cancle').on('click', function() {
             window.location.href = "<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>";
         });
@@ -84,11 +95,7 @@ input[type="file"] {
         <div class="file-div">
             <div class="file-list">
             <?php 
-//                 //작성된 게시물에 첨부되어있는 파일 불러오기
-//                 $fileArrays = $board->getFiles($pk);
-//                 for ($i = 0; $i < count($fileArrays); $i++) {
-//                     echo "<div class='file-name'>ㆍ {$fileArrays[$i]['filename']} <input class='del-file-btn' type='button' value='X' data-filepk=\"{$fileArrays[$i]['pk']}\"></div>";
-//                 }
+                //작성된 게시물에 첨부되어있는 파일 불러오기
                 foreach ($fileArray as $file) {
                     echo "<div class='file-name'>ㆍ {$file['filename']} <input class='del-file-btn' type='button' value='X' data-filepk=\"{$file['pk']}\"></div>";
                 }

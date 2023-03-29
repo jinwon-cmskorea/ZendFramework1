@@ -269,6 +269,62 @@ class BoardController extends Zend_Controller_Action {
                 'content'   => $row['content'],
                 'writer'    => $row['writer']
             ));
+            
+            //수정 버튼을 누를 시, post 값을 가져와서 업데이트 진행
+            if ($this->getRequest()->isPost()) {
+                $this->view->editResult = false;
+                $this->view->editMessage = '';
+                //파일 추가 업로드를 위한 배열 선언
+                $fileArrays = array();
+                
+                $contents = array(
+                    'title'     => $params['title'],
+                    'content'   => $params['content'],
+                    'writer'    => $params['writer']
+                );
+                
+                if ($boardForm->isValid($contents)) {
+                    //board 클래스 세팅
+                    $boardTable = new Was_Board_Table_Board();
+                    $board = new Was_Board($boardTable->getAdapter());
+                    
+                    $db = Zend_Db::factory('mysqli', $boardTable->getAdapter()->getConfig());
+                    //트랜잭션 시작
+                    $db->beginTransaction();
+                    //게시글 작성
+                    try {
+                        $result = $board->edit($contents, $pk);
+                        
+//                         if ($fileArrays) {
+//                             foreach ($fileArrays as $fileArray) {
+//                                 $fileResult = $board->addFile($result['pk'], $fileArray);
+//                                 if (!$fileResult) {
+//                                     break;
+//                                 }
+//                             }
+//                         }
+                        if (!$result) {
+                            $db->rollBack();
+                            $this->view->editMessage = "게시글 수정에 실패했습니다.";
+//                         } else if (isset($fileResult) && !$fileResult) {
+//                             $db->rollBack();
+//                             $this->view->writeMessage = "파일 업로드를 실패하여 게시글 작성에 실패했습니다.";
+                        } else {
+                            $this->view->editResult = true;
+                            $this->view->editMessage = "게시글 수정했습니다.";
+                        }
+                    } catch (Was_Board_Exception $e) {
+                        $db->rollBack();
+                        $this->view->editMessage = $e->getMessage();
+                    } catch (Zend_Db_Exception $e) {
+                        $db->rollBack();
+                        $this->view->editMessage = $e->getMessage();
+                    }
+                    $db->commit();
+                } else {
+                    $this->view->editMessage = "게시글 작성 형식을 지켜주세요.";
+                }
+            }
         }
         
         $this->view->boardForm = $boardForm;
