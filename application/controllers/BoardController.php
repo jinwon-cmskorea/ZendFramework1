@@ -234,6 +234,14 @@ class BoardController extends Zend_Controller_Action {
         
         $this->view->replyForm = $replyForm;
     }
+    
+    /**
+     * 게시글 수정 Action
+     */
+    public function editAction() {
+        
+    }
+    
     /**
      * 게시글 삭제 Action
      */

@@ -110,6 +110,12 @@ $memberTabe = new Was_Member_Table_Member();
             window.open('<?php echo $this->url(array('controller' => 'board', 'action' => 'view-image')); ?>?filePk=' + filePk, '이미지 보기', 'scrollbars=no, resizable=no, width=' + popUpWidth + ', height=' + popUpHeight + ', left='+ popUpX + ',top='+ popUpY);
         });
         
+        $('.edit-btn').on('click', function() {
+            var pk = $(this).data('pk');
+        
+            window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'edit'))?>?pk=' + pk;
+        });
+        
         $('#boardPk').val('<?php echo $board['pk'];?>');
         $('#memberPk').val('<?php echo $session['storage']->pk;?>');
     });
