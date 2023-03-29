@@ -888,6 +888,11 @@ tbody tr td  strong {
 }
 
 /* editBoard.php 요소 */
+.edit-body {
+   width: 90%;
+   margin: 10% 5% 0 5%;
+}
+
 .del-file-btn {
     color: white;
     background-color: rgb(237, 125, 49);
@@ -896,11 +901,11 @@ tbody tr td  strong {
 
 .time-info2 {
     font-size: medium;
-    margin-left: -15px;
 }
 
 .edit-time-float {
     float: left;
+    margin-top: 10px;
 }
 
 .edit-time-diplay {

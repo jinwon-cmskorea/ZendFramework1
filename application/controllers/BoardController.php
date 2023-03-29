@@ -239,7 +239,20 @@ class BoardController extends Zend_Controller_Action {
      * 게시글 수정 Action
      */
     public function editAction() {
+        $request = $this->getRequest();
+        //boardForm 에 필요한 요소 추가 및 수정
+        $boardForm = new Was_Board_Form_Board();
         
+        $boardForm->addElement('hidden', 'boardPk');
+        
+        $uploadFile = $boardForm->getElement('uploadFile');
+        $uploadFile->setName('uploadFile1');
+        $uploadFile->removeDecorator('HtmlTag');
+        
+        $submit = $boardForm->getElement('submit');
+        $submit->setLabel('작 성');
+        
+        $this->view->boardForm = $boardForm;
     }
     
     /**
