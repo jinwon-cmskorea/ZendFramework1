@@ -252,6 +252,25 @@ class BoardController extends Zend_Controller_Action {
         $submit = $boardForm->getElement('submit');
         $submit->setLabel('작 성');
         
+        //pk를 가져와 해당 게시글의 정보를 가져옴
+        if ($this->getRequest()) {
+            $params = $request->getParams();
+            $pk = $params['pk'];
+            
+            $boardTable = new Was_Board_Table_Board();
+            $board = new Was_Board($boardTable->getAdapter());
+            
+            $row = $board->read($pk);
+            $this->view->board = $row;
+            $this->view->boardFiles = $board->getFiles($pk);
+            $boardForm->setDefaults(array(
+                'boardPk'   => $row['pk'],
+                'title'     => $row['title'],
+                'content'   => $row['content'],
+                'writer'    => $row['writer']
+            ));
+        }
+        
         $this->view->boardForm = $boardForm;
     }
     

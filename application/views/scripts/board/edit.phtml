@@ -1,5 +1,8 @@
 <?php
 $this->headTitle('게시글 수정');
+
+$fileArray = $this->boardFiles;
+$board = $this->board;
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -78,16 +81,19 @@ input[type="file"] {
         <?php echo $this->boardForm->title; ?>
         <?php echo $this->boardForm->content; ?>
         
-        <div class="" style="margin: 0 5% 0 7%;">
-            <div style="display: flex; flex-flow: wrap;">
+        <div class="file-div">
+            <div class="file-list">
             <?php 
 //                 //작성된 게시물에 첨부되어있는 파일 불러오기
 //                 $fileArrays = $board->getFiles($pk);
 //                 for ($i = 0; $i < count($fileArrays); $i++) {
 //                     echo "<div class='file-name'>ㆍ {$fileArrays[$i]['filename']} <input class='del-file-btn' type='button' value='X' data-filepk=\"{$fileArrays[$i]['pk']}\"></div>";
 //                 }
+                foreach ($fileArray as $file) {
+                    echo "<div class='file-name'>ㆍ {$file['filename']} <input class='del-file-btn' type='button' value='X' data-filepk=\"{$file['pk']}\"></div>";
+                }
             ?>
-                <div class='file-name'>ㆍ 등록된파일 <input class='del-file-btn' type='button' value='X' data-filepk="19"></div>
+                
             </div>
         </div>
         
@@ -99,7 +105,7 @@ input[type="file"] {
         <?php echo $this->FormButton('add-file', '+', array('class' => 'add-file-element')); ?>
         <div class="time-info2">
              <div class="time-title edit-time-float">마지막 수정시간 : &nbsp;</div>
-             <div class="edit-time-diplay"><?php echo "0000-00-00 00:00:00"; ?></div>
+             <div class="edit-time-diplay"><?php echo $board['updateTime']; ?></div>
         </div>
         <?php echo $this->boardForm->btns; ?>
     </form>
