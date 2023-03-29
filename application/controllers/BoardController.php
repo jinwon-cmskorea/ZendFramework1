@@ -388,6 +388,10 @@ class BoardController extends Zend_Controller_Action {
      */
     public function fileDownloadAction() {
         $this->_helper->layout->disableLayout();
+        //파일 다운로드를 위해 임시로 저장할 디렉토리 지정
+        $bootstrap = $this->getInvokeArg('bootstrap');
+        $temp = $bootstrap->getOption('temp');
+        $tempPath = $temp['path'];
         
         $request = $this->getRequest();
         
@@ -418,7 +422,7 @@ class BoardController extends Zend_Controller_Action {
              * 그래서 iconv 함수를 이용해 인코딩을 변경해줌
              */
             $tmpFileName = iconv('utf-8', 'cp949', $fileArray['filename']);
-            $saveDir = __DIR__ . '/../../data/' . $tmpFileName;
+            $saveDir = $tempPath . $tmpFileName;
             file_put_contents($saveDir, base64_decode($fileArray['content']));
             
             //파일 다운로드 기능을 위한 헤더 설정
