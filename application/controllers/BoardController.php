@@ -312,11 +312,11 @@ class BoardController extends Zend_Controller_Action {
                     //게시글 수정
                     try {
                         //게시글 수정 메소드 호출
-                        $result = $board->edit($contents, $params['boardPk']);
+                        $result = $board->edit($contents, $pk);
                         
                         if ($fileArrays) {
                             foreach ($fileArrays as $fileArray) {
-                                $fileResult = $board->addFile($params['boardPk'], $fileArray);
+                                $fileResult = $board->addFile($pk, $fileArray);
                                 if (!$fileResult) {
                                     break;
                                 }

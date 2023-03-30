@@ -8,12 +8,12 @@ $board = $this->board;
     $(document).ready(function() {
         <?php if (isset($this->editResult)) : ?>
             var editResult = <?php echo $this->editResult ? 'true' : 'false'; ?>;
-            var editMessage = '<?php echo $this->editMessage; ?>';
+            var editMessage = "<?php echo $this->editMessage; ?>";
             
             if (!editResult && editMessage != '') {
                 alert(editMessage);
             } else if (editResult) {
-                window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>?message=editSuccess';
+                window.location.href = "<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>?message=editSuccess";
             }
         <?php endif; ?>
         //작성자 css 클래스 속성 제거
