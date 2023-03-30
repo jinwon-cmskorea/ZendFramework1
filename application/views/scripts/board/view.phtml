@@ -100,7 +100,7 @@ $memberTabe = new Was_Member_Table_Member();
             
             //팝업창 크기
             var popUpWidth = 500
-            var popUpHeight = 540;
+            var popUpHeight = 555;
             //팝업창 위치 조절
             var popUpX = (document.body.offsetWidth / 2) - (popUpWidth / 2);
             //듀얼 모니터인 경우 넣어줘야함.
@@ -163,7 +163,7 @@ $memberTabe = new Was_Member_Table_Member();
         </div>
     <?php endif; ?>
     <div class="time-info">
-         <div class="time-left"><strong>등록시간 &emsp; &nbsp; &nbsp; &nbsp; &nbsp; :</strong>&nbsp;&nbsp;<?php echo $board['insertTime']; ?></div>
+         <div class="time-left"><strong>등록시간 &emsp; &nbsp; &nbsp; :</strong>&nbsp;&nbsp;<?php echo $board['insertTime']; ?></div>
          <div class="time-right"><strong>마지막 수정시간 :</strong>&nbsp; <?php echo $board['updateTime']; ?></div>
     </div>
     <div class="reply">
@@ -171,8 +171,8 @@ $memberTabe = new Was_Member_Table_Member();
         <table class="col-sm-12">
             <thead>
                 <tr>
-                    <th class="col-sm-2"></th>
-                    <th class="col-sm-7"></th>
+                    <th class="col-sm-1"></th>
+                    <th class="col-sm-8"></th>
                     <th class="col-sm-2"></th>
                     <th class="col-sm-1"></th>
                 </tr>
@@ -206,7 +206,7 @@ $memberTabe = new Was_Member_Table_Member();
     <form class="reply-form" method="<?php echo $this->replyForm->getMethod(); ?>">
     	<?php echo $this->replyForm->boardPk; ?>
         <?php echo $this->replyForm->memberPk; ?>
-        <div class="reply-group col-sm-offset-2">
+        <div class="reply-group col-sm-offset-1">
             <?php echo $this->replyForm->content; ?>
             <?php echo $this->replyForm->submit; ?>
         </div>
