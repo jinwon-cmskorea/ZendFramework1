@@ -46,32 +46,33 @@ $memberTabe = new Was_Member_Table_Member();
             }
         });
         
-        $('.reply-form').on('submit', function () {
-            var boardPk = $('#boardPk').val();
-            var memberPk = $('#memberPk').val();
+        $('.reply-submit').on('click', function () {
+            var boardPk = $(this).data('boardPk');
+            var memberPk = $(this).data('memberPk');
             var content = $('.reply-content').val();
             var contentLength = $('.reply-content').val().length;
             
             if (contentLength > 100) {
                 alert('댓글은 100자 이하까지만 작성 가능합니다.');
                 $('.reply-content').focus();
-                return false;
-            }
-            
-            $.ajax({
-                url: "/board/write-reply",
-                method: "POST",
-                data: {"boardPk": boardPk, "memberPk": memberPk, "content": content},
-                dataType: "json",
-                success: function(receive) {
-                    alert(receive.message);
-                    if (receive.result == true) {
-                        window.location.reload();
-                    } else {
-                        $('.reply-content').focus();
+            } else if (!content) {
+                alert('댓글 내용을 작성해주세요.');
+            } else {
+                $.ajax({
+                    url: "/board/write-reply",
+                    method: "POST",
+                    data: {"boardPk": boardPk, "memberPk": memberPk, "content": content},
+                    dataType: "json",
+                    success: function(receive) {
+                        alert(receive.message);
+                        if (receive.result == true) {
+                            window.location.reload();
+                        } else {
+                            $('.reply-content').focus();
+                        }
                     }
-                }
-            });
+                });
+            }
         });
         
         $('.remove-reply-btn').on('click', function() {
@@ -115,9 +116,6 @@ $memberTabe = new Was_Member_Table_Member();
         
             window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'edit'))?>?pk=' + pk;
         });
-        
-        $('#boardPk').val('<?php echo $board['pk'];?>');
-        $('#memberPk').val('<?php echo $session['storage']->pk;?>');
     });
 </script>
 <style type="text/css">
@@ -203,14 +201,11 @@ $memberTabe = new Was_Member_Table_Member();
             </tbody>
         </table>
     </div>
-    <form class="reply-form" method="<?php echo $this->replyForm->getMethod(); ?>">
-    	<?php echo $this->replyForm->boardPk; ?>
-        <?php echo $this->replyForm->memberPk; ?>
-        <div class="reply-group col-sm-offset-1">
-            <?php echo $this->replyForm->content; ?>
-            <?php echo $this->replyForm->submit; ?>
-        </div>
-    </form>
+    
+    <div class="reply-group col-sm-offset-1">
+        <?php echo $this->FormText('reply-content', '', array('class' => 'reply-content', 'placeholder' => '댓글을 남겨요')); ?>
+        <?php echo $this->FormButton('reply-submit', '등록', array('class' => 'reply-submit', 'data-board-pk' => $board['pk'], 'data-member-pk' => $session['storage']->pk));?>
+    </div>
     <div class="view-page-button">
         <?php
         if (($session['storage']->pk == $board['memberPk']) || ($session['storage']->position <= 2)) {

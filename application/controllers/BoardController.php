@@ -229,12 +229,6 @@ class BoardController extends Zend_Controller_Action {
             }
             
         }
-        //댓글 작성을 위해 hidden 요소 추가
-        $replyForm = new Was_Board_Form_Reply();
-        $replyForm->addElement('hidden', 'boardPk');
-        $replyForm->addElement('hidden', 'memberPk');
-        
-        $this->view->replyForm = $replyForm;
     }
     
     /**

@@ -808,6 +808,10 @@ tbody tr td  strong {
     padding-left: 45px;
 }
 
+.reply tbody tr td {
+    font-size: medium;
+}
+
 .reply-group .reply-content {
     width: 40%;
     height: 36px;
