@@ -16,6 +16,8 @@ $board = $this->board;
                 window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>?message=editSuccess';
             }
         <?php endif; ?>
+        //작성자 css 클래스 속성 제거
+        $('#writer').removeClass('input-writer');
     
         $('#cancle').on('click', function() {
             window.location.href = "<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>";
@@ -83,7 +85,25 @@ $board = $this->board;
             }
         });
         
-        $('#writer').removeClass('input-writer');
+        $('.edit-form').on('submit', function() {
+            var title = $('#title').val();
+            var content = $('#content').val();
+            var writer = $('#writer').val();
+            //이름 정규식
+            var writerReg = /[가-힣A-Za-z]+$/;
+            
+            if (!title || !content || !writer) {
+                alert('제목, 내용, 작성자 는 필수사항입니다.');
+                return false;
+            }
+            
+            if (!writerReg.test(writer)) {
+                alert('이름은 한글, 영문만 입력할 수 있습니다.');
+                return false;
+            }
+            
+            $('.edit-form').submit();
+        });
     });
 </script>
 <style type="text/css">
