@@ -12,6 +12,7 @@ $board = $this->board;
             
             if (!editResult && editMessage != '') {
                 alert(editMessage);
+                history.back(-1);
             } else if (editResult) {
                 window.location.href = "<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>?message=editSuccess";
             }
@@ -143,8 +144,10 @@ input[type="file"] {
             <div class="file-list">
             <?php 
                 //작성된 게시물에 첨부되어있는 파일 불러오기
-                foreach ($fileArray as $file) {
-                    echo "<div class='file-name'>ㆍ {$file['filename']} <input class='del-file-btn' type='button' value='X' data-file-pk=\"{$file['pk']}\"></div>";
+                if ($fileArray) {
+                    foreach ($fileArray as $file) {
+                        echo "<div class='file-name'>ㆍ {$file['filename']} <input class='del-file-btn' type='button' value='X' data-file-pk=\"{$file['pk']}\"></div>";
+                    }
                 }
             ?>
                 

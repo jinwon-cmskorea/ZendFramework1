@@ -262,15 +262,20 @@ class BoardController extends Zend_Controller_Action {
             $boardTable = new Was_Board_Table_Board();
             $board = new Was_Board($boardTable->getAdapter());
             
-            $row = $board->read($pk);
-            $this->view->board = $row;
-            $this->view->boardFiles = $board->getFiles($pk);
-            $boardForm->setDefaults(array(
-                'boardPk'   => $row['pk'],
-                'title'     => $row['title'],
-                'content'   => $row['content'],
-                'writer'    => $row['writer']
-            ));
+            try {
+                $row = $board->read($pk);
+                $this->view->board = $row;
+                $this->view->boardFiles = $board->getFiles($pk);
+                $boardForm->setDefaults(array(
+                    'boardPk'   => $row['pk'],
+                    'title'     => $row['title'],
+                    'content'   => $row['content'],
+                    'writer'    => $row['writer']
+                ));
+            } catch (Was_Board_Exception $e) {
+                $this->view->editResult = false;
+                $this->view->editMessage = '존재하지 않는 게시글입니다.';
+            }
             
             //수정 버튼을 누를 시, post 값을 가져와서 업데이트 진행
             if ($this->getRequest()->isPost()) {
