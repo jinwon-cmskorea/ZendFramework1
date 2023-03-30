@@ -212,18 +212,8 @@ class BoardController extends Zend_Controller_Action {
             $boardTable = new Was_Board_Table_Board();
             $board = new Was_Board($boardTable->getAdapter());
             
-            //게시글 조회수를 가져옴
-            $select = $boardTable->select();
-            $select->from($boardTable->getTableName(), array('views'))->where("pk = ?", $pk);
-            $row = $boardTable->getAdapter()->fetchRow($select);
-            
-            $views = $row['views'];
-            
-            //해당 게시글이 보유한 내용, 파일, 댓글을 가져옴, 조회수 증가
+            //해당 게시글이 보유한 내용, 파일, 댓글을 가져옴
             try {
-                $views++;
-                $boardTable->update(array('views' => $views), "pk = {$pk}");
-                
                 $this->view->board = $board->read($pk);
                 $this->view->replys = $board->getReply($pk);
                 $this->view->files = $board->getFiles($pk);
@@ -600,6 +590,54 @@ class BoardController extends Zend_Controller_Action {
                 $result['message'] = '존재하지 않는 게시글입니다.';
             } catch (Zend_Db_Exception $e) {
                 $result['message'] = '파일을 삭제 중 문제가 발생했습니다.';
+            }
+        } else {
+            //예외
+            $result['result'] = false;
+            $result['message'] = '잘못된 요청입니다.';
+        }
+        
+        $this->_helper->json->sendJson($result);
+    }
+    
+    /**
+     * 조회수 증가 Action
+     */
+    public function increaseViewAction() {
+        $this->_helper->layout->disableLayout();
+        
+        $result = array(
+            'result'   => false,
+            'message'  => ''
+        );
+        
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $params = $this->getAllParams();
+            
+            $boardTable = new Was_Board_Table_Board();
+            $board = new Was_Board($boardTable->getAdapter());
+            
+            try {
+                $board->read($params['pk']);
+                //게시글 조회수를 가져옴
+                $select = $boardTable->select();
+                $select->from($boardTable->getTableName(), array('views'))->where("pk = ?", $params['pk']);
+                $row = $boardTable->getAdapter()->fetchRow($select);
+                $views = $row['views'];
+                
+                $views++;
+                $updateResult = $boardTable->update(array('views' => $views), "pk = {$params['pk']}");
+                
+                if ($updateResult == 1) {
+                    $result['result'] = true;
+                    $result['message'] = '조회수 증가';
+                } else {
+                    $result['message'] = '조회수를 증가시키는 중에 문제가 발생했습니다.';
+                }
+            } catch (Was_Board_Exception $e) {
+                $result['message'] = '존재하지 않는 게시글입니다.';
+            } catch (Zend_Db_Exception $e) {
+                $result['message'] = 'DB 문제가 발생했습니다.';
             }
         } else {
             //예외
