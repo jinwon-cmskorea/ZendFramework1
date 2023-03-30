@@ -13,11 +13,13 @@ $(document).ready(function() {
     <?php if (isset($this->writeResult)) : ?>
         var writeResult = <?php echo $this->writeResult ? 'true' : 'false'; ?>;
         var writeMessage = '<?php echo $this->writeMessage; ?>';
+        var pk = <?php echo $this->pk ? $this->pk : "0"; ?>;
         
         if (!writeResult && writeMessage != '') {
             alert(writeMessage);
         } else if (writeResult) {
-            window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>?message=success';
+            alert('게시글을 작성했습니다.');
+            window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'view')); ?>?pk=' + pk;
         }
     <?php endif; ?>
 
@@ -61,6 +63,26 @@ $(document).ready(function() {
             $('.remove-file-element' + fileCount).hide();
         }
     });
+    
+    $('.write-form').on('submit', function() {
+            var title = $('#title').val();
+            var content = $('#content').val();
+            var writer = $('#writer').val();
+            //이름 정규식
+            var writerReg = /[가-힣A-Za-z]+$/;
+            
+            if (!title || !content || !writer) {
+                alert('제목, 내용, 작성자 는 필수사항입니다.');
+                return false;
+            }
+            
+            if (!writerReg.test(writer)) {
+                alert('이름은 한글, 영문만 입력할 수 있습니다.');
+                return false;
+            }
+            
+            $('.write-form').submit();
+        });
 });
 </script>
 <style type="text/css">

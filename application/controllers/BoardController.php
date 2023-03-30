@@ -168,9 +168,12 @@ class BoardController extends Zend_Controller_Action {
                     } else if (isset($fileResult) && !$fileResult) {
                         $db->rollBack();
                         $this->view->writeMessage = "파일 업로드를 실패하여 게시글 작성에 실패했습니다.";
+                        $board->delete($result['pk']);
                     } else {
                         $this->view->writeResult = true;
                         $this->view->writeMessage = "게시글 작성했습니다.";
+                        $this->view->pk = $result['pk'];
+                        $db->commit();
                     }
                 } catch (Was_Board_Exception $e) {
                     $db->rollBack();
@@ -179,7 +182,6 @@ class BoardController extends Zend_Controller_Action {
                     $db->rollBack();
                     $this->view->writeMessage = $e->getMessage();
                 }
-                $db->commit();
             } else {
                 $this->view->writeMessage = "게시글 작성 형식을 지켜주세요.";
             }
