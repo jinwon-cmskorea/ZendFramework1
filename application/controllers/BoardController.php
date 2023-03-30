@@ -165,9 +165,15 @@ class BoardController extends Zend_Controller_Action {
                     if (!$result) {
                         $db->rollBack();
                         $this->view->writeMessage = "게시글 작성에 실패했습니다.";
-                    } else if (isset($fileResult) && !$fileResult) {
+                    } else if (isset($fileResult) && (!$fileResult || is_numeric($fileResult))) {
                         $db->rollBack();
-                        $this->view->writeMessage = "파일 업로드를 실패하여 게시글 작성에 실패했습니다.";
+                        if ($fileResult == false) {
+                            $this->view->writeMessage = "파일 업로드를 실패하여 게시글 수정에 실패했습니다.";
+                        } else if ($fileResult === Was_Board::INVALID_FILE_TYPE) {
+                            $this->view->writeMessage = "허용되지 않는 파일 확장자입니다.\\n업로드 가능한 파일은 jpeg, jpg, gif, png, pdf 입니다.";
+                        } else if ($fileResult === Was_Board::INVALID_FILE_SIZE) {
+                            $this->view->writeMessage = "파일의 크기가 너무 큽니다.\\n최대 3MB의 파일까지만 업로드 가능합니다.";
+                        }
                         $board->delete($result['pk']);
                     } else {
                         $this->view->writeResult = true;
