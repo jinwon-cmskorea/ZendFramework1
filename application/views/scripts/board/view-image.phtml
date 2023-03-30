@@ -9,15 +9,10 @@ $(document).ready(function() {
 });
 </script>
 <img src="data:image;base64, <?php echo $fileArray['content']; ?>" alt="image" style="width: 500px; height: 500px;">
-<div>
+<div class='file-download-div'>
     <a href="<?php echo $this->url(array('controller' => 'board', 'action' => 'file-download')); ?>?filePk=<?php echo $fileArray['pk']?>">
     <?php 
         echo $this->FormButton('file-download', '파일 다운로드', array('class' => 'file-download'));
     ?>
     </a>
-</div>
-<div>
-<?php 
-    echo $this->FormButton('close-popup', '창 닫기', array('class' => 'close-popup'));
-?>
 </div>
