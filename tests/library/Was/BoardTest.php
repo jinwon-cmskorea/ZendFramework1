@@ -243,32 +243,32 @@ class Was_BoardTest extends PHPUnit_Framework_TestCase {
         $fileInfos = array(
             'type' => ''
         );
-        $this->assertFalse($this->board->addFile($infos['boardPk'], $fileInfos));
+        $this->assertEquals(Was_Board::INVALID_FILE_TYPE, $this->board->addFile($infos['boardPk'], $fileInfos));
         
         //fileType 필드가 존재하지않는 경우
         $fileInfos = $this->fileTestArray;
         unset($fileInfos['type']);
-        $this->assertFalse($this->board->addFile($infos['boardPk'], $fileInfos));
+        $this->assertEquals(Was_Board::INVALID_FILE_TYPE, $this->board->addFile($infos['boardPk'], $fileInfos));
         
         //허용되지않은 확장자
         $fileInfos = $this->fileTestArray;
         $fileInfos['type'] = 'hwp';
-        $this->assertFalse($this->board->addFile($infos['boardPk'], $fileInfos));
+        $this->assertEquals(Was_Board::INVALID_FILE_TYPE, $this->board->addFile($infos['boardPk'], $fileInfos));
         
         //fileSize 필드가 존재하지 않는 경우
         $fileInfos = $this->fileTestArray;
         unset($fileInfos['size']);
-        $this->assertFalse($this->board->addFile($infos['boardPk'], $fileInfos));
+        $this->assertEquals(Was_Board::INVALID_FILE_SIZE, $this->board->addFile($infos['boardPk'], $fileInfos));
         
         //fileSize이 빈값인 경우
         $fileInfos = $this->fileTestArray;
         $fileInfos['size'] = '';
-        $this->assertFalse($this->board->addFile($infos['boardPk'], $fileInfos));
+        $this->assertEquals(Was_Board::INVALID_FILE_SIZE, $this->board->addFile($infos['boardPk'], $fileInfos));
         
         //허용된 fileSize를 초과하는 경우
         $fileInfos = $this->fileTestArray;
         $fileInfos['size'] = 3200000;
-        $this->assertFalse($this->board->addFile($infos['boardPk'], $fileInfos));
+        $this->assertEquals(Was_Board::INVALID_FILE_SIZE, $this->board->addFile($infos['boardPk'], $fileInfos));
         
         //name 필드가 존재하지 않는 경우
         $fileInfos = $this->fileTestArray;

@@ -9,10 +9,13 @@ $board = $this->board;
         <?php if (isset($this->editResult)) : ?>
             var editResult = <?php echo $this->editResult ? 'true' : 'false'; ?>;
             var editMessage = "<?php echo $this->editMessage; ?>";
+            var editNotBoard = "<?php echo $this->editNotBoard ? $this->editNotBoard : ''; ?>";
             
             if (!editResult && editMessage != '') {
                 alert(editMessage);
-                history.back(-1);
+            } else if (!editResult && editNotBoard != '') {
+                alert(editNotBoard);
+                window.location.href = "<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>";
             } else if (editResult) {
                 window.location.href = "<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>?message=editSuccess";
             }

@@ -55,6 +55,16 @@ class Was_Board {
      * @var array
      */
     protected $_validFileType = array();
+    /**
+     * 유효하지 않은 파일 확장자
+     * @var number
+     */
+    const INVALID_FILE_TYPE = 2;
+    /**
+     * 파일의 크기가 너무 크거나 존재하지않음
+     * @var number
+     */
+    const INVALID_FILE_SIZE = 3;
     
     public function __construct(Zend_Db_Adapter_Abstract $dbAdapter) {
         $this->setBoardTable($dbAdapter);
@@ -298,14 +308,14 @@ class Was_Board {
             throw new Was_Board_Exception($e->getMessage());
         }
         
-        if (!isset($fileInfos['type']) || !$fileInfos['type']) return false;
+        if (!isset($fileInfos['type']) || !$fileInfos['type']) return self::INVALID_FILE_TYPE;
         
         $this->getValidFileTypes();
-        if (array_search($fileInfos['type'], $this->_validFileType) === false) return false;
+        if (array_search($fileInfos['type'], $this->_validFileType) === false) return self::INVALID_FILE_TYPE;
         
         //파일 업로드 시 3MB 초과하면 false 반환
         if (!isset($fileInfos['size']) || !$fileInfos['size'] ||
-            ($fileInfos['size'] && $fileInfos['size'] > 3145728)) return false;
+            ($fileInfos['size'] && $fileInfos['size'] > 3145728)) return self::INVALID_FILE_SIZE;
         
         if (!isset($fileInfos['name']) || !$fileInfos['name']) return false;
         

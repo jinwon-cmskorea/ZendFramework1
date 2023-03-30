@@ -268,7 +268,7 @@ class BoardController extends Zend_Controller_Action {
                 ));
             } catch (Was_Board_Exception $e) {
                 $this->view->editResult = false;
-                $this->view->editMessage = '존재하지 않는 게시글입니다.';
+                $this->view->editNotBoard = '존재하지 않는 게시글입니다.';
             }
             
             //수정 버튼을 누를 시, post 값을 가져와서 업데이트 진행
@@ -318,7 +318,7 @@ class BoardController extends Zend_Controller_Action {
                         if ($fileArrays) {
                             foreach ($fileArrays as $fileArray) {
                                 $fileResult = $board->addFile($pk, $fileArray);
-                                if (!$fileResult) {
+                                if ($fileResult == false || $fileResult >= Was_Board::INVALID_FILE_TYPE) {
                                     break;
                                 }
                             }
@@ -326,9 +326,15 @@ class BoardController extends Zend_Controller_Action {
                         if (!$result) {
                             $db->rollBack();
                             $this->view->editMessage = "게시글 수정에 실패했습니다.";
-                        } else if (isset($fileResult) && !$fileResult) {
+                        } else if (isset($fileResult)) {
                             $db->rollBack();
-                            $this->view->writeMessage = "파일 업로드를 실패하여 게시글 수정에 실패했습니다.";
+                            if ($fileResult == false) {
+                                $this->view->editMessage = "파일 업로드를 실패하여 게시글 수정에 실패했습니다.";
+                            } else if ($fileResult == Was_Board::INVALID_FILE_TYPE) {
+                                $this->view->editMessage = "허용되지 않는 파일 확장자입니다.\\n업로드 가능한 파일은 jpeg, jpg, gif, png, pdf 입니다.";
+                            } else if ($fileResult == Was_Board::TOO_LARGE_FILE) {
+                                $this->view->editMessage = "파일의 크기가 너무 큽니다.\\n최대 3MB의 파일까지만 업로드 가능합니다.";
+                            }
                         } else {
                             $this->view->editResult = true;
                             $this->view->editMessage = "게시글 수정했습니다.";
