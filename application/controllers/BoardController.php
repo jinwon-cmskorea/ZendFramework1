@@ -282,12 +282,20 @@ class BoardController extends Zend_Controller_Action {
                 
                 //파일 업로드를 위해, 업로드한 파일 정보들을 담은 배열 생성
                 $files = $_FILES;
+                $allowType = $board->getValidFileTypes();
+                $checkFile = true;
+                
                 foreach ($files as $file) {
                     if (!$file['name'] || $file['error']) {
                         continue;
                     }
                     $fileType = explode('/', $file['type']);
                     $fileContent = file_get_contents($file['tmp_name']);
+                    
+                    if (!array_search($fileType[1], $allowType)) {
+                        $checkFile = false;
+                        break;
+                    }
                     
                     $temp = array(
                         'name'      => $file['name'],
@@ -298,7 +306,7 @@ class BoardController extends Zend_Controller_Action {
                     array_push($fileArrays, $temp);
                 }
                 
-                if ($boardForm->isValid($contents)) {
+                if ($boardForm->isValid($contents) && $checkFile) {
                     //board 클래스 세팅
                     $boardTable = new Was_Board_Table_Board();
                     $board = new Was_Board($boardTable->getAdapter());
@@ -314,7 +322,7 @@ class BoardController extends Zend_Controller_Action {
                         if ($fileArrays) {
                             foreach ($fileArrays as $fileArray) {
                                 $fileResult = $board->addFile($pk, $fileArray);
-                                if ($fileResult == false || $fileResult >= Was_Board::INVALID_FILE_TYPE) {
+                                if ($fileResult == false || is_numeric($fileResult)) {
                                     break;
                                 }
                             }
@@ -343,6 +351,8 @@ class BoardController extends Zend_Controller_Action {
                         $this->view->editMessage = $e->getMessage();
                     }
                     $db->commit();
+                } else if (!$checkFile) {
+                    $this->view->editMessage = "허용되지 않는 파일 확장자가 존재합니다.\\n업로드 가능한 파일은 jpeg, jpg, gif, png, pdf 입니다.";
                 } else {
                     $this->view->editMessage = "게시글 작성 형식을 지켜주세요.";
                 }
