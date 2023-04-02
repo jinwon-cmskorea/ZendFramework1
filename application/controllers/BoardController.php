@@ -113,6 +113,9 @@ class BoardController extends Zend_Controller_Action {
         
         if ($this->getRequest()->isPost()) {
             $params = $request->getParams();
+            //board 클래스 세팅 및 허용된 파일 확장자를 불러옴
+            $boardTable = new Was_Board_Table_Board();
+            $board = new Was_Board($boardTable->getAdapter());
             //작성 완료시 view 에 리턴해줄 변수 설정
             $this->view->writeResult = false;
             $this->view->writeMessage = '';
@@ -126,12 +129,20 @@ class BoardController extends Zend_Controller_Action {
             );
             //파일 업로드를 위해, 업로드한 파일 정보들을 담은 배열 생성
             $files = $_FILES;
+            $allowType = $board->getValidFileTypes();
+            $checkFile = true;
+            
             foreach ($files as $file) {
                 if (!$file['name'] || $file['error']) {
                     continue;
                 }
                 $fileType = explode('/', $file['type']);
                 $fileContent = file_get_contents($file['tmp_name']);
+                
+                if (!array_search($fileType[1], $allowType)) {
+                    $checkFile = false;
+                    break;
+                }
                 
                 $temp = array(
                     'name'      => $file['name'],
@@ -142,11 +153,7 @@ class BoardController extends Zend_Controller_Action {
                 array_push($fileArrays, $temp);
             }
             
-            if ($boardForm->isValid($contents)) {
-                //board 클래스 세팅 및 허용된 파일 확장자를 불러옴
-                $boardTable = new Was_Board_Table_Board();
-                $board = new Was_Board($boardTable->getAdapter());
-                
+            if ($boardForm->isValid($contents) && $checkFile) {
                 $db = Zend_Db::factory('mysqli', $boardTable->getAdapter()->getConfig());
                 //트랜잭션 시작
                 $db->beginTransaction();
@@ -157,7 +164,7 @@ class BoardController extends Zend_Controller_Action {
                     if ($fileArrays) {
                         foreach ($fileArrays as $fileArray) {
                             $fileResult = $board->addFile($result['pk'], $fileArray);
-                            if (!$fileResult) {
+                            if (!$fileResult || is_numeric($fileResult)) {
                                 break;
                             }
                         }
@@ -188,6 +195,8 @@ class BoardController extends Zend_Controller_Action {
                     $db->rollBack();
                     $this->view->writeMessage = $e->getMessage();
                 }
+            } else if (!$checkFile) {
+                $this->view->writeMessage = "허용되지 않는 파일 확장자가 존재합니다.\\n업로드 가능한 파일은 jpeg, jpg, gif, png, pdf 입니다.";
             } else {
                 $this->view->writeMessage = "게시글 작성 형식을 지켜주세요.";
             }
