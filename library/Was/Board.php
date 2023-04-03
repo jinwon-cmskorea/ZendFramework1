@@ -406,22 +406,23 @@ class Was_Board {
         //파일 기본키가 존재하고 게시글 기본키가 없는 경우
         if ((isset($filePk) && $filePk) && (!isset($boardPk) || !$boardPk)) {
             //파일 하나 삭제
-            $fileTable->getAdapter()->delete($fileTable->getTableName(), "pk = {$filePk}");
+//             $fileTable->getAdapter()->delete($fileTable->getTableName(), "pk = {$filePk}");
+            $fileTable->find($filePk)->current()->delete();
             //해당하는 파일 내용도 삭제
-            $detailsTable = $this->getFileDetailsTable();
-            $detailsTable->getAdapter()->delete($detailsTable->getTableName(), "filePk = {$filePk}");
+//             $detailsTable = $this->getFileDetailsTable();
+//             $detailsTable->getAdapter()->delete($detailsTable->getTableName(), "filePk = {$filePk}");
         } else if(isset($boardPk) && $boardPk) {
             //해당 게시글의 파일을 전부 지우기 위해 filePk를 전부 가져옴
-            $select = $fileTable->select();
-            $select->from($fileTable->getTableName(), array("pk"))->where('boardPk = ?', $boardPk);
-            $indexs = $fileTable->getAdapter()->fetchAll($select);
-            //filePk 들을 가져온 후 delete
-            $fileTable->getAdapter()->delete($fileTable->getTableName(), "boardPk = {$boardPk}");
+//             $select = $fileTable->select();
+//             $select->from($fileTable->getTableName(), array("pk"))->where('boardPk = ?', $boardPk);
+//             $indexs = $fileTable->getAdapter()->fetchAll($select);
+//             //filePk 들을 가져온 후 delete
+//             $fileTable->getAdapter()->delete($fileTable->getTableName(), "boardPk = {$boardPk}");
             
-            $detailsTable = $this->getFileDetailsTable();
-            foreach ($indexs as $index => $pk) {
-                $detailsTable->getAdapter()->delete($detailsTable->getTableName(), "filePk = {$pk['pk']}");
-            }
+//             $detailsTable = $this->getFileDetailsTable();
+//             foreach ($indexs as $index => $pk) {
+//                 $detailsTable->getAdapter()->delete($detailsTable->getTableName(), "filePk = {$pk['pk']}");
+//             }
         }
         
         return 1;
@@ -528,7 +529,7 @@ class Was_Board {
         }
         
         //파일 일괄 삭제
-        $this->deleteFile(null, $pk);
+//         $this->deleteFile(null, $pk);
         
         //댓글 일괄 삭제
 //         $this->deleteReply(null, $pk);

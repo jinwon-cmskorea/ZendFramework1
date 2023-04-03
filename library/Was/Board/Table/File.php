@@ -15,5 +15,18 @@ class Was_Board_Table_File extends Was_Board_Table_Abstract {
      * @var string
      */
     protected $_name = 'file';
+    
+    protected $_dependentTables = array(
+        'Was_Board_Table_FileDetails'
+    );
+    
+    protected $_referenceMap = array(
+        'Board' => array(
+            'columns'           => 'boardPk',
+            'refTableClass'     => 'Was_Board_Table_Board',
+            'refColumns'        => 'pk',
+            'onDelete'          => self::CASCADE
+        )
+    );
 }
 

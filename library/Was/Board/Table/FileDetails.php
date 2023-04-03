@@ -15,5 +15,14 @@ class Was_Board_Table_FileDetails extends Was_Board_Table_Abstract {
      * @var string
      */
     protected $_name = 'file_details';
+    
+    protected $_referenceMap = array(
+        'Reply' => array(
+            'columns'           => 'filePk',
+            'refTableClass'     => 'Was_Board_Table_File',
+            'refColumns'        => 'pk',
+            'onDelete'          => self::CASCADE
+        )
+    );
 }
 
