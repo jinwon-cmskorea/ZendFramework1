@@ -15,5 +15,14 @@ class Was_Board_Table_BoardReply extends Was_Board_Table_Abstract {
      * @var string
      */
     protected $_name = 'board_reply';
+    
+    protected $_referenceMap = array(
+        'Board' => array(
+            'columns'           => 'boardPk',
+            'refTableClass'     => 'Was_Board_Table_Board',
+            'refColumns'        => 'pk',
+            'onDelete'          => self::CASCADE
+        )
+    );
 }
 

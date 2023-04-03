@@ -15,5 +15,7 @@ class Was_Board_Table_Board extends Was_Board_Table_Abstract {
      * @var string
      */
     protected $_name = 'board';
+    
+    protected $_dependentTables = array('Was_Board_Table_BoardReply');
 }
 

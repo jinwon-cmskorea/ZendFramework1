@@ -531,11 +531,12 @@ class Was_Board {
         $this->deleteFile(null, $pk);
         
         //댓글 일괄 삭제
-        $this->deleteReply(null, $pk);
+//         $this->deleteReply(null, $pk);
         
         $boardTable = $this->getBoardTable();
         //파일, 댓글 삭제 후 게시글 삭제
-        $num = $boardTable->getAdapter()->delete($boardTable->getTableName(), "pk = {$pk}");
+//         $num = $boardTable->getAdapter()->delete($boardTable->getTableName(), "pk = {$pk}");
+        $num = $boardTable->find($pk)->current()->delete();
         if ($num != 1) return false;
         
         return 1;
@@ -628,7 +629,7 @@ class Was_Board {
             $boardReplyTable->getAdapter()->delete($boardReplyTable->getTableName(), "pk = {$replyPk}");
         } else if (isset($boardPk) && $boardPk) {
             //해당 게시글의 댓글 일괄 삭제
-            $boardReplyTable->getAdapter()->delete($boardReplyTable->getTableName(), "boardPk = {$boardPk}");
+//             $boardReplyTable->getAdapter()->delete($boardReplyTable->getTableName(), "boardPk = {$boardPk}");
         }
         
         return 1;
