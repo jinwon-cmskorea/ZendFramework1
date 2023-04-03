@@ -473,8 +473,6 @@ class BoardController extends Zend_Controller_Action {
                     $result['result'] = true;
                     $result['message'] = '댓글을 삭제했습니다.';
                 }
-            } catch (Was_Board_Exception $e) {
-                $result['message'] = '존재하지 않는 게시글입니다.';
             } catch (Zend_Db_Exception $e) {
                 $result['message'] = '댓글을 삭제 중 문제가 발생했습니다.';
             }
@@ -605,8 +603,6 @@ class BoardController extends Zend_Controller_Action {
                     $result['result'] = true;
                     $result['message'] = '파일을 삭제했습니다.';
                 }
-            } catch (Was_Board_Exception $e) {
-                $result['message'] = '존재하지 않는 게시글입니다.';
             } catch (Zend_Db_Exception $e) {
                 $result['message'] = '파일을 삭제 중 문제가 발생했습니다.';
             }

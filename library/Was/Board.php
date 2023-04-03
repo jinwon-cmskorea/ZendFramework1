@@ -225,7 +225,7 @@ class Was_Board {
      *            'content'  => '내용'
      *        )
      * @param number 작성자 고유키
-     * @return Zend_Db_Table_Row | string 필수항목 미입력, 올바르지 않은 이름 형식시 에러문 반환
+     * @return Zend_Db_Table_Row | string 필수항목 미입력, 올바르지 않은 이름 형식시 에러문 반환 | boolean db 처리에 문제발생시 false 반환
      */
     public function write(array $contents, $memberPk) {
         //필수항목 및 이름 형식 체크
@@ -263,7 +263,7 @@ class Was_Board {
      *            'content'  => '내용'
      *        )
      * @param number 게시글기본키
-     * @return number 수정 성공시 1 반환
+     * @return number 수정 성공시 1 반환 | boolean db 처리에 문제발생시 false 반환
      */
     public function edit(array $contents, $boardPk) {
         // 글 수정
@@ -389,40 +389,14 @@ class Was_Board {
      * 해당 파일을 삭제한다
      * 
      * @param number 파일기본키
-     * @param number 게시글기본키 [optional]
      * @return number
      */
-    public function deleteFile($filePk = null, $boardPk = null) {
-        if ($boardPk) {
-            //존재하는 게시글 번호인지 확인
-            try {
-                $this->_checkExistBoard($boardPk);
-            } catch (Was_Board_Exception $e) {
-                throw new Was_Board_Exception($e->getMessage());
-            }
-        }
-        
+    public function deleteFile($filePk) {
         $fileTable = $this->getFileTable();
         //파일 기본키가 존재하고 게시글 기본키가 없는 경우
-        if ((isset($filePk) && $filePk) && (!isset($boardPk) || !$boardPk)) {
+        if (isset($filePk) && $filePk) {
             //파일 하나 삭제
-//             $fileTable->getAdapter()->delete($fileTable->getTableName(), "pk = {$filePk}");
             $fileTable->find($filePk)->current()->delete();
-            //해당하는 파일 내용도 삭제
-//             $detailsTable = $this->getFileDetailsTable();
-//             $detailsTable->getAdapter()->delete($detailsTable->getTableName(), "filePk = {$filePk}");
-        } else if(isset($boardPk) && $boardPk) {
-            //해당 게시글의 파일을 전부 지우기 위해 filePk를 전부 가져옴
-//             $select = $fileTable->select();
-//             $select->from($fileTable->getTableName(), array("pk"))->where('boardPk = ?', $boardPk);
-//             $indexs = $fileTable->getAdapter()->fetchAll($select);
-//             //filePk 들을 가져온 후 delete
-//             $fileTable->getAdapter()->delete($fileTable->getTableName(), "boardPk = {$boardPk}");
-            
-//             $detailsTable = $this->getFileDetailsTable();
-//             foreach ($indexs as $index => $pk) {
-//                 $detailsTable->getAdapter()->delete($detailsTable->getTableName(), "filePk = {$pk['pk']}");
-//             }
         }
         
         return 1;
@@ -528,15 +502,8 @@ class Was_Board {
             throw new Was_Board_Exception($e->getMessage());
         }
         
-        //파일 일괄 삭제
-//         $this->deleteFile(null, $pk);
-        
-        //댓글 일괄 삭제
-//         $this->deleteReply(null, $pk);
-        
         $boardTable = $this->getBoardTable();
         //파일, 댓글 삭제 후 게시글 삭제
-//         $num = $boardTable->getAdapter()->delete($boardTable->getTableName(), "pk = {$pk}");
         $num = $boardTable->find($pk)->current()->delete();
         if ($num != 1) return false;
         
@@ -608,29 +575,16 @@ class Was_Board {
     /**
      * 댓글을 삭제한다
      * 
-     * @param number 댓글기본키 [optional]
-     * @param number 게시글 기본키 [optional]
+     * @param number 댓글기본키
      * @return number
      * @exception Was_Board_Exception 게시글이 존재하지않을 시
      */
-    public function deleteReply($replyPk = null, $boardPk = null) {
-        if ($boardPk) { 
-            //존재하는 게시글 번호인지 확인
-            try {
-                $this->_checkExistBoard($boardPk);
-            } catch (Was_Board_Exception $e) {
-                throw new Was_Board_Exception($e->getMessage());
-            }
-        }
-        
+    public function deleteReply($replyPk) {
         $boardReplyTable = $this->getBoardReplyTable();
         //댓글 기본키는 존재하나, 게시글기본키가 존재하지 않는 경우
-        if ((isset($replyPk) && $replyPk) && (!isset($boardPk) || !$boardPk)) {
+        if (isset($replyPk) && $replyPk) {
             //댓글 하나 삭제
             $boardReplyTable->getAdapter()->delete($boardReplyTable->getTableName(), "pk = {$replyPk}");
-        } else if (isset($boardPk) && $boardPk) {
-            //해당 게시글의 댓글 일괄 삭제
-//             $boardReplyTable->getAdapter()->delete($boardReplyTable->getTableName(), "boardPk = {$boardPk}");
         }
         
         return 1;
