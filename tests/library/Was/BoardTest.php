@@ -311,7 +311,7 @@ class Was_BoardTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($this->board->addFile($infos['boardPk'], $fileInfos2));
         
         $this->assertEquals(2, count($this->board->getFiles($infos['boardPk'])));
-        $this->assertEquals(1, $this->board->deleteFile(null, $infos['boardPk']));
+        $this->assertEquals(1, $this->board->delete($infos['boardPk']));
         $this->assertEquals(0, count($this->board->getFiles($infos['boardPk'])));
         
         //테스트 파일 삭제
@@ -593,8 +593,13 @@ class Was_BoardTest extends PHPUnit_Framework_TestCase {
         $this->board->writeReply($boardRow['pk'], 30, '현재 작성자 기본키 30');
         
         $this->assertEquals(2, count($this->board->getReply($boardRow['pk'])));
-        $this->board->deleteReply(null, $boardRow['pk']);
-        $this->assertEquals(0, count($this->board->getReply($boardRow['pk'])));
+        $this->assertEquals(1, $this->board->delete($boardRow['pk']));
+        //게시글이 삭제됐으므로, 댓글 테이블을 조회해서 댓글 갯수 확인. 게시글이 삭제되면서 댓글도 전부 삭제됐으므로 0이 나와야함
+        $replyTable = $this->board->getBoardReplyTable();
+        $select = $replyTable->select();
+        $select->where('boardPk = ?', $boardRow['pk']);
+        $rowset = $replyTable->getAdapter()->fetchAll($select);
+        $this->assertEquals(0, count($rowset));
     }
     
     /**
