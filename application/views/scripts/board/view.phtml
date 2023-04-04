@@ -20,7 +20,7 @@ $memberTabe = new Was_Member_Table_Member();
         <?php endif; ?>
         
         $('.cancle-btn').on('click', function() {
-            window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list'))?>';
+            history.back(-1);
         });
         
         $('.delete-btn').on('click', function() {
