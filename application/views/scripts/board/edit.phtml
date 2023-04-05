@@ -3,6 +3,9 @@ $this->headTitle('게시글 수정');
 
 $fileArray = $this->boardFiles;
 $board = $this->board;
+if (Zend_Session::namespaceGet('formData')) {
+    $formData = Zend_Session::namespaceGet('formData');
+}
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -19,6 +22,15 @@ $board = $this->board;
             } else if (editResult) {
                 window.location.href = "<?php echo $this->url(array('controller' => 'board', 'action' => 'list')); ?>?message=editSuccess";
             }
+        <?php endif; ?>
+        <?php if (isset($formData)) : ?>
+            var title = "<?php echo $formData['data']['title']; ?>";
+            var content = "<?php echo str_replace(array("\r\n", "\r", "\n"), '\n', addslashes($formData['data']['content'])); ?>";
+            var writer = "<?php echo $formData['data']['writer']; ?>";
+            
+            $('#title').val(title);
+            $('#content').val(content);
+            $('#writer').val(writer);
         <?php endif; ?>
         //작성자 css 클래스 속성 제거
         $('#writer').removeClass('input-writer');
@@ -67,12 +79,15 @@ $board = $this->board;
         //파일명 옆 x버튼 누를시, 파일 삭제
         $('.del-file-btn').on('click', function() { 
             var filePk = $(this).data('filePk');
+            var title = $('#title').val();
+            var content = $('#content').val();
+            var writer = $('#writer').val();
             
             if (confirm("첨부파일을 삭제하시겠습니까?")) {
                 $.ajax({
                     url: "/board/file-delete",
                     method: "POST",
-                    data: {"filePk" : filePk},
+                    data: {"filePk" : filePk, "title" : title, "content" : content, "writer" : writer},
                     dataType: "json",
                     success: function(receive) {
                         if (receive.result == true) {

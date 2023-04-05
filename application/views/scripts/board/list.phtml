@@ -2,6 +2,8 @@
 $this->headTitle('게시글 리스트');
 
 $replyTable = new Was_Board_Table_BoardReply();
+//게시글 수정 데이터가 존재하면  삭제
+if (Zend_Session::namespaceGet('formData')) Zend_Session::namespaceUnset('formData');
 ?>
 <script type="text/javascript">
 $(document).ready(function() {

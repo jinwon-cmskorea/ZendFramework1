@@ -594,6 +594,15 @@ class BoardController extends Zend_Controller_Action {
             $boardTable = new Was_Board_Table_Board();
             $board = new Was_Board($boardTable->getAdapter());
             
+            $data = array(
+                'title'     => $params['title'],
+                'content'   => $params['content'],
+                'writer'    => $params['writer']
+            );
+            Zend_Session::namespaceUnset('formData');
+            $formData = new Zend_Session_Namespace('formData');
+            $formData->data = $data;
+            
             try {
                 $deleteFileResult = $board->deleteFile($params['filePk']);
                 
