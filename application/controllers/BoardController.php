@@ -139,7 +139,7 @@ class BoardController extends Zend_Controller_Action {
                 $fileType = explode('/', $file['type']);
                 $fileContent = file_get_contents($file['tmp_name']);
                 
-                if (!array_search($fileType[1], $allowType)) {
+                if (array_search($fileType[1], $allowType) === false) {
                     $checkFile = false;
                     break;
                 }
@@ -301,7 +301,7 @@ class BoardController extends Zend_Controller_Action {
                     $fileType = explode('/', $file['type']);
                     $fileContent = file_get_contents($file['tmp_name']);
                     
-                    if (!array_search($fileType[1], $allowType)) {
+                    if (array_search($fileType[1], $allowType) === false) {
                         $checkFile = false;
                         break;
                     }
