@@ -22,7 +22,7 @@ $memberTabe = new Was_Member_Table_Member();
         $('.cancle-btn').on('click', function() {
             var url = new URL('<?php echo $_SERVER['HTTP_REFERER']; ?>');
             
-            if (url.pathname == '/board/write') {
+            if (url.pathname == '/board/write' || url.pathname == '/board/view') {
                 window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list'))?>';
             } else {
                 window.location.href = '<?php echo $_SERVER['HTTP_REFERER']; ?>'
