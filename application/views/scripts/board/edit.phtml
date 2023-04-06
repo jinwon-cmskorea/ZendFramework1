@@ -24,9 +24,9 @@ if (Zend_Session::namespaceGet('formData')) {
             }
         <?php endif; ?>
         <?php if (isset($formData)) : ?>
-            var title = "<?php echo $formData['data']['title']; ?>";
+            var title = "<?php echo addslashes($formData['data']['title']); ?>";
             var content = "<?php echo str_replace(array("\r\n", "\r", "\n"), '\n', addslashes($formData['data']['content'])); ?>";
-            var writer = "<?php echo $formData['data']['writer']; ?>";
+            var writer = "<?php echo addslashes($formData['data']['writer']); ?>";
             
             $('#title').val(title);
             $('#content').val(content);
