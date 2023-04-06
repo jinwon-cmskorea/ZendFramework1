@@ -20,7 +20,13 @@ $memberTabe = new Was_Member_Table_Member();
         <?php endif; ?>
         
         $('.cancle-btn').on('click', function() {
-            history.back(-1);
+            var url = new URL('<?php echo $_SERVER['HTTP_REFERER']; ?>');
+            
+            if (url.pathname == '/board/write') {
+                window.location.href = '<?php echo $this->url(array('controller' => 'board', 'action' => 'list'))?>';
+            } else {
+                window.location.href = '<?php echo $_SERVER['HTTP_REFERER']; ?>'
+            }
         });
         
         $('.delete-btn').on('click', function() {
